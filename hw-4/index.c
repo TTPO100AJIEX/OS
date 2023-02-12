@@ -8,21 +8,21 @@ gcc index.c -o a.exe
 #include <unistd.h>
 #include <sys/stat.h>
 
-#define BUF_SIZE 1024 // Size of chunks the file will be read in
+#define BUF_SIZE 1024 // Size of chunks to process the file
 
 int main(int argc, char** argv)
 {
     int fdIn = open(argv[1], O_RDONLY); // Open the input file
-    if (fdIn < 0) { printf("Can\'t open file!"); return -1; } // Print the error and stop
+    if (fdIn < 0) { printf("Can\'t open file!"); return -1; } // If the file failed to open, print the error and stop
 
     struct stat infileStats; fstat(fdIn, &infileStats); // Get some information about the file
     unsigned int perms =
         (infileStats.st_mode & S_IRUSR) + (infileStats.st_mode & S_IWUSR) + (infileStats.st_mode & S_IXUSR) + // Extract permissions for owner
         (infileStats.st_mode & S_IRGRP) + (infileStats.st_mode & S_IWGRP) + (infileStats.st_mode & S_IXGRP) + // Exract permission for group
-        (infileStats.st_mode & S_IROTH) + (infileStats.st_mode & S_IWOTH) + (infileStats.st_mode & S_IXOTH); // Extract permissions for exeryone else
+        (infileStats.st_mode & S_IROTH) + (infileStats.st_mode & S_IWOTH) + (infileStats.st_mode & S_IXOTH); // Extract permissions for everyone else
     umask(0); // Remove the mask for permissions
 
-    unlink(argv[2]); // Delete the old file if it exists (required for permissions to change in open)
+    unlink(argv[2]); // Delete the old file if it exists (required for permissions to change during open)
     int fdOut = open(argv[2], O_WRONLY | O_CREAT, perms); // Create and open the output file
     unsigned int lastSize;
     char buffer[BUF_SIZE]; // Initialize the buffer
