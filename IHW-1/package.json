@@ -10,6 +10,9 @@
         "gen": "node testing/gen.js",
 
         "compile-4": "gcc 4/index.c -o 4/bin/index.exe",
-        "run-4": "npm run compile-4 && node testing/run.js 4"
+        "run-4": "npm run compile-4 && node testing/run.js 4",
+
+        "compile-5": "gcc 5/index.c -o 5/bin/index.exe",
+        "run-5": "npm run compile-5 && node testing/run.js 5"
     }
 }
