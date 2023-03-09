@@ -1,0 +1,137 @@
+#include <stdio.h>
+#include <stdbool.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <sys/wait.h>
+#include <sys/stat.h>
+#include <signal.h>
+
+#define CHUNK_SIZE 5000
+
+bool isUpperCase(char symbol) { return symbol >= 'A' && symbol <= 'Z'; }
+bool isLowerCase(char symbol) { return symbol >= 'a' && symbol <= 'z'; }
+bool isLetter(char symbol) { return isUpperCase(symbol) || isLowerCase(symbol); }
+
+void input(int input, int output)
+{
+    char inbuffer[CHUNK_SIZE];
+    int lastRead = -1;
+    while (lastRead != 0)
+    {
+        lastRead = read(input, inbuffer, CHUNK_SIZE);
+        if (lastRead == -1) { perror("Reader - failed to read the input"); return; }
+        if (write(output, inbuffer, lastRead) != lastRead) { perror("Reader - failed to write to the reader pipe"); return; }
+    }
+}
+
+void solve(int input, int output)
+{
+    char inbuffer[CHUNK_SIZE + 1];
+    char* wordStart = NULL;
+    bool isFirstWord = true;
+    enum Status { WORD, SKIP, CHECK } status = CHECK;
+    
+    int lastRead = -1;
+    while (lastRead != 0)
+    {
+        lastRead = read(input, inbuffer + sizeof(char), CHUNK_SIZE);
+        if (lastRead == -1) { perror("Solver - failed to read the input from the reader pipe"); return; }
+
+        for (unsigned int i = 1; i <= lastRead; i++)
+        {
+            switch (status)
+            {
+                case WORD:
+                {
+                    if (isLetter(inbuffer[i])) break;
+                    const unsigned int wordLength = &inbuffer[i] - wordStart;
+                    if (write(output, wordStart, wordLength) != wordLength) { perror("Solver - failed to write to the writer pipe"); return; }
+                    status = CHECK;
+                    break;
+                }
+                case SKIP:
+                {
+                    if (!isLetter(inbuffer[i])) status = CHECK;
+                    break;
+                }
+                case CHECK:
+                {
+                    if (isUpperCase(inbuffer[i]))
+                    {
+                        status = WORD;
+                        wordStart = &inbuffer[i];
+                        i--;
+                        if (!isFirstWord) { inbuffer[i] = ' '; wordStart -= sizeof(char); }
+                        else isFirstWord = false;
+                        break;
+                    }
+                    if (isLowerCase(inbuffer[i])) status = SKIP;
+                    break;
+                }
+            }
+        }
+        if (status == WORD)
+        {
+            const unsigned int wordLength = &inbuffer[lastRead + 1] - wordStart;
+            if (write(output, wordStart, wordLength) != wordLength) { perror("Solver - failed to write to the writer pipe"); return; }
+            wordStart = &inbuffer[1];
+        }
+    }
+}
+
+void output(int input, int output)
+{
+    char inbuffer[CHUNK_SIZE];
+    int lastRead = -1;
+    while (lastRead != 0)
+    {
+        lastRead = read(input, inbuffer, CHUNK_SIZE);
+        if (lastRead == -1) { perror("Writer - failed to read the input from the writer pipe"); return; }
+        if (write(output, inbuffer, lastRead) != lastRead) { perror("Writer - failed to write the output"); return; }
+    }
+}
+
+#define READER_PIPE_NAME "reader.fifo"
+#define WRITER_PIPE_NAME "writer.fifo"
+
+int main(int argc, char** argv)
+{
+    if (argc < 3) { printf("Not enough command line arguments specified"); return -1; }
+
+    if (mkfifo(READER_PIPE_NAME, 0666) == -1) { perror("Failed to create a reader pipe"); return -1; }
+    if (mkfifo(WRITER_PIPE_NAME, 0666) == -1) { perror("Failed to create a writer pipe"); unlink(READER_PIPE_NAME); return -1; }
+
+    pid_t writer = fork();
+    if (writer == -1) { perror("Failed to create the writer process"); return -1; }
+    if (writer == 0)
+    {
+        int outputFile = open(argv[2], O_CREAT | O_WRONLY, 0666);
+        if (outputFile == -1) { perror("Writer - failed to open an output file"); return -1; }
+        if (ftruncate(outputFile, 0) == -1) { perror("Writer - failed to clear the output file"); close(outputFile); return -1; }
+
+        int inputPipe = open(WRITER_PIPE_NAME, O_RDONLY);
+        if (inputPipe == -1) { perror("Writer - failed to open the writer pipe for reading"); close(outputFile); return -1; }
+
+        output(inputPipe, outputFile);
+
+        if (close(outputFile) == -1) { perror("Writer - failed to close the output file"); close(inputPipe); return -1; }
+        if (close(inputPipe) == -1) { perror("Writer - failed to close the writer pipe"); return -1; }
+        return 0;
+    }
+
+    int inputFile = open(argv[1], O_RDONLY);
+    if (inputFile == -1) { perror("Failed to open an input file"); kill(writer, SIGINT); return -1; }
+
+    int outputPipe = open(READER_PIPE_NAME, O_WRONLY);
+    if (outputPipe == -1) { perror("Failed to open the reader pipe for writing"); kill(writer, SIGINT); close(inputFile); return -1; }
+
+    input(inputFile, outputPipe);
+
+    if (close(inputFile) == -1) { perror("Failed to close the input file"); kill(writer, SIGINT); close(outputPipe); return -1; }
+    if (close(outputPipe) == -1) { perror("Failed to close the reader pipe"); kill(writer, SIGINT); return -1; }
+    
+    waitpid(writer, NULL, 0);
+
+    if (unlink(READER_PIPE_NAME) == -1) { perror("Failed to delete the reader pipe"); return -1; }
+    if (unlink(WRITER_PIPE_NAME) == -1) { perror("Failed to delete the writer pipe"); return -1; }
+}

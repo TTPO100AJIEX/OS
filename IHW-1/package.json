@@ -13,6 +13,15 @@
         "run-4": "npm run compile-4 && node testing/run.js 4",
 
         "compile-5": "gcc 5/index.c -o 5/bin/index.exe",
-        "run-5": "npm run compile-5 && node testing/run.js 5"
+        "run-5": "npm run compile-5 && node testing/run.js 5",
+
+        "compile-6": "gcc 6/index.c -o 6/bin/index.exe",
+        "run-6": "npm run compile-6 && node testing/run.js 6",
+
+        "compile-7": "gcc 7/index.c -o 7/bin/index.exe",
+        "run-7": "npm run compile-7 && node testing/run.js 7",
+
+        "compile-8": "gcc 8/io.c -o 8/bin/io.exe && gcc 8/solver.c -o 8/bin/solver.exe",
+        "run-8": "npm run compile-8 && node testing/run.js 8"
     }
 }
