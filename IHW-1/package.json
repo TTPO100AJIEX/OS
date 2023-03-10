@@ -9,19 +9,13 @@
     {
         "gen": "node testing/gen.js",
 
-        "compile-4": "gcc 4/index.c -o 4/bin/index.exe",
-        "run-4": "npm run compile-4 && node testing/run.js 4",
+        "4": "./compile.sh 4 && node testing/run.js 4",
+        "5": "./compile.sh 5 && node testing/run.js 5",
+        "6": "./compile.sh 6 && node testing/run.js 6",
+        "7": "./compile.sh 7 && node testing/run.js 7",
+        "8": "./compile.sh 8 && node testing/run.js 8",
+        "9": "./compile.sh 9 && node testing/run.js 9",
 
-        "compile-5": "gcc 5/index.c -o 5/bin/index.exe",
-        "run-5": "npm run compile-5 && node testing/run.js 5",
-
-        "compile-6": "gcc 6/index.c -o 6/bin/index.exe",
-        "run-6": "npm run compile-6 && node testing/run.js 6",
-
-        "compile-7": "gcc 7/index.c -o 7/bin/index.exe",
-        "run-7": "npm run compile-7 && node testing/run.js 7",
-
-        "compile-8": "gcc 8/io.c -o 8/bin/io.exe && gcc 8/solver.c -o 8/bin/solver.exe",
-        "run-8": "npm run compile-8 && node testing/run.js 8"
+        "all": "npm run 4 && npm run 5 && npm run 6 && npm run 7 && npm run 8 && npm run 9"
     }
 }
