@@ -23,7 +23,7 @@ void solve(const int input, const int output)
     int lastRead = -1;
     while (lastRead != 0)
     {
-        lastRead = read(input, inbuffer + sizeof(char), CHUNK_SIZE);
+        lastRead = read(input, inbuffer + 1, CHUNK_SIZE);
         if (lastRead == -1) { perror("Solve - read failed!"); return; }
 
         for (int i = 1; i <= lastRead; i++)

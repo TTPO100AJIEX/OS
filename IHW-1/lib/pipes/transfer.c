@@ -1,4 +1,4 @@
-#include "pipes.h"
+#include "messages.h"
 
 #ifndef CHUNK_SIZE
     #error "CHUNK_SIZE must be defined"

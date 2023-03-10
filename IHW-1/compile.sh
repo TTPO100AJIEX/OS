@@ -19,3 +19,9 @@ then
     gcc -Ilib -DCHUNK_SIZE=$chunksize $options lib/pipes/solve.c lib/pipes/transfer.c $1/io.c -o $1/bin/io.exe
     gcc -Ilib -DCHUNK_SIZE=$chunksize $options lib/pipes/solve.c lib/pipes/transfer.c $1/solver.c -o $1/bin/solver.exe
 fi
+
+if [ $1 -eq 10 ]
+then
+    gcc -Ilib -DCHUNK_SIZE=200 $options lib/messages/input.c lib/messages/solve.c lib/messages/output.c $1/io.c -o $1/bin/io.exe
+    gcc -Ilib -DCHUNK_SIZE=200 $options lib/messages/input.c lib/messages/solve.c lib/messages/output.c $1/solver.c -o $1/bin/solver.exe
+fi
