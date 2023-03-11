@@ -5,17 +5,15 @@
 #endif
 
 #include <stdio.h>
-#include <stdlib.h>
 #include <stdbool.h>
-#include <string.h>
 #include <unistd.h>
+#include <string.h>
 #include <sys/msg.h>
 
 struct msgbuf
 {
     long mtype;
-    //char mtext[CHUNK_SIZE + 1];
-    char* mtext;
+    char mtext[CHUNK_SIZE + 1];
 };
 
 static bool isUpperCase(char symbol) { return symbol >= 'A' && symbol <= 'Z'; }
@@ -24,50 +22,50 @@ static bool isLetter(char symbol) { return isUpperCase(symbol) || isLowerCase(sy
 
 void solve(const int input, const int output)
 {
-    char inbuffer[CHUNK_SIZE + 1];
     struct msgbuf buffer = { 1 };
-    buffer.mtext = malloc(CHUNK_SIZE);
     char* wordStart;
     bool isFirstWord = true;
     enum Status { WORD, SKIP, CHECK } status = CHECK;
     
     int lastRead = -1;
-    while (lastRead != 0)
+    while (lastRead != 1)
     {
-        lastRead = msgrcv(input, &buffer, CHUNK_SIZE, 1, 0);
-        if (lastRead == -1) { perror("msgrcv"); return; }
-        memcpy(inbuffer + 1, buffer.mtext, lastRead);
+        lastRead = msgrcv(input, &buffer, CHUNK_SIZE + 1, 1, 0);
+        if (lastRead == -1) { perror("Solve - read failed"); return; }
        
-        for (int i = 1; i <= lastRead; i++)
+        for (int i = 1; i < lastRead; i++)
         {
             switch (status)
             {
                 case WORD:
                 {
-                    if (isLetter(inbuffer[i])) break;
-                    const unsigned int wordLength = &inbuffer[i] - wordStart;
-                    memcpy(buffer.mtext, wordStart, wordLength);
-                    if (wordLength != 0) msgsnd(output, &buffer, wordLength, 0);
+                    if (isLetter(buffer.mtext[i])) break;
+                    const unsigned int wordLength = &buffer.mtext[i] - wordStart;
+                    if (wordLength != 0)
+                    {
+                        memmove(buffer.mtext, wordStart, wordLength);
+                        if (msgsnd(output, &buffer, wordLength, 0) == -1) { perror("Solve - write failed"); return; }
+                    }
                     status = CHECK;
                     break;
                 }
                 case SKIP:
                 {
-                    if (!isLetter(inbuffer[i])) status = CHECK;
+                    if (!isLetter(buffer.mtext[i])) status = CHECK;
                     break;
                 }
                 case CHECK:
                 {
-                    if (isUpperCase(inbuffer[i]))
+                    if (isUpperCase(buffer.mtext[i]))
                     {
                         status = WORD;
-                        wordStart = &inbuffer[i];
+                        wordStart = &buffer.mtext[i];
                         i--;
-                        if (!isFirstWord) { inbuffer[i] = ' '; wordStart--; }
+                        if (!isFirstWord) { buffer.mtext[i] = ' '; wordStart--; }
                         else isFirstWord = false;
                         break;
                     }
-                    if (isLowerCase(inbuffer[i])) status = SKIP;
+                    if (isLowerCase(buffer.mtext[i])) status = SKIP;
                     break;
                 }
             }
@@ -75,12 +73,15 @@ void solve(const int input, const int output)
         
         if (status == WORD)
         {
-            const unsigned int wordLength = &inbuffer[lastRead + 1] - wordStart;
-            memcpy(buffer.mtext, wordStart, wordLength);
-            if (wordLength != 0) msgsnd(output, &buffer, wordLength, 0);
-            wordStart = &inbuffer[1];
+            const unsigned int wordLength = &buffer.mtext[lastRead] - wordStart;
+            if (wordLength != 0)
+            {
+                memmove(buffer.mtext, wordStart, wordLength);
+                if (msgsnd(output, &buffer, wordLength, 0) == -1) { perror("Solve - write failed"); return; }
+                wordStart = &buffer.mtext[1];
+            }
         }
     }
 
-    msgsnd(output, &buffer, 0, 0);
+    if (msgsnd(output, &buffer, 0, 0) == -1) { perror("Solve - write failed"); return; }
 }

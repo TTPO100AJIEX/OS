@@ -1,3 +1,4 @@
+#define _POSIX_C_SOURCE 200809L
 #include <stdio.h>
 #include <unistd.h>
 #include <fcntl.h>
@@ -78,6 +79,6 @@ int main(int argc, char** argv)
     waitpid(io, NULL, 0);
     waitpid(solver, NULL, 0);
 
-    if (unlink(READER_PIPE_NAME) == -1) { perror("Failed to delete the reader pipe"); return -1; }
+    if (unlink(READER_PIPE_NAME) == -1) { perror("Failed to delete the reader pipe"); unlink(WRITER_PIPE_NAME); return -1; }
     if (unlink(WRITER_PIPE_NAME) == -1) { perror("Failed to delete the writer pipe"); return -1; }
 }

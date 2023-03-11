@@ -1,11 +1,10 @@
-#include "messages.h"
+#include "pipes.h"
 
 #ifndef CHUNK_SIZE
     #error "CHUNK_SIZE must be defined"
 #endif
 
 #include <stdio.h>
-#include <stdlib.h>
 #include <unistd.h>
 
 void transfer(const int input, const int output)
@@ -16,6 +15,9 @@ void transfer(const int input, const int output)
     {
         lastRead = read(input, inbuffer, CHUNK_SIZE);
         if (lastRead == -1) { perror("Transfer - read failed!"); return; }
-        if (write(output, inbuffer, lastRead) != lastRead) { perror("Transfer - write failed!"); return; }
+        if (lastRead != 0)
+        {
+            if (write(output, inbuffer, lastRead) != lastRead) { perror("Transfer - write failed!"); return; }
+        }
     }
 }

@@ -5,7 +5,6 @@
 #endif
 
 #include <stdio.h>
-#include <stdlib.h>
 #include <stdbool.h>
 #include <unistd.h>
 
@@ -34,7 +33,10 @@ void solve(const int input, const int output)
                 {
                     if (isLetter(inbuffer[i])) break;
                     const unsigned int wordLength = &inbuffer[i] - wordStart;
-                    if (write(output, wordStart, wordLength) != wordLength) { perror("Solver - write failed!"); return; }
+                    if (wordLength != 0)
+                    {
+                        if (write(output, wordStart, wordLength) != wordLength) { perror("Solver - write failed!"); return; }
+                    }
                     status = CHECK;
                     break;
                 }

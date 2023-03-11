@@ -20,7 +20,7 @@ for (const test of tests)
         {
             execFileSync(`./${process.argv[2]}/bin/index.exe`, [ "testing/tests/" + test + "/in.in", process.argv[2] + "/output/" + test + ".out" ]);
         }
-    } catch(err) { console.log(`⚠️ RE: test ${folder.slice(5)}`, err); }
+    } catch(err) { console.log(`⚠️ RE: test ${test.slice(5)}`, err); }
     
     const correctAnswer = fs.readFileSync("testing/tests/" + test + "/out.out")
     const givenAnswer = fs.readFileSync(process.argv[2] + "/output/" + test + ".out");

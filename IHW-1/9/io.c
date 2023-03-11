@@ -1,3 +1,4 @@
+#define _POSIX_C_SOURCE 200809L
 #include <stdio.h>
 #include <unistd.h>
 #include <fcntl.h>
@@ -18,7 +19,7 @@ int main(int argc, char** argv)
     if (mkfifo(WRITER_PIPE_NAME, 0666) == -1) { perror("Failed to create a writer pipe"); unlink(READER_PIPE_NAME); return -1; }
 
     pid_t writer = fork();
-    if (writer == -1) { perror("Failed to create the writer process"); return -1; }
+    if (writer == -1) { perror("Failed to create the writer process"); unlink(READER_PIPE_NAME); unlink(WRITER_PIPE_NAME); return -1; }
     if (writer == 0)
     {
         int outputFile = open(argv[2], O_CREAT | O_WRONLY, 0666);
@@ -36,18 +37,18 @@ int main(int argc, char** argv)
     }
 
     int inputFile = open(argv[1], O_RDONLY);
-    if (inputFile == -1) { perror("Failed to open an input file"); kill(writer, SIGINT); return -1; }
+    if (inputFile == -1) { perror("Failed to open an input file"); kill(writer, SIGINT); unlink(READER_PIPE_NAME); unlink(WRITER_PIPE_NAME); return -1; }
 
     int outputPipe = open(READER_PIPE_NAME, O_WRONLY);
-    if (outputPipe == -1) { perror("Failed to open the reader pipe for writing"); kill(writer, SIGINT); close(inputFile); return -1; }
+    if (outputPipe == -1) { perror("Failed to open the reader pipe for writing"); kill(writer, SIGINT); close(inputFile); unlink(READER_PIPE_NAME); unlink(WRITER_PIPE_NAME); return -1; }
 
     transfer(inputFile, outputPipe);
 
-    if (close(inputFile) == -1) { perror("Failed to close the input file"); kill(writer, SIGINT); close(outputPipe); return -1; }
-    if (close(outputPipe) == -1) { perror("Failed to close the reader pipe"); kill(writer, SIGINT); return -1; }
+    if (close(inputFile) == -1) { perror("Failed to close the input file"); kill(writer, SIGINT); close(outputPipe); unlink(READER_PIPE_NAME); unlink(WRITER_PIPE_NAME); return -1; }
+    if (close(outputPipe) == -1) { perror("Failed to close the reader pipe"); kill(writer, SIGINT); unlink(READER_PIPE_NAME); unlink(WRITER_PIPE_NAME); return -1; }
     
     waitpid(writer, NULL, 0);
 
-    if (unlink(READER_PIPE_NAME) == -1) { perror("Failed to delete the reader pipe"); return -1; }
+    if (unlink(READER_PIPE_NAME) == -1) { perror("Failed to delete the reader pipe"); unlink(WRITER_PIPE_NAME); return -1; }
     if (unlink(WRITER_PIPE_NAME) == -1) { perror("Failed to delete the writer pipe"); return -1; }
 }

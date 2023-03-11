@@ -1,3 +1,4 @@
+#define _POSIX_C_SOURCE 200809L
 #include <stdio.h>
 #include <unistd.h>
 #include <fcntl.h>
@@ -68,10 +69,10 @@ int main(int argc, char** argv)
     }
 
 
-    if (close(readerPipe[0]) == -1) { perror("Failed to close the reading side of reader pipe"); return -1; }
-    if (close(readerPipe[1]) == -1) { perror("Failed to close the writing side of reader pipe"); return -1; }
-    if (close(writerPipe[0]) == -1) { perror("Failed to close the reading side of writer pipe"); return -1; }
-    if (close(writerPipe[1]) == -1) { perror("Failed to close the writing side of writer pipe"); return -1; }
+    if (close(readerPipe[0]) == -1) { perror("Failed to close the reading side of reader pipe"); kill(writer, SIGINT); kill(reader, SIGINT); kill(solver, SIGINT); close(readerPipe[1]); close(writerPipe[0]); close(writerPipe[1]); return -1; }
+    if (close(readerPipe[1]) == -1) { perror("Failed to close the writing side of reader pipe"); kill(writer, SIGINT); kill(reader, SIGINT); kill(solver, SIGINT); close(writerPipe[0]); close(writerPipe[1]); return -1; }
+    if (close(writerPipe[0]) == -1) { perror("Failed to close the reading side of writer pipe"); kill(writer, SIGINT); kill(reader, SIGINT); kill(solver, SIGINT); close(writerPipe[1]);  return -1; }
+    if (close(writerPipe[1]) == -1) { perror("Failed to close the writing side of writer pipe"); kill(writer, SIGINT); kill(reader, SIGINT); kill(solver, SIGINT); return -1; }
 
     waitpid(reader, NULL, 0);
     waitpid(solver, NULL, 0);
