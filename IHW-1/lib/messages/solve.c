@@ -22,8 +22,8 @@ static bool isLetter(char symbol) { return isUpperCase(symbol) || isLowerCase(sy
 
 void solve(const int input, const int output)
 {
-    struct msgbuf buffer = { 1 };
-    char* wordStart;
+    struct msgbuf buffer = { 1, { 0 } };
+    char* wordStart = NULL;
     bool isFirstWord = true;
     enum Status { WORD, SKIP, CHECK } status = CHECK;
     

@@ -16,7 +16,7 @@ struct msgbuf
 
 void input(const int input, const int output)
 {
-    struct msgbuf buffer = { 1 };
+    struct msgbuf buffer = { 1, { 0 } };
     buffer.mtext[0] = 0;
     int lastRead = -1;
     while (lastRead != 0)

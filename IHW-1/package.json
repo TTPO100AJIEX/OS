@@ -17,6 +17,7 @@
         "9": "./compile.sh 9 && node testing/run.js 9",
         "10": "./compile.sh 10 && node testing/run.js 10",
 
-        "all": "npm run 4 && npm run 5 && npm run 6 && npm run 7 && npm run 8 && npm run 9 && npm run 10"
+        "all": "npm run 4 && npm run 5 && npm run 6 && npm run 7 && npm run 8 && npm run 9 && npm run 10",
+        "clear": "rm -f */bin/*.exe && rm -f */output/*.out"
     }
 }

@@ -15,7 +15,7 @@ static bool isLetter(char symbol) { return isUpperCase(symbol) || isLowerCase(sy
 void solve(const int input, const int output)
 {
     char inbuffer[CHUNK_SIZE + 1];
-    char* wordStart;
+    char* wordStart = NULL;
     bool isFirstWord = true;
     enum Status { WORD, SKIP, CHECK } status = CHECK;
     

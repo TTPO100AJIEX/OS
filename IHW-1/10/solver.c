@@ -2,7 +2,7 @@
 #include <sys/msg.h>
 #include "messages.h"
 
-int main(int argc, char** argv)
+int main(void)
 {
     int readerQueue = msgget(IPC_PRIVATE + 1, 0666);
     if (readerQueue == -1) { perror("Failed to open a reader message queue"); return -1; }

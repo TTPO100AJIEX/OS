@@ -6,7 +6,7 @@
 #define READER_PIPE_NAME "reader.fifo"
 #define WRITER_PIPE_NAME "writer.fifo"
 
-int main(int argc, char** argv)
+int main(void)
 {
     int inputPipe = open(READER_PIPE_NAME, O_RDONLY);
     if (inputPipe == -1) { perror("Solver - failed to open the reader pipe for reading"); return -1; }

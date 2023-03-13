@@ -1,4 +1,4 @@
-options="-O2 -fsanitize=address,undefined -fno-sanitize-recover=all -std=c17 -Werror -Wsign-compare"
+options="-O2 -fsanitize=address,undefined,leak -fno-sanitize-recover=all -std=c17 -Werror -Wall -Wextra"
 
 if [ $1 -lt 8 ]
 then
