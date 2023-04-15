@@ -1,3 +1,6 @@
+// gcc index.c -o index.exe
+// ./index.exe
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
