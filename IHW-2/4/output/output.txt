@@ -1,0 +1,13 @@
+[23:56:58.947.200] Controller: started hotel with PID 3086
+[23:56:58.947.683] Hotel: started with PID 3086
+[23:56:58.948.136] Hotel: initialized 25 rooms
+[23:57:00.190.707] Controller: started m visitor with PID 3087 (time: 1)
+[23:57:00.191.568] Visitor 3087: came to the hotel to enter
+[23:57:00.442.563] Hotel: male visitor with id 3087 came
+[23:57:00.693.469] Hotel: registered visitor 3087
+[23:57:00.694.364] Visitor 3087: started sleeping
+[23:57:01.695.240] Visitor 3087: stopped sleeping
+[23:57:01.696.097] Visitor 3087: came to the hotel to leave
+[23:57:01.947.446] Hotel: visitor with id 3087 wants to leave
+[23:57:01.948.005] Hotel: removed visitor 3087
+[23:57:01.948.413] Visitor 3087: left the hotel, OK
