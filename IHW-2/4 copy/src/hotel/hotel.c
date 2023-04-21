@@ -3,7 +3,8 @@
 #define _POSIX_C_SOURCE 200809L // For ftruncate and kill to work properly
 #include <stdbool.h>
 #include <signal.h>
-#include <errno.h>
+#include <semaphore.h>
+#include <sys/wait.h>
 #include "../log/log.h"
 #include "../utils/utils.h"
 
@@ -12,7 +13,7 @@ sem_t* to_unlock;
 static void stop()
 {
     running = false;
-    post_semaphore(to_unlock); // This may fail and it is fine
+    sem_post(to_unlock); // This may fail and it is fine
 }
 
 struct Room
@@ -103,19 +104,19 @@ int hotel(struct State state)
 
     while (running)
     {
-        if (post_semaphore(state.door_in) == -1) perror("Hotel: failed to open the door_in semaphore");
-        if (wait_semaphore(state.reception_in) == -1 && errno != EINTR) perror("Hotel: failed to close the reception_in semaphore");
+        if (sem_post(state.door_in) == -1) perror("Hotel: failed to open the door_in semaphore");
+        if (sem_wait(state.reception_in) == -1 && running) perror("Hotel: failed to close the reception_in semaphore");
 
         switch (state.shared_memory->type)
         {
             case COME_REQUEST:
             {
-                if (handleCome(state.shared_memory->data.come_request, state, hotel) == -1 && errno != EINTR) perror("Hotel: failed to process a come request");
+                if (handleCome(state.shared_memory->data.come_request, state, hotel) == -1 && running) perror("Hotel: failed to process a come request");
                 break;
             }
             case LEAVE_REQUEST:
             {
-                if (handleLeave(state.shared_memory->data.leave_request, state, hotel) == -1 && errno != EINTR) perror("Hotel: failed to process a leave request");
+                if (handleLeave(state.shared_memory->data.leave_request, state, hotel) == -1 && running) perror("Hotel: failed to process a leave request");
                 break;
             }
             default: { }

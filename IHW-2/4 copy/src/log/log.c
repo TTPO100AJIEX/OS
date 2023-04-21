@@ -1,21 +1,19 @@
 #include "log.h"
 
-#include <stdio.h>
-#include <semaphore.h>
-#include "../utils/utils.h"
+#include <unistd.h>
+#include <fcntl.h>
+#include <string.h>
 
-FILE* log_file = NULL;
+FILE* log_file;
 sem_t* log_semaphore = NULL;
 static pid_t ownerPID;
 
-int set_log_file(const char* filepath)
+int set_log_file(char* filepath)
 {
-    if (log_semaphore)
-    {
-        if (stop_logging() == -1) return -1;
-    }
-    log_semaphore = create_semaphore("log_semaphore", 1);
-    if (log_semaphore == NULL) return -1;
+    if (log_semaphore) stop_logging();
+
+    log_semaphore = sem_open("log_semaphore", O_CREAT, 0666, 1);
+    if (log_semaphore == SEM_FAILED) return -1;
     ownerPID = getpid();
 
     log_file = fopen(filepath, "w");
@@ -26,14 +24,13 @@ int set_log_file(const char* filepath)
 
 int stop_logging()
 {
-    int status = 0;
-    if (fclose(log_file) == -1) status = -1;
-    if (close_semaphore(log_semaphore) == -1) status = -1;
+    if (fclose(log_file) == -1) return -1;
+    if (sem_close(log_semaphore) == -1) return -1;
     if (getpid() == ownerPID)
     {
-        if (delete_semaphore("log_semaphore") == -1) status = -1;
+        if (sem_unlink("log_semaphore") == -1) return -1;
     }
-    return status;
+    return 0;
 }
 
 

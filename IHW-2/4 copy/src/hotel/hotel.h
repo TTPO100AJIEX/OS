@@ -1,5 +1,5 @@
 #pragma once
 
-#include "../utils/utils.h"
+#include "../protocol.h"
 
 int hotel(struct State state);

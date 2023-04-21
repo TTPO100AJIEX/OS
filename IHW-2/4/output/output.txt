@@ -1,13 +1,105 @@
-[23:56:58.947.200] Controller: started hotel with PID 3086
-[23:56:58.947.683] Hotel: started with PID 3086
-[23:56:58.948.136] Hotel: initialized 25 rooms
-[23:57:00.190.707] Controller: started m visitor with PID 3087 (time: 1)
-[23:57:00.191.568] Visitor 3087: came to the hotel to enter
-[23:57:00.442.563] Hotel: male visitor with id 3087 came
-[23:57:00.693.469] Hotel: registered visitor 3087
-[23:57:00.694.364] Visitor 3087: started sleeping
-[23:57:01.695.240] Visitor 3087: stopped sleeping
-[23:57:01.696.097] Visitor 3087: came to the hotel to leave
-[23:57:01.947.446] Hotel: visitor with id 3087 wants to leave
-[23:57:01.948.005] Hotel: removed visitor 3087
-[23:57:01.948.413] Visitor 3087: left the hotel, OK
+[20:40:08.278.243] Controller: started hotel with PID 11739
+[20:40:08.279.405] Hotel: started with PID 11739
+[20:40:08.280.154] Hotel: initialized 25 rooms
+[20:40:08.296.895] Controller: started m visitor with PID 11740 (time: 7)
+[20:40:08.297.205] Visitor 11740: came to the hotel to get a room
+[20:40:08.314.280] Controller: started m visitor with PID 11741 (time: 7)
+[20:40:08.314.643] Visitor 11741: came to the hotel to get a room
+[20:40:08.331.664] Controller: started m visitor with PID 11742 (time: 9)
+[20:40:08.331.954] Visitor 11742: came to the hotel to get a room
+[20:40:08.349.010] Controller: started m visitor with PID 11743 (time: 8)
+[20:40:08.349.318] Visitor 11743: came to the hotel to get a room
+[20:40:08.366.244] Controller: started f visitor with PID 11744 (time: 11)
+[20:40:08.366.533] Visitor 11744: came to the hotel to get a room
+[20:40:08.383.603] Controller: started m visitor with PID 11745 (time: 13)
+[20:40:08.383.916] Visitor 11745: came to the hotel to get a room
+[20:40:08.401.027] Controller: started f visitor with PID 11746 (time: 9)
+[20:40:08.401.314] Visitor 11746: came to the hotel to get a room
+[20:40:08.418.490] Controller: started f visitor with PID 11747 (time: 3)
+[20:40:08.418.870] Visitor 11747: came to the hotel to get a room
+[20:40:08.436.132] Controller: started f visitor with PID 11748 (time: 7)
+[20:40:08.436.444] Visitor 11748: came to the hotel to get a room
+[20:40:08.453.919] Controller: started f visitor with PID 11749 (time: 2)
+[20:40:08.454.204] Visitor 11749: came to the hotel to get a room
+[20:40:08.471.724] Controller: started m visitor with PID 11750 (time: 13)
+[20:40:08.472.086] Visitor 11750: came to the hotel to get a room
+[20:40:08.489.577] Controller: started f visitor with PID 11751 (time: 6)
+[20:40:08.489.867] Visitor 11751: came to the hotel to get a room
+[20:40:08.507.346] Controller: started f visitor with PID 11752 (time: 5)
+[20:40:08.507.645] Visitor 11752: came to the hotel to get a room
+[20:40:08.525.179] Controller: started f visitor with PID 11753 (time: 4)
+[20:40:08.525.474] Visitor 11753: came to the hotel to get a room
+[20:40:08.542.739] Controller: started m visitor with PID 11754 (time: 4)
+[20:40:08.543.046] Visitor 11754: came to the hotel to get a room
+[20:40:08.560.576] Controller: started f visitor with PID 11755 (time: 10)
+[20:40:08.560.866] Visitor 11755: came to the hotel to get a room
+[20:40:08.578.182] Controller: started f visitor with PID 11756 (time: 5)
+[20:40:08.578.527] Visitor 11756: came to the hotel to get a room
+[20:40:08.595.869] Controller: started m visitor with PID 11757 (time: 12)
+[20:40:08.596.148] Visitor 11757: came to the hotel to get a room
+[20:40:08.613.624] Controller: started m visitor with PID 11758 (time: 2)
+[20:40:08.613.921] Visitor 11758: came to the hotel to get a room
+[20:40:08.631.532] Controller: started f visitor with PID 11759 (time: 9)
+[20:40:08.631.877] Visitor 11759: came to the hotel to get a room
+[20:40:08.649.300] Controller: started f visitor with PID 11760 (time: 11)
+[20:40:08.649.653] Visitor 11760: came to the hotel to get a room
+[20:40:08.667.062] Controller: started f visitor with PID 11761 (time: 10)
+[20:40:08.667.372] Visitor 11761: came to the hotel to get a room
+[20:40:08.684.663] Controller: started f visitor with PID 11762 (time: 2)
+[20:40:08.685.048] Visitor 11762: came to the hotel to get a room
+[20:40:08.702.796] Controller: started m visitor with PID 11763 (time: 4)
+[20:40:08.703.110] Visitor 11763: came to the hotel to get a room
+[20:40:08.720.847] Controller: started f visitor with PID 11764 (time: 8)
+[20:40:08.721.146] Visitor 11764: came to the hotel to get a room
+[20:40:08.739.877] Controller: started f visitor with PID 11765 (time: 14)
+[20:40:08.740.214] Visitor 11765: came to the hotel to get a room
+[20:40:08.758.423] Controller: started m visitor with PID 11766 (time: 5)
+[20:40:08.758.709] Visitor 11766: came to the hotel to get a room
+[20:40:08.776.121] Controller: started f visitor with PID 11767 (time: 12)
+[20:40:08.776.408] Visitor 11767: came to the hotel to get a room
+[20:40:08.794.290] Controller: started m visitor with PID 11770 (time: 1)
+[20:40:08.794.559] Visitor 11770: came to the hotel to get a room
+[20:40:08.812.164] Controller: started m visitor with PID 11771 (time: 3)
+[20:40:08.812.456] Visitor 11771: came to the hotel to get a room
+[20:40:08.830.031] Controller: started f visitor with PID 11772 (time: 9)
+[20:40:08.830.325] Visitor 11772: came to the hotel to get a room
+[20:40:08.847.847] Controller: started m visitor with PID 11773 (time: 1)
+[20:40:08.848.141] Visitor 11773: came to the hotel to get a room
+[20:40:08.865.456] Controller: started f visitor with PID 11774 (time: 7)
+[20:40:08.865.797] Visitor 11774: came to the hotel to get a room
+[20:40:08.883.243] Controller: started m visitor with PID 11776 (time: 11)
+[20:40:08.883.580] Visitor 11776: came to the hotel to get a room
+[20:40:08.901.113] Controller: started m visitor with PID 11777 (time: 2)
+[20:40:08.901.391] Visitor 11777: came to the hotel to get a room
+[20:40:08.918.966] Controller: started m visitor with PID 11778 (time: 5)
+[20:40:08.919.280] Visitor 11778: came to the hotel to get a room
+[20:40:08.936.764] Controller: started m visitor with PID 11779 (time: 7)
+[20:40:08.937.082] Visitor 11779: came to the hotel to get a room
+[20:40:08.954.514] Controller: started m visitor with PID 11780 (time: 6)
+[20:40:08.954.832] Visitor 11780: came to the hotel to get a room
+[20:40:08.972.474] Controller: started f visitor with PID 11781 (time: 2)
+[20:40:08.972.810] Visitor 11781: came to the hotel to get a room
+[20:40:08.990.068] Controller: started f visitor with PID 11782 (time: 12)
+[20:40:08.990.409] Visitor 11782: came to the hotel to get a room
+[20:40:09.007.935] Controller: started f visitor with PID 11783 (time: 11)
+[20:40:09.008.333] Visitor 11783: came to the hotel to get a room
+[20:40:09.025.585] Controller: started f visitor with PID 11784 (time: 2)
+[20:40:09.025.909] Visitor 11784: came to the hotel to get a room
+[20:40:09.043.242] Controller: started f visitor with PID 11785 (time: 9)
+[20:40:09.043.645] Visitor 11785: came to the hotel to get a room
+[20:40:09.060.840] Controller: started m visitor with PID 11786 (time: 8)
+[20:40:09.061.191] Visitor 11786: came to the hotel to get a room
+[20:40:09.079.067] Controller: started m visitor with PID 11787 (time: 10)
+[20:40:09.079.384] Visitor 11787: came to the hotel to get a room
+[20:40:09.096.774] Controller: started m visitor with PID 11788 (time: 1)
+[20:40:09.097.156] Visitor 11788: came to the hotel to get a room
+[20:40:09.114.556] Controller: started f visitor with PID 11789 (time: 1)
+[20:40:09.114.870] Visitor 11789: came to the hotel to get a room
+[20:40:09.132.292] Controller: started m visitor with PID 11790 (time: 3)
+[20:40:09.132.633] Visitor 11790: came to the hotel to get a room
+[20:40:09.149.998] Controller: started m visitor with PID 11791 (time: 1)
+[20:40:09.150.332] Visitor 11791: came to the hotel to get a room
+[20:40:09.169.423] Controller: started f visitor with PID 11792 (time: 7)
+[20:40:09.169.755] Visitor 11792: came to the hotel to get a room
+[20:40:10.798.647] Hotel: male visitor with id 11740 came
+[20:40:10.798.726] Hotel: registered visitor 11740

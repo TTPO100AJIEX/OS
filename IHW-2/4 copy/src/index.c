@@ -2,8 +2,12 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <signal.h>
+#include <fcntl.h>
+#include <semaphore.h>
+#include <sys/mman.h>
 #include <sys/wait.h>
 
+#include "protocol.h"
 #include "utils/utils.h"
 #include "log/log.h"
 #include "hotel/hotel.h"
@@ -21,19 +25,26 @@ int main(int argc, char** argv)
     setbuf(stdout, NULL); // Remove buffering of stdout
     signal(SIGINT, stop);
     if (argc < 2) { printf("Not enough command line arguments specified!\n"); return 1; }
-    struct State state = init_state(argv[1]);
-    if (state.door_in == NULL || state.door_out == NULL || state.reception_in == NULL || state.reception_out == NULL || state.shared_memory == NULL)
-    {
-        perror("Controller: failed to initialize the state");
-        return 1;
-    }
-
+    if (set_log_file(argv[1]) == -1) { perror("Controller: failed to setup the logging"); return 1; }
+    
+    int shm_id = shm_open(memory, O_CREAT | O_RDWR, 0666);
+    if (shm_id == -1) { perror("Controller: failed to create a shared memory"); return 1; }
+    if (ftruncate(shm_id, sizeof(struct Message)) == -1) { perror("Controller: failed to size the shared memory"); shm_unlink(memory); return 1; }
+    struct State state = {
+        .door_in = sem_open(door_in_semaphore, O_CREAT, 0666, 0),
+        .door_out = sem_open(door_out_semaphore, O_CREAT, 0666, 0),
+        .reception_in = sem_open(reception_in_semaphore, O_CREAT, 0666, 0),
+        .reception_out = sem_open(reception_out_semaphore, O_CREAT, 0666, 0),
+        .shared_memory = mmap(0, sizeof(struct Message), PROT_WRITE | PROT_READ, MAP_SHARED, shm_id, 0)
+    };
+    if (state.door_in == SEM_FAILED || state.door_out == SEM_FAILED || state.reception_in == SEM_FAILED || state.reception_out == SEM_FAILED) { perror("Controller: failed to create the semaphores"); clear_state(state); return 1; }
+    if (state.shared_memory == MAP_FAILED) { perror("Controller: failed to load the shared memory"); clear_state(state); return 1; }
+    
 
     pid_t hotelPID = fork();
     if (hotelPID == -1) { perror("Controller: failed to create the hotel"); return 1; }
     if (hotelPID == 0) return hotel(state);
     log("Controller: started hotel with PID %d\n", hotelPID);
-
 
     bool showMessage = true;
     while (running)
@@ -64,11 +75,6 @@ int main(int argc, char** argv)
     printf("\nStopping...\n");
     if (kill(hotelPID, SIGINT) == -1) perror("Controller: failed to stop the hotel");
     waitpid(hotelPID, NULL, 0);
-
-    if (clear_state(state) == -1)
-    {
-        perror("Controller: failed to clear the state");
-        return 1;
-    }
+    clear_state(state);
     return 0;
 }
