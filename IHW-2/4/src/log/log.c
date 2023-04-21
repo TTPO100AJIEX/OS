@@ -1,8 +1,6 @@
 #include "log.h"
 
-#include <stdio.h>
-#include <semaphore.h>
-#include "../utils/utils.h"
+#include <unistd.h>
 
 FILE* log_file = NULL;
 sem_t* log_semaphore = NULL;
@@ -46,6 +44,6 @@ int log_time()
 
     char buffer[16];
     strftime(buffer, 16, "%H:%M:%S", localtime(&tv.tv_sec));
-    fprintf(log_file, "[%s.%03d.%03d] ", buffer, tv.tv_usec / 1000, tv.tv_usec % 1000);
+    fprintf(log_file, "[%s.%03ld.%03ld] ", buffer, tv.tv_usec / 1000, tv.tv_usec % 1000);
     return 0;
 }

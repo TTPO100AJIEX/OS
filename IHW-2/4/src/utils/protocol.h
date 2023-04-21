@@ -1,6 +1,6 @@
 #pragma once
 
-#include <unistd.h>
+#include <sys/types.h>
 
 enum Gender { NONE, MALE, FEMALE };
 

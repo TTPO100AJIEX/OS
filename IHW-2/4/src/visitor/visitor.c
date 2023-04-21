@@ -1,13 +1,18 @@
 #include "visitor.h"
 
+#include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
+#include <unistd.h>
 #include <signal.h>
 #include "../log/log.h"
-#include "../utils/utils.h"
 
+static bool running = true;
 static struct State state;
 static void stop()
 {
+    if (!running) return;
+    running = false;
     if (close_state(state) == -1)
     {
         perror("Visitor: failed to close the state");
@@ -51,18 +56,15 @@ int visitor(struct State l_state, enum Gender gender, unsigned int time)
     signal(SIGINT, stop);
 
     int status = come_to_hotel(gender);
-    if (status == -1) { if (errno != EINTR) perror("Visitor: failed to call the hotel"); return 1; }
+    if (status == -1) { perror("Visitor: failed to call the hotel"); return 1; }
     if (status == 1)
     {
         log("Visitor %d: left the hotel, there were no places for me :(\n", getpid());
-        raise(SIGINT);
-        return 0;
+        stop();
     }
 
     if (live(time) != 0) { perror("Visitor: failed to live in the hotel"); return 1; }
-
-    if (leave_hotel() == -1 && errno != EINTR) { perror("Visitor: failed to leave the hotel"); return 1; }
-
-    raise(SIGINT);
+    if (leave_hotel() == -1) { perror("Visitor: failed to leave the hotel"); return 1; }
+    stop();
     return 0;
 }

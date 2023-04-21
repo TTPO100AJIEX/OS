@@ -1,19 +1,12 @@
 #include "hotel.h"
 
 #define _POSIX_C_SOURCE 200809L // For ftruncate and kill to work properly
+#include <stdio.h>
+#include <stdlib.h>
 #include <stdbool.h>
+#include <unistd.h>
 #include <signal.h>
-#include <errno.h>
 #include "../log/log.h"
-#include "../utils/utils.h"
-
-static bool running = true;
-sem_t* to_unlock;
-static void stop()
-{
-    running = false;
-    post_semaphore(to_unlock); // This may fail and it is fine
-}
 
 struct Room
 {
@@ -26,7 +19,42 @@ struct Room
     } residents;
 };
 
-static int findRoomForGender(enum Gender gender, struct Room rooms[25])
+static bool running = true;
+static struct State state;
+struct Room rooms[25];
+static void stop()
+{
+    if (!running) return;
+    running = false;
+    
+    // Kill all remaining visitors
+    for (unsigned int i = 0; i < 25; i++)
+    {
+        if (rooms[i].isForSinglePerson && rooms[i].residents.person)
+        {
+            if (kill(rooms[i].residents.person, SIGINT) == -1) perror("Hotel: failed to kill a visitor");
+        }
+        if (!rooms[i].isForSinglePerson && rooms[i].residents.people[0])
+        {
+            if (kill(rooms[i].residents.people[0], SIGINT) == -1) perror("Hotel: failed to kill a visitor");
+        }
+        if (!rooms[i].isForSinglePerson && rooms[i].residents.people[1])
+        {
+            if (kill(rooms[i].residents.people[1], SIGINT) == -1) perror("Hotel: failed to kill a visitor");
+        }
+    }
+
+    if (close_state(state) == -1)
+    {
+        perror("Visitor: failed to close the state");
+        exit(1);
+    }
+    exit(0);
+}
+
+
+
+static int findRoomForGender(enum Gender gender)
 {
     for (unsigned int i = 0; i < 25; i++)
     {
@@ -40,17 +68,17 @@ static int findRoomForGender(enum Gender gender, struct Room rooms[25])
     }
     return -1;
 }
-static void registerRoom(enum Gender gender, pid_t id, int room, struct Room rooms[25])
+static void registerRoom(enum Gender gender, pid_t id, int room)
 {
     rooms[room].gender = gender;
     if (rooms[room].isForSinglePerson) { rooms[room].residents.person = id; return; }
     if (!rooms[room].residents.people[0]) { rooms[room].residents.people[0] = id; return; }
     rooms[room].residents.people[1] = id;
 }
-static int handleCome(struct ComeRequest request, struct State state, struct Room rooms[25])
+static int handleCome(struct ComeRequest request)
 {
     log("Hotel: %s visitor with id %d came\n", request.gender == MALE ? "male" : "female", request.id);
-    int room = findRoomForGender(request.gender, rooms);
+    int room = findRoomForGender(request.gender);
     if (room == -1)
     {
         struct Message message = {
@@ -62,7 +90,7 @@ static int handleCome(struct ComeRequest request, struct State state, struct Roo
     }
     else
     {
-        registerRoom(request.gender, request.id, room, rooms);
+        registerRoom(request.gender, request.id, room);
         struct Message message = {
             .type = COME_RESPONSE,
             .data = { .come_response = { COME_OK } }
@@ -71,7 +99,8 @@ static int handleCome(struct ComeRequest request, struct State state, struct Roo
         return response(state, message);
     }
 }
-static int handleLeave(struct LeaveRequest request, struct State state, struct Room rooms[25])
+
+static int handleLeave(struct LeaveRequest request)
 {
     log("Hotel: visitor with id %d wants to leave\n", request.id);
 
@@ -90,56 +119,37 @@ static int handleLeave(struct LeaveRequest request, struct State state, struct R
     return response(state, message);
 }
 
-int hotel(struct State state)
+int hotel(struct State l_state)
 {
-    to_unlock = state.reception_in;
+    state = l_state;
     signal(SIGINT, stop);
     log("Hotel: started with PID %d\n", getpid());
 
-    struct Room hotel[25];
-    for (unsigned int i = 0; i < 15; i++) { hotel[i].isForSinglePerson = false; hotel[i].residents.people[0] = 0; hotel[i].residents.people[1] = 0; }
-    for (unsigned int i = 15; i < 25; i++) { hotel[i].isForSinglePerson = true; hotel[i].gender = NONE; hotel[i].residents.person = 0; }
+    for (unsigned int i = 0; i < 15; i++) { rooms[i].isForSinglePerson = false; rooms[i].residents.people[0] = 0; rooms[i].residents.people[1] = 0; }
+    for (unsigned int i = 15; i < 25; i++) { rooms[i].isForSinglePerson = true; rooms[i].gender = NONE; rooms[i].residents.person = 0; }
     log("Hotel: initialized %d rooms\n", 25);
 
     while (running)
     {
+        log("%c\n", '!');
         if (post_semaphore(state.door_in) == -1) perror("Hotel: failed to open the door_in semaphore");
-        if (wait_semaphore(state.reception_in) == -1 && errno != EINTR) perror("Hotel: failed to close the reception_in semaphore");
+        if (wait_semaphore(state.reception_in) == -1) perror("Hotel: failed to close the reception_in semaphore");
 
         switch (state.shared_memory->type)
         {
             case COME_REQUEST:
             {
-                if (handleCome(state.shared_memory->data.come_request, state, hotel) == -1 && errno != EINTR) perror("Hotel: failed to process a come request");
+                if (handleCome(state.shared_memory->data.come_request) == -1) perror("Hotel: failed to process a come request");
                 break;
             }
             case LEAVE_REQUEST:
             {
-                if (handleLeave(state.shared_memory->data.leave_request, state, hotel) == -1 && errno != EINTR) perror("Hotel: failed to process a leave request");
+                if (handleLeave(state.shared_memory->data.leave_request) == -1) perror("Hotel: failed to process a leave request");
                 break;
             }
-            default: { }
-        }
-    }
-    
-
-    // Kill all remaining visitors
-    for (unsigned int i = 0; i < 25; i++)
-    {
-        if (hotel[i].isForSinglePerson && hotel[i].residents.person)
-        {
-            if (kill(hotel[i].residents.person, SIGINT) == -1) perror("Hotel: failed to kill a visitor");
-        }
-        if (!hotel[i].isForSinglePerson && hotel[i].residents.people[0])
-        {
-            if (kill(hotel[i].residents.people[0], SIGINT) == -1) perror("Hotel: failed to kill a visitor");
-        }
-        if (!hotel[i].isForSinglePerson && hotel[i].residents.people[1])
-        {
-            if (kill(hotel[i].residents.people[1], SIGINT) == -1) perror("Hotel: failed to kill a visitor");
+            default: { log("%c\n", '@'); }
         }
     }
 
-    close_state(state);
     return 0;
 }

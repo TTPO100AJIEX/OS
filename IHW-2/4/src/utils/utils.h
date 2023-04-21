@@ -11,7 +11,7 @@ void sleep_milliseconds(unsigned int milliseconds);
 #define reception_out_semaphore "reception_out_semaphore"
 #define memory "memory"
 
-sem_t* create_semaphore(const char* name, int value);
+sem_t* create_semaphore(const char* name, unsigned int value);
 int wait_semaphore(sem_t* sem);
 int post_semaphore(sem_t* sem);
 int close_semaphore(sem_t* sem);
@@ -30,7 +30,6 @@ struct State
     sem_t* reception_out;
     struct Message* shared_memory;
 };
-
 struct State init_state(const char* logfile);
 int close_state(struct State state);
 int clear_state(struct State state);
