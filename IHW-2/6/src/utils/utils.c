@@ -15,17 +15,64 @@ void sleep_milliseconds(unsigned int milliseconds)
 
 
 
+#include <stdio.h>
 #include <fcntl.h>
-sem_t* create_semaphore(const char* name, unsigned int value)
+#include <sys/ipc.h>
+#include <sys/sem.h>
+#define semaphore_filepath "6/src/utils/utils.c"
+static int string_has(const char* string)
 {
-    sem_t* sem = sem_open(name, O_CREAT, 0666, value);
-    return (sem == SEM_FAILED) ? NULL : sem;
-}
-int wait_semaphore(sem_t* sem) { return (sem_wait(sem) == -1) ? -1 : 0; }
-int post_semaphore(sem_t* sem) { return (sem_post(sem) == -1) ? -1 : 0; }
-int close_semaphore(sem_t* sem) { return (sem_close(sem) == -1) ? -1 : 0; }
-int delete_semaphore(const char* name) { return (sem_unlink(name) == -1) ? -1 : 0; }
 
+}
+
+int create_semaphore(const char* name, __attribute__ ((unused)) unsigned int value)
+{
+    key_t key = ftok(semaphore_filepath, 0);
+    int sem = semget(key, 1, 0666 | IPC_CREAT);
+    printf("%s, %d %d\n", name, key, sem);
+    return (sem == -1) ? 0 : sem;
+}
+int wait_semaphore(__attribute__ ((unused)) int sem)
+{
+    return 0;
+    //return (sem_wait(sem) == -1) ? -1 : 0;
+}
+int post_semaphore(__attribute__ ((unused)) int sem)
+{
+    return 0;
+    //return (sem_post(sem) == -1) ? -1 : 0;
+}
+int close_semaphore(__attribute__ ((unused)) int sem) { return 0; }
+int delete_semaphore(const char* name)
+{
+    key_t key = ftok(semaphore_filepath, 0);
+    int sem = semget(key, 1, 0);
+    printf("%s, %d %d\n", name, key, sem);
+    if (sem == -1) return -1;
+    return (semctl(sem, 1, IPC_RMID) == -1) ? -1 : 0;
+}
+/*
+
+    key = ftok(pathname, 0);
+    if (( semid = semget(key, 1, 0666 | IPC_CREAT )) < 0)
+    {
+        printf("Can't create semaphore set\n");
+        exit(-1);
+    }
+
+    mybuf.sem_num = 0;
+    mybuf.sem_op = -1;
+    mybuf.sem_flg = 1;
+
+    if (semop(semid, &mybuf, 1) < 0)
+    {
+        printf("Can't wait for condition\n");
+        exit(-1);
+    }
+
+    semctl(semid, 1, IPC_RMID);
+    printf("The condition is present\n");
+    */
 
 #define _POSIX_C_SOURCE 200809L // For ftruncate and kill to work properly
 #include <unistd.h>
@@ -46,20 +93,20 @@ int delete_memory(const char* name) { return (shm_unlink(name) == -1) ? -1 : 0; 
 #include "../log/log.h"
 struct State init_state(const char* logfile)
 {
-    struct State state = { NULL, NULL, NULL, NULL, NULL };
+    struct State state = { 0, 0, 0, 0, NULL };
     if (set_log_file(logfile) == -1) return state;
 
     state.door_in = create_semaphore(door_in_semaphore, 0);
-    if (state.door_in == NULL) return state;
+    if (state.door_in == 0) return state;
 
     state.door_out = create_semaphore(door_out_semaphore, 0);
-    if (state.door_out == NULL) return state;
+    if (state.door_out == 0) return state;
 
     state.reception_in = create_semaphore(reception_in_semaphore, 0);
-    if (state.reception_in == NULL) return state;
+    if (state.reception_in == 0) return state;
 
     state.reception_out = create_semaphore(reception_out_semaphore, 0);
-    if (state.reception_out == NULL) return state;
+    if (state.reception_out == 0) return state;
 
     state.shared_memory = create_memory(memory, sizeof(struct Message));
     if (state.shared_memory == NULL) return state;

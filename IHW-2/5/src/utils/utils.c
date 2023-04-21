@@ -16,15 +16,50 @@ void sleep_milliseconds(unsigned int milliseconds)
 
 
 #include <fcntl.h>
+#include <stdlib.h>
+#include <string.h>
+struct Semaphore
+{
+    char* name;
+    sem_t* sem;
+};
+// Naive implementation of std::map<std::string, sem_t*> 
+static unsigned int semaphores_size = 0;
+static struct Semaphore semaphores[8]; // I do not need more semaphores, so this is definitely enough
 sem_t* create_semaphore(const char* name, unsigned int value)
 {
-    sem_t* sem = sem_open(name, O_CREAT, 0666, value);
-    return (sem == SEM_FAILED) ? NULL : sem;
+    // Changed in comparison to program 4
+    sem_t* sem = create_memory(name, sizeof(sem_t));
+    if (sem == NULL) return NULL;
+    if (sem_init(sem, 1, value) == -1) return NULL;
+
+    semaphores[semaphores_size].name = malloc((strlen(name) + 1) * sizeof(char));
+    strcpy(semaphores[semaphores_size].name, name);
+    semaphores[semaphores_size].sem = sem;
+    semaphores_size++;
+    return sem;
 }
 int wait_semaphore(sem_t* sem) { return (sem_wait(sem) == -1) ? -1 : 0; }
 int post_semaphore(sem_t* sem) { return (sem_post(sem) == -1) ? -1 : 0; }
-int close_semaphore(sem_t* sem) { return (sem_close(sem) == -1) ? -1 : 0; }
-int delete_semaphore(const char* name) { return (sem_unlink(name) == -1) ? -1 : 0; }
+int close_semaphore(__attribute__ ((unused)) sem_t* sem) { return 0; } // Changed in comparison to program 4
+int delete_semaphore(const char* name)
+{
+    // Changed in comparison to program 4
+    for (unsigned int i = 0; i < semaphores_size; i++)
+    {
+        if (semaphores[i].name != NULL && strcmp(name, semaphores[i].name) == 0)
+        {
+            int status = 0;
+            free(semaphores[i].name);
+            semaphores[i].name = NULL;
+            
+            if (sem_destroy(semaphores[i].sem) == -1) status = -1;
+            if (delete_memory(name) == -1) status = -1;
+            return status;
+        }
+    }
+    return -1;
+}
 
 
 #define _POSIX_C_SOURCE 200809L // For ftruncate and kill to work properly

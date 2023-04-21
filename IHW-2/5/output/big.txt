@@ -1,0 +1,453 @@
+[23:44:25.253.254] Controller: started hotel with PID 3278
+[23:44:25.253.931] Hotel: started with PID 3278
+[23:44:25.254.535] Hotel: initialized 25 rooms
+[23:44:25.255.167] Visitor 3279: came to the hotel to get a room
+[23:44:25.255.706] Controller: started m visitor with PID 3279 (time: 7)
+[23:44:25.256.403] Controller: started m visitor with PID 3280 (time: 7)
+[23:44:25.256.964] Visitor 3280: came to the hotel to get a room
+[23:44:25.257.575] Controller: started m visitor with PID 3281 (time: 9)
+[23:44:25.258.150] Visitor 3281: came to the hotel to get a room
+[23:44:25.258.734] Controller: started m visitor with PID 3282 (time: 8)
+[23:44:25.259.564] Visitor 3282: came to the hotel to get a room
+[23:44:25.260.677] Controller: started f visitor with PID 3283 (time: 11)
+[23:44:25.261.777] Visitor 3283: came to the hotel to get a room
+[23:44:25.262.659] Controller: started m visitor with PID 3284 (time: 13)
+[23:44:25.263.420] Visitor 3284: came to the hotel to get a room
+[23:44:25.264.203] Controller: started f visitor with PID 3285 (time: 9)
+[23:44:25.264.931] Visitor 3285: came to the hotel to get a room
+[23:44:25.265.685] Controller: started f visitor with PID 3286 (time: 3)
+[23:44:25.266.255] Visitor 3286: came to the hotel to get a room
+[23:44:25.266.832] Controller: started f visitor with PID 3287 (time: 7)
+[23:44:25.267.394] Visitor 3287: came to the hotel to get a room
+[23:44:25.268.065] Controller: started f visitor with PID 3288 (time: 2)
+[23:44:25.268.610] Visitor 3288: came to the hotel to get a room
+[23:44:25.269.241] Controller: started m visitor with PID 3289 (time: 13)
+[23:44:25.269.827] Visitor 3289: came to the hotel to get a room
+[23:44:25.270.387] Controller: started f visitor with PID 3290 (time: 6)
+[23:44:25.270.920] Visitor 3290: came to the hotel to get a room
+[23:44:25.271.538] Controller: started f visitor with PID 3291 (time: 5)
+[23:44:25.272.248] Visitor 3291: came to the hotel to get a room
+[23:44:25.272.921] Controller: started f visitor with PID 3292 (time: 4)
+[23:44:25.273.498] Visitor 3292: came to the hotel to get a room
+[23:44:25.274.186] Controller: started m visitor with PID 3293 (time: 4)
+[23:44:25.274.850] Visitor 3293: came to the hotel to get a room
+[23:44:25.275.509] Controller: started f visitor with PID 3294 (time: 10)
+[23:44:25.276.091] Visitor 3294: came to the hotel to get a room
+[23:44:25.276.934] Controller: started f visitor with PID 3295 (time: 5)
+[23:44:25.277.802] Visitor 3295: came to the hotel to get a room
+[23:44:25.278.563] Controller: started m visitor with PID 3296 (time: 12)
+[23:44:25.279.112] Visitor 3296: came to the hotel to get a room
+[23:44:25.279.635] Controller: started m visitor with PID 3297 (time: 2)
+[23:44:25.280.226] Visitor 3297: came to the hotel to get a room
+[23:44:25.280.853] Controller: started f visitor with PID 3298 (time: 9)
+[23:44:25.281.417] Visitor 3298: came to the hotel to get a room
+[23:44:25.282.026] Controller: started f visitor with PID 3299 (time: 11)
+[23:44:25.282.571] Visitor 3299: came to the hotel to get a room
+[23:44:25.283.143] Controller: started f visitor with PID 3300 (time: 10)
+[23:44:25.283.709] Visitor 3300: came to the hotel to get a room
+[23:44:25.284.370] Controller: started f visitor with PID 3301 (time: 2)
+[23:44:25.285.008] Visitor 3301: came to the hotel to get a room
+[23:44:25.285.558] Controller: started m visitor with PID 3302 (time: 4)
+[23:44:25.286.113] Visitor 3302: came to the hotel to get a room
+[23:44:25.286.691] Controller: started f visitor with PID 3303 (time: 8)
+[23:44:25.287.363] Visitor 3303: came to the hotel to get a room
+[23:44:25.287.988] Controller: started f visitor with PID 3304 (time: 14)
+[23:44:25.288.538] Visitor 3304: came to the hotel to get a room
+[23:44:25.289.139] Controller: started m visitor with PID 3305 (time: 5)
+[23:44:25.289.668] Visitor 3305: came to the hotel to get a room
+[23:44:25.290.471] Controller: started f visitor with PID 3306 (time: 12)
+[23:44:25.291.171] Visitor 3306: came to the hotel to get a room
+[23:44:25.291.771] Controller: started m visitor with PID 3307 (time: 1)
+[23:44:25.292.359] Visitor 3307: came to the hotel to get a room
+[23:44:25.292.998] Controller: started m visitor with PID 3308 (time: 3)
+[23:44:25.293.636] Visitor 3308: came to the hotel to get a room
+[23:44:25.294.401] Controller: started f visitor with PID 3309 (time: 9)
+[23:44:25.295.151] Visitor 3309: came to the hotel to get a room
+[23:44:25.295.729] Controller: started m visitor with PID 3310 (time: 1)
+[23:44:25.296.301] Visitor 3310: came to the hotel to get a room
+[23:44:25.296.928] Controller: started f visitor with PID 3311 (time: 7)
+[23:44:25.297.605] Visitor 3311: came to the hotel to get a room
+[23:44:25.298.313] Controller: started m visitor with PID 3312 (time: 11)
+[23:44:25.298.878] Visitor 3312: came to the hotel to get a room
+[23:44:25.299.427] Controller: started m visitor with PID 3313 (time: 2)
+[23:44:25.299.984] Visitor 3313: came to the hotel to get a room
+[23:44:25.300.555] Controller: started m visitor with PID 3314 (time: 5)
+[23:44:25.301.089] Visitor 3314: came to the hotel to get a room
+[23:44:25.301.721] Controller: started m visitor with PID 3315 (time: 7)
+[23:44:25.302.354] Visitor 3315: came to the hotel to get a room
+[23:44:25.302.929] Controller: started m visitor with PID 3316 (time: 6)
+[23:44:25.303.452] Visitor 3316: came to the hotel to get a room
+[23:44:25.304.073] Controller: started f visitor with PID 3317 (time: 2)
+[23:44:25.304.708] Visitor 3317: came to the hotel to get a room
+[23:44:25.305.317] Controller: started f visitor with PID 3318 (time: 12)
+[23:44:25.305.950] Visitor 3318: came to the hotel to get a room
+[23:44:25.306.519] Controller: started f visitor with PID 3319 (time: 11)
+[23:44:25.307.070] Visitor 3319: came to the hotel to get a room
+[23:44:25.307.657] Controller: started f visitor with PID 3320 (time: 2)
+[23:44:25.308.232] Visitor 3320: came to the hotel to get a room
+[23:44:25.308.850] Controller: started f visitor with PID 3321 (time: 9)
+[23:44:25.309.412] Visitor 3321: came to the hotel to get a room
+[23:44:25.309.981] Controller: started m visitor with PID 3322 (time: 8)
+[23:44:25.310.555] Visitor 3322: came to the hotel to get a room
+[23:44:25.311.227] Controller: started m visitor with PID 3323 (time: 10)
+[23:44:25.311.865] Visitor 3323: came to the hotel to get a room
+[23:44:25.312.623] Controller: started m visitor with PID 3324 (time: 1)
+[23:44:25.313.305] Visitor 3324: came to the hotel to get a room
+[23:44:25.314.040] Controller: started f visitor with PID 3325 (time: 1)
+[23:44:25.314.654] Visitor 3325: came to the hotel to get a room
+[23:44:25.315.261] Controller: started m visitor with PID 3326 (time: 3)
+[23:44:25.315.853] Visitor 3326: came to the hotel to get a room
+[23:44:25.316.419] Controller: started m visitor with PID 3327 (time: 1)
+[23:44:25.316.970] Visitor 3327: came to the hotel to get a room
+[23:44:25.317.543] Controller: started f visitor with PID 3328 (time: 7)
+[23:44:25.318.103] Visitor 3328: came to the hotel to get a room
+[23:44:25.506.029] Hotel: male visitor with id 3279 came
+[23:44:25.506.599] Hotel: registered visitor 3279
+[23:44:26.007.379] Visitor 3279: started sleeping
+[23:44:26.257.699] Hotel: male visitor with id 3280 came
+[23:44:26.258.755] Hotel: registered visitor 3280
+[23:44:26.759.548] Visitor 3280: started sleeping
+[23:44:27.009.825] Hotel: male visitor with id 3281 came
+[23:44:27.010.728] Hotel: registered visitor 3281
+[23:44:27.511.659] Visitor 3281: started sleeping
+[23:44:27.762.082] Hotel: male visitor with id 3282 came
+[23:44:27.762.604] Hotel: registered visitor 3282
+[23:44:28.263.409] Visitor 3282: started sleeping
+[23:44:28.513.976] Hotel: female visitor with id 3283 came
+[23:44:28.514.642] Hotel: registered visitor 3283
+[23:44:29.015.324] Visitor 3283: started sleeping
+[23:44:29.265.531] Hotel: male visitor with id 3284 came
+[23:44:29.266.183] Hotel: registered visitor 3284
+[23:44:29.767.539] Visitor 3284: started sleeping
+[23:44:30.018.155] Hotel: female visitor with id 3285 came
+[23:44:30.020.419] Hotel: registered visitor 3285
+[23:44:30.522.281] Visitor 3285: started sleeping
+[23:44:30.772.556] Hotel: female visitor with id 3286 came
+[23:44:30.773.481] Hotel: registered visitor 3286
+[23:44:31.274.667] Visitor 3286: started sleeping
+[23:44:31.525.027] Hotel: female visitor with id 3287 came
+[23:44:31.525.708] Hotel: registered visitor 3287
+[23:44:32.026.994] Visitor 3287: started sleeping
+[23:44:32.277.205] Hotel: female visitor with id 3288 came
+[23:44:32.277.795] Hotel: registered visitor 3288
+[23:44:32.778.758] Visitor 3288: started sleeping
+[23:44:33.008.238] Visitor 3279: stopped sleeping
+[23:44:33.009.187] Visitor 3279: came to the hotel to leave
+[23:44:33.029.082] Hotel: male visitor with id 3289 came
+[23:44:33.029.685] Hotel: registered visitor 3289
+[23:44:33.530.597] Visitor 3289: started sleeping
+[23:44:33.760.578] Visitor 3280: stopped sleeping
+[23:44:33.761.273] Visitor 3280: came to the hotel to leave
+[23:44:33.780.908] Hotel: female visitor with id 3290 came
+[23:44:33.781.536] Hotel: registered visitor 3290
+[23:44:34.275.392] Visitor 3286: stopped sleeping
+[23:44:34.275.940] Visitor 3286: came to the hotel to leave
+[23:44:34.282.374] Visitor 3290: started sleeping
+[23:44:34.532.754] Hotel: female visitor with id 3291 came
+[23:44:34.533.305] Hotel: registered visitor 3291
+[23:44:34.779.804] Visitor 3288: stopped sleeping
+[23:44:34.780.671] Visitor 3288: came to the hotel to leave
+[23:44:35.034.293] Visitor 3291: started sleeping
+[23:44:35.284.588] Hotel: female visitor with id 3292 came
+[23:44:35.285.133] Hotel: registered visitor 3292
+[23:44:35.786.288] Visitor 3292: started sleeping
+[23:44:36.037.383] Hotel: male visitor with id 3293 came
+[23:44:36.039.595] Hotel: registered visitor 3293
+[23:44:36.265.073] Visitor 3282: stopped sleeping
+[23:44:36.265.766] Visitor 3282: came to the hotel to leave
+[23:44:36.512.480] Visitor 3281: stopped sleeping
+[23:44:36.513.147] Visitor 3281: came to the hotel to leave
+[23:44:36.542.032] Visitor 3293: started sleeping
+[23:44:36.792.226] Hotel: female visitor with id 3294 came
+[23:44:36.792.816] Hotel: registered visitor 3294
+[23:44:37.293.482] Visitor 3294: started sleeping
+[23:44:37.543.829] Hotel: female visitor with id 3295 came
+[23:44:37.544.513] Hotel: registered visitor 3295
+[23:44:38.045.207] Visitor 3295: started sleeping
+[23:44:38.295.424] Hotel: male visitor with id 3296 came
+[23:44:38.296.280] Hotel: registered visitor 3296
+[23:44:38.797.428] Visitor 3296: started sleeping
+[23:44:39.027.779] Visitor 3287: stopped sleeping
+[23:44:39.028.584] Visitor 3287: came to the hotel to leave
+[23:44:39.047.702] Hotel: male visitor with id 3297 came
+[23:44:39.048.470] Hotel: registered visitor 3297
+[23:44:39.523.183] Visitor 3285: stopped sleeping
+[23:44:39.524.140] Visitor 3285: came to the hotel to leave
+[23:44:39.549.314] Visitor 3297: started sleeping
+[23:44:39.790.089] Visitor 3292: stopped sleeping
+[23:44:39.790.835] Visitor 3292: came to the hotel to leave
+[23:44:39.799.699] Hotel: female visitor with id 3298 came
+[23:44:39.800.351] Hotel: registered visitor 3298
+[23:44:40.016.026] Visitor 3283: stopped sleeping
+[23:44:40.016.933] Visitor 3283: came to the hotel to leave
+[23:44:40.035.535] Visitor 3291: stopped sleeping
+[23:44:40.036.553] Visitor 3291: came to the hotel to leave
+[23:44:40.282.959] Visitor 3290: stopped sleeping
+[23:44:40.283.663] Visitor 3290: came to the hotel to leave
+[23:44:40.301.362] Visitor 3298: started sleeping
+[23:44:40.543.086] Visitor 3293: stopped sleeping
+[23:44:40.543.899] Visitor 3293: came to the hotel to leave
+[23:44:40.551.595] Hotel: female visitor with id 3299 came
+[23:44:40.552.146] Hotel: registered visitor 3299
+[23:44:41.053.204] Visitor 3299: started sleeping
+[23:44:41.303.541] Hotel: female visitor with id 3300 came
+[23:44:41.304.521] Hotel: registered visitor 3300
+[23:44:41.550.227] Visitor 3297: stopped sleeping
+[23:44:41.551.227] Visitor 3297: came to the hotel to leave
+[23:44:41.805.377] Visitor 3300: started sleeping
+[23:44:42.055.593] Hotel: female visitor with id 3301 came
+[23:44:42.056.422] Hotel: registered visitor 3301
+[23:44:42.557.184] Visitor 3301: started sleeping
+[23:44:42.770.220] Visitor 3284: stopped sleeping
+[23:44:42.771.086] Visitor 3284: came to the hotel to leave
+[23:44:42.807.415] Hotel: male visitor with id 3302 came
+[23:44:42.808.453] Hotel: registered visitor 3302
+[23:44:43.046.024] Visitor 3295: stopped sleeping
+[23:44:43.046.687] Visitor 3295: came to the hotel to leave
+[23:44:43.309.204] Visitor 3302: started sleeping
+[23:44:43.559.451] Hotel: female visitor with id 3303 came
+[23:44:43.560.122] Hotel: registered visitor 3303
+[23:44:44.061.114] Visitor 3303: started sleeping
+[23:44:44.311.559] Hotel: female visitor with id 3304 came
+[23:44:44.312.554] Hotel: registered visitor 3304
+[23:44:44.558.313] Visitor 3301: stopped sleeping
+[23:44:44.559.480] Visitor 3301: came to the hotel to leave
+[23:44:44.813.800] Visitor 3304: started sleeping
+[23:44:45.064.106] Hotel: male visitor with id 3305 came
+[23:44:45.064.722] Hotel: registered visitor 3305
+[23:44:45.565.538] Visitor 3305: started sleeping
+[23:44:45.815.899] Hotel: female visitor with id 3306 came
+[23:44:45.816.886] Hotel: registered visitor 3306
+[23:44:46.318.037] Visitor 3306: started sleeping
+[23:44:46.531.506] Visitor 3289: stopped sleeping
+[23:44:46.532.374] Visitor 3289: came to the hotel to leave
+[23:44:46.568.273] Hotel: male visitor with id 3307 came
+[23:44:46.569.200] Hotel: registered visitor 3307
+[23:44:47.070.221] Visitor 3307: started sleeping
+[23:44:47.294.253] Visitor 3294: stopped sleeping
+[23:44:47.294.868] Visitor 3294: came to the hotel to leave
+[23:44:47.310.110] Visitor 3302: stopped sleeping
+[23:44:47.311.123] Visitor 3302: came to the hotel to leave
+[23:44:47.320.554] Hotel: male visitor with id 3308 came
+[23:44:47.321.600] Hotel: registered visitor 3308
+[23:44:47.822.615] Visitor 3308: started sleeping
+[23:44:48.071.300] Visitor 3307: stopped sleeping
+[23:44:48.072.360] Visitor 3307: came to the hotel to leave
+[23:44:48.073.154] Hotel: female visitor with id 3309 came
+[23:44:48.073.832] Hotel: registered visitor 3309
+[23:44:48.574.780] Visitor 3309: started sleeping
+[23:44:48.825.536] Hotel: male visitor with id 3310 came
+[23:44:48.826.170] Hotel: registered visitor 3310
+[23:44:49.302.341] Visitor 3298: stopped sleeping
+[23:44:49.303.534] Visitor 3298: came to the hotel to leave
+[23:44:49.327.310] Visitor 3310: started sleeping
+[23:44:49.577.995] Hotel: female visitor with id 3311 came
+[23:44:49.578.870] Hotel: registered visitor 3311
+[23:44:50.080.434] Visitor 3311: started sleeping
+[23:44:50.329.269] Visitor 3310: stopped sleeping
+[23:44:50.334.750] Visitor 3310: came to the hotel to leave
+[23:44:50.335.412] Hotel: male visitor with id 3312 came
+[23:44:50.336.197] Hotel: registered visitor 3312
+[23:44:50.566.596] Visitor 3305: stopped sleeping
+[23:44:50.567.375] Visitor 3305: came to the hotel to leave
+[23:44:50.798.265] Visitor 3296: stopped sleeping
+[23:44:50.799.210] Visitor 3296: came to the hotel to leave
+[23:44:50.823.509] Visitor 3308: stopped sleeping
+[23:44:50.824.510] Visitor 3308: came to the hotel to leave
+[23:44:50.837.068] Visitor 3312: started sleeping
+[23:44:51.087.459] Hotel: male visitor with id 3313 came
+[23:44:51.088.705] Hotel: registered visitor 3313
+[23:44:51.589.969] Visitor 3313: started sleeping
+[23:44:51.806.184] Visitor 3300: stopped sleeping
+[23:44:51.807.328] Visitor 3300: came to the hotel to leave
+[23:44:51.840.201] Hotel: male visitor with id 3314 came
+[23:44:51.840.942] Hotel: registered visitor 3314
+[23:44:52.054.378] Visitor 3299: stopped sleeping
+[23:44:52.055.301] Visitor 3299: came to the hotel to leave
+[23:44:52.062.090] Visitor 3303: stopped sleeping
+[23:44:52.062.916] Visitor 3303: came to the hotel to leave
+[23:44:52.342.148] Visitor 3314: started sleeping
+[23:44:52.592.532] Hotel: male visitor with id 3315 came
+[23:44:52.593.394] Hotel: registered visitor 3315
+[23:44:53.094.229] Visitor 3315: started sleeping
+[23:44:53.344.720] Hotel: male visitor with id 3316 came
+[23:44:53.345.505] Hotel: registered visitor 3316
+[23:44:53.590.726] Visitor 3313: stopped sleeping
+[23:44:53.592.433] Visitor 3313: came to the hotel to leave
+[23:44:53.846.550] Visitor 3316: started sleeping
+[23:44:54.097.055] Hotel: female visitor with id 3317 came
+[23:44:54.097.932] Hotel: registered visitor 3317
+[23:44:54.598.903] Visitor 3317: started sleeping
+[23:44:54.849.116] Hotel: female visitor with id 3318 came
+[23:44:54.849.853] Hotel: registered visitor 3318
+[23:44:55.350.667] Visitor 3318: started sleeping
+[23:44:55.600.924] Hotel: female visitor with id 3319 came
+[23:44:55.601.475] Hotel: failed to register visitor 3319
+[23:44:56.102.476] Visitor 3319: left the hotel, there were no places for me :(
+[23:44:56.353.024] Hotel: female visitor with id 3320 came
+[23:44:56.353.772] Hotel: failed to register visitor 3320
+[23:44:56.600.090] Visitor 3317: stopped sleeping
+[23:44:56.600.674] Visitor 3317: came to the hotel to leave
+[23:44:56.855.046] Visitor 3320: left the hotel, there were no places for me :(
+[23:44:57.085.713] Visitor 3311: stopped sleeping
+[23:44:57.087.614] Visitor 3311: came to the hotel to leave
+[23:44:57.105.917] Hotel: female visitor with id 3321 came
+[23:44:57.108.150] Hotel: failed to register visitor 3321
+[23:44:57.343.724] Visitor 3314: stopped sleeping
+[23:44:57.345.869] Visitor 3314: came to the hotel to leave
+[23:44:57.576.626] Visitor 3309: stopped sleeping
+[23:44:57.578.619] Visitor 3309: came to the hotel to leave
+[23:44:57.610.630] Visitor 3321: left the hotel, there were no places for me :(
+[23:44:57.861.161] Hotel: male visitor with id 3322 came
+[23:44:57.861.818] Hotel: failed to register visitor 3322
+[23:44:58.319.152] Visitor 3306: stopped sleeping
+[23:44:58.319.791] Visitor 3306: came to the hotel to leave
+[23:44:58.363.025] Visitor 3322: left the hotel, there were no places for me :(
+[23:44:58.613.968] Hotel: male visitor with id 3323 came
+[23:44:58.615.223] Hotel: failed to register visitor 3323
+[23:44:58.814.924] Visitor 3304: stopped sleeping
+[23:44:58.817.572] Visitor 3304: came to the hotel to leave
+[23:44:59.116.278] Visitor 3323: left the hotel, there were no places for me :(
+[23:44:59.367.020] Hotel: male visitor with id 3324 came
+[23:44:59.370.398] Hotel: failed to register visitor 3324
+[23:44:59.847.624] Visitor 3316: stopped sleeping
+[23:44:59.850.932] Visitor 3316: came to the hotel to leave
+[23:44:59.873.322] Visitor 3324: left the hotel, there were no places for me :(
+[23:45:00.095.596] Visitor 3315: stopped sleeping
+[23:45:00.096.301] Visitor 3315: came to the hotel to leave
+[23:45:00.123.946] Hotel: female visitor with id 3325 came
+[23:45:00.126.671] Hotel: failed to register visitor 3325
+[23:45:00.629.746] Visitor 3325: left the hotel, there were no places for me :(
+[23:45:00.880.021] Hotel: male visitor with id 3326 came
+[23:45:00.880.521] Hotel: failed to register visitor 3326
+[23:45:01.381.379] Visitor 3326: left the hotel, there were no places for me :(
+[23:45:01.631.822] Hotel: male visitor with id 3327 came
+[23:45:01.632.592] Hotel: failed to register visitor 3327
+[23:45:01.838.111] Visitor 3312: stopped sleeping
+[23:45:01.838.896] Visitor 3312: came to the hotel to leave
+[23:45:02.133.525] Visitor 3327: left the hotel, there were no places for me :(
+[23:45:02.383.800] Hotel: female visitor with id 3328 came
+[23:45:02.385.155] Hotel: failed to register visitor 3328
+[23:45:02.886.884] Visitor 3328: left the hotel, there were no places for me :(
+[23:45:03.137.098] Hotel: visitor with id 3279 wants to leave
+[23:45:03.138.656] Hotel: removed visitor 3279
+[23:45:03.639.561] Visitor 3279: left the hotel, OK
+[23:45:03.890.254] Hotel: visitor with id 3280 wants to leave
+[23:45:03.890.788] Hotel: removed visitor 3280
+[23:45:04.391.641] Visitor 3280: left the hotel, OK
+[23:45:04.641.837] Hotel: visitor with id 3286 wants to leave
+[23:45:04.642.552] Hotel: removed visitor 3286
+[23:45:05.143.497] Visitor 3286: left the hotel, OK
+[23:45:05.393.864] Hotel: visitor with id 3288 wants to leave
+[23:45:05.394.603] Hotel: removed visitor 3288
+[23:45:05.895.563] Visitor 3288: left the hotel, OK
+[23:45:06.146.084] Hotel: visitor with id 3282 wants to leave
+[23:45:06.148.271] Hotel: removed visitor 3282
+[23:45:06.650.248] Visitor 3282: left the hotel, OK
+[23:45:06.900.473] Hotel: visitor with id 3281 wants to leave
+[23:45:06.901.254] Hotel: removed visitor 3281
+[23:45:07.351.508] Visitor 3318: stopped sleeping
+[23:45:07.352.572] Visitor 3318: came to the hotel to leave
+[23:45:07.402.162] Visitor 3281: left the hotel, OK
+[23:45:07.652.415] Hotel: visitor with id 3287 wants to leave
+[23:45:07.653.256] Hotel: removed visitor 3287
+[23:45:08.154.236] Visitor 3287: left the hotel, OK
+[23:45:08.404.464] Hotel: visitor with id 3285 wants to leave
+[23:45:08.405.280] Hotel: removed visitor 3285
+[23:45:08.906.249] Visitor 3285: left the hotel, OK
+[23:45:09.156.496] Hotel: visitor with id 3292 wants to leave
+[23:45:09.157.280] Hotel: removed visitor 3292
+[23:45:09.658.495] Visitor 3292: left the hotel, OK
+[23:45:09.908.902] Hotel: visitor with id 3283 wants to leave
+[23:45:09.909.451] Hotel: removed visitor 3283
+[23:45:10.410.582] Visitor 3283: left the hotel, OK
+[23:45:10.661.029] Hotel: visitor with id 3291 wants to leave
+[23:45:10.661.714] Hotel: removed visitor 3291
+[23:45:11.162.794] Visitor 3291: left the hotel, OK
+[23:45:11.412.974] Hotel: visitor with id 3290 wants to leave
+[23:45:11.413.507] Hotel: removed visitor 3290
+[23:45:11.914.487] Visitor 3290: left the hotel, OK
+[23:45:12.164.803] Hotel: visitor with id 3293 wants to leave
+[23:45:12.165.308] Hotel: removed visitor 3293
+[23:45:12.666.418] Visitor 3293: left the hotel, OK
+[23:45:12.917.024] Hotel: visitor with id 3297 wants to leave
+[23:45:12.918.537] Hotel: removed visitor 3297
+[23:45:13.420.568] Visitor 3297: left the hotel, OK
+[23:45:13.671.272] Hotel: visitor with id 3284 wants to leave
+[23:45:13.672.123] Hotel: removed visitor 3284
+[23:45:14.173.633] Visitor 3284: left the hotel, OK
+[23:45:14.424.440] Hotel: visitor with id 3295 wants to leave
+[23:45:14.426.703] Hotel: removed visitor 3295
+[23:45:14.929.068] Visitor 3295: left the hotel, OK
+[23:45:15.179.510] Hotel: visitor with id 3301 wants to leave
+[23:45:15.181.589] Hotel: removed visitor 3301
+[23:45:15.684.065] Visitor 3301: left the hotel, OK
+[23:45:15.934.641] Hotel: visitor with id 3289 wants to leave
+[23:45:15.935.307] Hotel: removed visitor 3289
+[23:45:16.436.217] Visitor 3289: left the hotel, OK
+[23:45:16.686.900] Hotel: visitor with id 3294 wants to leave
+[23:45:16.689.486] Hotel: removed visitor 3294
+[23:45:17.192.073] Visitor 3294: left the hotel, OK
+[23:45:17.443.047] Hotel: visitor with id 3302 wants to leave
+[23:45:17.445.739] Hotel: removed visitor 3302
+[23:45:17.948.418] Visitor 3302: left the hotel, OK
+[23:45:18.198.888] Hotel: visitor with id 3307 wants to leave
+[23:45:18.201.101] Hotel: removed visitor 3307
+[23:45:18.703.611] Visitor 3307: left the hotel, OK
+[23:45:18.954.011] Hotel: visitor with id 3298 wants to leave
+[23:45:18.956.419] Hotel: removed visitor 3298
+[23:45:19.459.122] Visitor 3298: left the hotel, OK
+[23:45:19.709.398] Hotel: visitor with id 3310 wants to leave
+[23:45:19.710.543] Hotel: removed visitor 3310
+[23:45:20.212.096] Visitor 3310: left the hotel, OK
+[23:45:20.462.662] Hotel: visitor with id 3305 wants to leave
+[23:45:20.465.796] Hotel: removed visitor 3305
+[23:45:20.968.490] Visitor 3305: left the hotel, OK
+[23:45:21.218.847] Hotel: visitor with id 3296 wants to leave
+[23:45:21.219.503] Hotel: removed visitor 3296
+[23:45:21.720.784] Visitor 3296: left the hotel, OK
+[23:45:21.971.612] Hotel: visitor with id 3308 wants to leave
+[23:45:21.974.252] Hotel: removed visitor 3308
+[23:45:22.476.638] Visitor 3308: left the hotel, OK
+[23:45:22.727.328] Hotel: visitor with id 3300 wants to leave
+[23:45:22.729.970] Hotel: removed visitor 3300
+[23:45:23.232.576] Visitor 3300: left the hotel, OK
+[23:45:23.483.275] Hotel: visitor with id 3299 wants to leave
+[23:45:23.486.171] Hotel: removed visitor 3299
+[23:45:23.989.264] Visitor 3299: left the hotel, OK
+[23:45:24.239.706] Hotel: visitor with id 3303 wants to leave
+[23:45:24.242.561] Hotel: removed visitor 3303
+[23:45:24.745.509] Visitor 3303: left the hotel, OK
+[23:45:24.996.414] Hotel: visitor with id 3313 wants to leave
+[23:45:24.998.915] Hotel: removed visitor 3313
+[23:45:25.501.596] Visitor 3313: left the hotel, OK
+[23:45:25.752.395] Hotel: visitor with id 3317 wants to leave
+[23:45:25.755.773] Hotel: removed visitor 3317
+[23:45:26.259.585] Visitor 3317: left the hotel, OK
+[23:45:26.509.858] Hotel: visitor with id 3311 wants to leave
+[23:45:26.510.622] Hotel: removed visitor 3311
+[23:45:27.011.646] Visitor 3311: left the hotel, OK
+[23:45:27.262.491] Hotel: visitor with id 3314 wants to leave
+[23:45:27.264.015] Hotel: removed visitor 3314
+[23:45:27.765.909] Visitor 3314: left the hotel, OK
+[23:45:28.016.163] Hotel: visitor with id 3309 wants to leave
+[23:45:28.016.821] Hotel: removed visitor 3309
+[23:45:28.517.788] Visitor 3309: left the hotel, OK
+[23:45:28.768.612] Hotel: visitor with id 3306 wants to leave
+[23:45:28.770.877] Hotel: removed visitor 3306
+[23:45:29.273.302] Visitor 3306: left the hotel, OK
+[23:45:29.523.596] Hotel: visitor with id 3304 wants to leave
+[23:45:29.524.917] Hotel: removed visitor 3304
+[23:45:30.026.071] Visitor 3304: left the hotel, OK
+[23:45:30.276.532] Hotel: visitor with id 3316 wants to leave
+[23:45:30.277.024] Hotel: removed visitor 3316
+[23:45:30.778.004] Visitor 3316: left the hotel, OK
+[23:45:31.028.324] Hotel: visitor with id 3315 wants to leave
+[23:45:31.028.862] Hotel: removed visitor 3315
+[23:45:31.529.698] Visitor 3315: left the hotel, OK
+[23:45:31.780.178] Hotel: visitor with id 3312 wants to leave
+[23:45:31.780.846] Hotel: removed visitor 3312
+[23:45:32.282.105] Visitor 3312: left the hotel, OK
+[23:45:32.532.599] Hotel: visitor with id 3318 wants to leave
+[23:45:32.533.331] Hotel: removed visitor 3318
+[23:45:33.034.855] Visitor 3318: left the hotel, OK

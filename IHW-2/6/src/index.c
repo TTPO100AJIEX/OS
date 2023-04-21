@@ -39,7 +39,7 @@ int main(int argc, char** argv)
     signal(SIGINT, stop);
     if (argc < 2) { printf("Not enough command line arguments specified!\n"); return 1; }
     state = init_state(argv[1]);
-    if (state.door_in == NULL || state.door_out == NULL || state.reception_in == NULL || state.reception_out == NULL || state.shared_memory == NULL)
+    if (state.door_in == 0 || state.door_out == 0 || state.reception_in == 0 || state.reception_out == 0 || state.shared_memory == NULL)
     {
         perror("Controller: failed to initialize the state");
         clear_state(state);
