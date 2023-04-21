@@ -44,6 +44,6 @@ int log_time()
 
     char buffer[16];
     strftime(buffer, 16, "%H:%M:%S", localtime(&tv.tv_sec));
-    fprintf(log_file, "[%s.%03ld.%03ld] ", buffer, tv.tv_usec / 1000, tv.tv_usec % 1000);
+    fprintf(log_file, "[%s.%03d.%03d] ", buffer, (int)(tv.tv_usec / 1000), (int)(tv.tv_usec % 1000));
     return 0;
 }
