@@ -1,0 +1,18 @@
+[21:15:31.016.427] Started with PID 5366
+[21:15:31.016.603] Initialized 25 rooms
+[21:15:32.513.155] male visitor 5368 wants to enter
+[21:15:32.513.247] Registered the visitor 5368 into the room 0
+[21:15:33.515.109] male visitor 5367 wants to enter
+[21:15:33.515.231] Registered the visitor 5367 into the room 0
+[21:15:34.517.474] male visitor 5369 wants to enter
+[21:15:34.517.529] Registered the visitor 5369 into the room 1
+[21:15:35.518.398] female visitor 5370 wants to enter
+[21:15:35.518.478] Registered the visitor 5370 into the room 2
+[21:15:36.519.870] Visitor with id 5368 wants to leave
+[21:15:36.519.954] Removed visitor 5368
+[21:15:37.520.841] Visitor with id 5367 wants to leave
+[21:15:37.520.902] Removed visitor 5367
+[21:15:38.521.760] Visitor with id 5370 wants to leave
+[21:15:38.521.848] Removed visitor 5370
+[21:15:39.523.312] Visitor with id 5369 wants to leave
+[21:15:39.523.347] Removed visitor 5369

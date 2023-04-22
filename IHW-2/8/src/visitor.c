@@ -18,7 +18,9 @@ static void stop(int sig)
     if (sig == SIGINT)
     {
         // Kill the hotel to stop everything
-        if (kill(*(state.hotel_pid), SIGINT) == -1) perror("Failed to kill the hotel");
+        pid_t hotel_pid;
+        read_memory(state.hotel_pid, &hotel_pid, sizeof(pid_t));
+        if (kill(hotel_pid, SIGINT) == -1) perror("Failed to kill the hotel");
     }
 
     // Close all the utilities and exit

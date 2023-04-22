@@ -14,7 +14,7 @@ void sleep_milliseconds(unsigned int milliseconds)
 #include <string.h>
 #include <sys/ipc.h>
 #include <sys/sem.h>
-#define semaphore_filepath "6/src/utils/utils.c"
+#define ipc_filepath "6/src/utils/utils.c"
 // Semaphore utilities
 static int string_hash(const char* string)
 {
@@ -24,7 +24,7 @@ static int string_hash(const char* string)
 }
 int create_semaphore(const char* name, unsigned int value)
 {
-    int sem = semget(ftok(semaphore_filepath, string_hash(name)), 1, 0666 | IPC_CREAT);
+    int sem = semget(ftok(ipc_filepath, string_hash(name)), 1, 0666 | IPC_CREAT);
     if (sem == -1) return -1;
     for (unsigned int i = 0; i < value; i++)
     {
@@ -50,7 +50,7 @@ int delete_semaphore(int sem) { return (semctl(sem, 1, IPC_RMID) == -1) ? -1 : 0
 #include <sys/shm.h>
 void* create_memory(const char* name, unsigned int size)
 {
-    int shm_id = shmget(IPC_PRIVATE + ftok(semaphore_filepath, string_hash(name)), size, 0666 | IPC_CREAT);
+    int shm_id = shmget(IPC_PRIVATE + 1 + ftok(ipc_filepath, string_hash(name)), size, 0666 | IPC_CREAT);
     if(shm_id == -1) return NULL;
     void* ans = shmat(shm_id, NULL, 0);
     return (ans == NULL) ? NULL : ans;
@@ -60,13 +60,12 @@ int read_memory(const void* mem, void* dest, unsigned int size) { memcpy(dest, m
 int close_memory(void* mem) { return (shmdt(mem) == -1) ? -1 : 0; }
 int delete_memory(const char* name)
 {
-    int shm_id = shmget(IPC_PRIVATE + ftok(semaphore_filepath, string_hash(name)), 0, 0);
+    int shm_id = shmget(IPC_PRIVATE + 1 + ftok(ipc_filepath, string_hash(name)), 0, 0);
     if (shm_id == -1) return -1;
     return (shmctl(shm_id, IPC_RMID, NULL) == -1) ? -1 : 0;
 }
 
 
-#include "../log/log.h"
 // Utilities to work with state
 int init_state(struct State* state)
 {

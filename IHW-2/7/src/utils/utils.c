@@ -43,7 +43,6 @@ int close_memory(__attribute__ ((unused)) void* name) { return 0; } // Posix sha
 int delete_memory(const char* name) { return (shm_unlink(name) == -1) ? -1 : 0; }
 
 
-#include "../log/log.h"
 // Utilities to work with state
 int init_state(struct State* state)
 {

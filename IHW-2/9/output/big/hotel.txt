@@ -1,0 +1,182 @@
+[20:53:45.330.614] Started with PID 5103
+[20:53:45.330.698] Initialized 25 rooms
+[20:53:46.836.592] male visitor 5105 wants to enter
+[20:53:46.836.675] Registered the visitor 5105 into the room 0
+[20:53:47.838.357] male visitor 5106 wants to enter
+[20:53:47.838.408] Registered the visitor 5106 into the room 0
+[20:53:48.839.586] male visitor 5107 wants to enter
+[20:53:48.839.619] Registered the visitor 5107 into the room 1
+[20:53:49.840.787] male visitor 5108 wants to enter
+[20:53:49.840.834] Registered the visitor 5108 into the room 1
+[20:53:50.841.632] female visitor 5109 wants to enter
+[20:53:50.841.667] Registered the visitor 5109 into the room 2
+[20:53:51.842.470] male visitor 5110 wants to enter
+[20:53:51.842.504] Registered the visitor 5110 into the room 3
+[20:53:52.843.329] female visitor 5111 wants to enter
+[20:53:52.843.372] Registered the visitor 5111 into the room 2
+[20:53:53.844.248] female visitor 5112 wants to enter
+[20:53:53.844.284] Registered the visitor 5112 into the room 4
+[20:53:54.845.194] female visitor 5113 wants to enter
+[20:53:54.845.227] Registered the visitor 5113 into the room 4
+[20:53:55.846.663] female visitor 5114 wants to enter
+[20:53:55.846.697] Registered the visitor 5114 into the room 5
+[20:53:56.847.316] male visitor 5115 wants to enter
+[20:53:56.847.356] Registered the visitor 5115 into the room 3
+[20:53:57.848.323] female visitor 5116 wants to enter
+[20:53:57.848.354] Registered the visitor 5116 into the room 5
+[20:53:58.849.078] female visitor 5117 wants to enter
+[20:53:58.849.142] Registered the visitor 5117 into the room 6
+[20:53:59.849.786] female visitor 5118 wants to enter
+[20:53:59.849.836] Registered the visitor 5118 into the room 6
+[20:54:00.850.688] male visitor 5119 wants to enter
+[20:54:00.850.731] Registered the visitor 5119 into the room 7
+[20:54:01.851.684] female visitor 5120 wants to enter
+[20:54:01.851.733] Registered the visitor 5120 into the room 8
+[20:54:02.853.126] female visitor 5121 wants to enter
+[20:54:02.853.188] Registered the visitor 5121 into the room 8
+[20:54:03.854.058] male visitor 5122 wants to enter
+[20:54:03.854.091] Registered the visitor 5122 into the room 7
+[20:54:04.855.062] male visitor 5123 wants to enter
+[20:54:04.855.105] Registered the visitor 5123 into the room 9
+[20:54:05.855.737] female visitor 5124 wants to enter
+[20:54:05.855.773] Registered the visitor 5124 into the room 10
+[20:54:06.856.581] female visitor 5125 wants to enter
+[20:54:06.856.622] Registered the visitor 5125 into the room 10
+[20:54:07.857.429] female visitor 5126 wants to enter
+[20:54:07.857.510] Registered the visitor 5126 into the room 11
+[20:54:08.858.727] female visitor 5127 wants to enter
+[20:54:08.858.789] Registered the visitor 5127 into the room 11
+[20:54:09.860.231] male visitor 5128 wants to enter
+[20:54:09.860.310] Registered the visitor 5128 into the room 9
+[20:54:10.861.061] female visitor 5129 wants to enter
+[20:54:10.861.098] Registered the visitor 5129 into the room 12
+[20:54:11.861.747] female visitor 5130 wants to enter
+[20:54:11.861.799] Registered the visitor 5130 into the room 12
+[20:54:12.862.601] male visitor 5131 wants to enter
+[20:54:12.862.636] Registered the visitor 5131 into the room 13
+[20:54:13.863.344] female visitor 5132 wants to enter
+[20:54:13.863.375] Registered the visitor 5132 into the room 14
+[20:54:14.865.187] male visitor 5133 wants to enter
+[20:54:14.865.344] Registered the visitor 5133 into the room 13
+[20:54:15.866.216] male visitor 5134 wants to enter
+[20:54:15.866.288] Registered the visitor 5134 into the room 15
+[20:54:16.867.136] female visitor 5135 wants to enter
+[20:54:16.867.173] Registered the visitor 5135 into the room 14
+[20:54:17.868.371] male visitor 5136 wants to enter
+[20:54:17.868.405] Registered the visitor 5136 into the room 16
+[20:54:18.869.294] female visitor 5137 wants to enter
+[20:54:18.869.328] Registered the visitor 5137 into the room 17
+[20:54:19.870.229] male visitor 5138 wants to enter
+[20:54:19.870.264] Registered the visitor 5138 into the room 18
+[20:54:20.871.872] male visitor 5139 wants to enter
+[20:54:20.871.945] Registered the visitor 5139 into the room 19
+[20:54:21.873.170] male visitor 5140 wants to enter
+[20:54:21.873.224] Registered the visitor 5140 into the room 20
+[20:54:22.873.987] male visitor 5141 wants to enter
+[20:54:22.874.040] Registered the visitor 5141 into the room 21
+[20:54:23.874.845] male visitor 5142 wants to enter
+[20:54:23.874.893] Registered the visitor 5142 into the room 22
+[20:54:24.875.725] female visitor 5143 wants to enter
+[20:54:24.875.757] Registered the visitor 5143 into the room 23
+[20:54:25.876.650] female visitor 5144 wants to enter
+[20:54:25.876.701] Registered the visitor 5144 into the room 24
+[20:54:26.879.006] female visitor 5145 wants to enter
+[20:54:26.879.039] Failed to register the visitor 5145
+[20:54:27.879.994] female visitor 5146 wants to enter
+[20:54:27.880.026] Failed to register the visitor 5146
+[20:54:28.880.908] female visitor 5147 wants to enter
+[20:54:28.880.950] Failed to register the visitor 5147
+[20:54:29.881.891] male visitor 5148 wants to enter
+[20:54:29.881.920] Failed to register the visitor 5148
+[20:54:30.883.388] male visitor 5149 wants to enter
+[20:54:30.883.416] Failed to register the visitor 5149
+[20:54:31.884.353] male visitor 5150 wants to enter
+[20:54:31.884.387] Failed to register the visitor 5150
+[20:54:32.885.521] female visitor 5151 wants to enter
+[20:54:32.885.603] Failed to register the visitor 5151
+[20:54:33.886.809] male visitor 5152 wants to enter
+[20:54:33.886.844] Failed to register the visitor 5152
+[20:54:34.887.598] male visitor 5153 wants to enter
+[20:54:34.887.658] Failed to register the visitor 5153
+[20:54:35.888.370] female visitor 5154 wants to enter
+[20:54:35.888.403] Failed to register the visitor 5154
+[20:54:36.890.022] Visitor with id 5105 wants to leave
+[20:54:36.890.058] Removed visitor 5105
+[20:54:37.890.881] Visitor with id 5106 wants to leave
+[20:54:37.890.915] Removed visitor 5106
+[20:54:38.891.938] Visitor with id 5112 wants to leave
+[20:54:38.891.970] Removed visitor 5112
+[20:54:39.893.033] Visitor with id 5107 wants to leave
+[20:54:39.893.067] Removed visitor 5107
+[20:54:40.893.718] Visitor with id 5108 wants to leave
+[20:54:40.893.749] Removed visitor 5108
+[20:54:41.894.446] Visitor with id 5114 wants to leave
+[20:54:41.894.479] Removed visitor 5114
+[20:54:42.895.809] Visitor with id 5109 wants to leave
+[20:54:42.895.867] Removed visitor 5109
+[20:54:43.896.754] Visitor with id 5111 wants to leave
+[20:54:43.896.804] Removed visitor 5111
+[20:54:44.898.095] Visitor with id 5113 wants to leave
+[20:54:44.898.225] Removed visitor 5113
+[20:54:45.899.298] Visitor with id 5116 wants to leave
+[20:54:45.899.464] Removed visitor 5116
+[20:54:46.900.724] Visitor with id 5117 wants to leave
+[20:54:46.900.764] Removed visitor 5117
+[20:54:47.901.529] Visitor with id 5118 wants to leave
+[20:54:47.901.566] Removed visitor 5118
+[20:54:48.902.547] Visitor with id 5110 wants to leave
+[20:54:48.902.582] Removed visitor 5110
+[20:54:49.903.671] Visitor with id 5119 wants to leave
+[20:54:49.903.704] Removed visitor 5119
+[20:54:50.905.056] Visitor with id 5123 wants to leave
+[20:54:50.905.108] Removed visitor 5123
+[20:54:51.906.118] Visitor with id 5121 wants to leave
+[20:54:51.906.156] Removed visitor 5121
+[20:54:52.907.062] Visitor with id 5115 wants to leave
+[20:54:52.907.115] Removed visitor 5115
+[20:54:53.907.795] Visitor with id 5127 wants to leave
+[20:54:53.907.829] Removed visitor 5127
+[20:54:54.908.361] Visitor with id 5120 wants to leave
+[20:54:54.908.393] Removed visitor 5120
+[20:54:55.909.284] Visitor with id 5128 wants to leave
+[20:54:55.909.317] Removed visitor 5128
+[20:54:56.910.012] Visitor with id 5124 wants to leave
+[20:54:56.910.069] Removed visitor 5124
+[20:54:57.911.736] Visitor with id 5122 wants to leave
+[20:54:57.911.768] Removed visitor 5122
+[20:54:58.912.872] Visitor with id 5133 wants to leave
+[20:54:58.912.904] Removed visitor 5133
+[20:54:59.914.370] Visitor with id 5125 wants to leave
+[20:54:59.914.413] Removed visitor 5125
+[20:55:00.915.112] Visitor with id 5126 wants to leave
+[20:55:00.915.154] Removed visitor 5126
+[20:55:01.916.654] Visitor with id 5131 wants to leave
+[20:55:01.916.689] Removed visitor 5131
+[20:55:02.918.534] Visitor with id 5129 wants to leave
+[20:55:02.918.574] Removed visitor 5129
+[20:55:03.919.695] Visitor with id 5134 wants to leave
+[20:55:03.919.729] Removed visitor 5134
+[20:55:04.920.650] Visitor with id 5136 wants to leave
+[20:55:04.920.684] Removed visitor 5136
+[20:55:05.921.388] Visitor with id 5139 wants to leave
+[20:55:05.921.420] Removed visitor 5139
+[20:55:06.922.356] Visitor with id 5130 wants to leave
+[20:55:06.922.389] Removed visitor 5130
+[20:55:07.923.469] Visitor with id 5132 wants to leave
+[20:55:07.923.501] Removed visitor 5132
+[20:55:08.924.394] Visitor with id 5135 wants to leave
+[20:55:08.924.425] Removed visitor 5135
+[20:55:09.925.475] Visitor with id 5137 wants to leave
+[20:55:09.925.509] Removed visitor 5137
+[20:55:10.926.447] Visitor with id 5140 wants to leave
+[20:55:10.926.481] Removed visitor 5140
+[20:55:11.927.235] Visitor with id 5143 wants to leave
+[20:55:11.927.296] Removed visitor 5143
+[20:55:12.928.006] Visitor with id 5141 wants to leave
+[20:55:12.928.039] Removed visitor 5141
+[20:55:13.929.696] Visitor with id 5142 wants to leave
+[20:55:13.929.794] Removed visitor 5142
+[20:55:14.931.487] Visitor with id 5138 wants to leave
+[20:55:14.931.521] Removed visitor 5138
+[20:55:15.932.678] Visitor with id 5144 wants to leave
+[20:55:15.932.719] Removed visitor 5144

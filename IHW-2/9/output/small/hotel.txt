@@ -1,0 +1,18 @@
+[20:53:04.849.800] Started with PID 5054
+[20:53:04.849.907] Initialized 25 rooms
+[20:53:06.359.264] male visitor 5056 wants to enter
+[20:53:06.359.308] Registered the visitor 5056 into the room 0
+[20:53:07.361.774] male visitor 5057 wants to enter
+[20:53:07.361.807] Registered the visitor 5057 into the room 0
+[20:53:08.362.813] male visitor 5058 wants to enter
+[20:53:08.362.870] Registered the visitor 5058 into the room 1
+[20:53:09.363.672] female visitor 5059 wants to enter
+[20:53:09.363.708] Registered the visitor 5059 into the room 2
+[20:53:10.365.128] Visitor with id 5056 wants to leave
+[20:53:10.365.161] Removed visitor 5056
+[20:53:11.365.930] Visitor with id 5057 wants to leave
+[20:53:11.365.966] Removed visitor 5057
+[20:53:12.367.074] Visitor with id 5059 wants to leave
+[20:53:12.367.105] Removed visitor 5059
+[20:53:13.368.660] Visitor with id 5058 wants to leave
+[20:53:13.368.693] Removed visitor 5058

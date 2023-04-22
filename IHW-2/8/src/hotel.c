@@ -139,7 +139,8 @@ int main(void)
         clear_state(state);
         return 1;
     }
-    *(state.hotel_pid) = getpid(); // Save the PID of the hotel in the shared memory
+    pid_t pid = getpid();
+    write_memory(state.hotel_pid, &pid, sizeof(pid_t)); // Save the PID of the hotel in the shared memory
     signal(SIGINT, stop); // Register the signal handler
     log("Started with PID %d\n", getpid());
     
