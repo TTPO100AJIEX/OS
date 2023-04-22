@@ -4,11 +4,9 @@ mkdir -p ./$1/bin
 if [ $1 -lt 7 ]
 then
     gcc $options $1/src/utils/utils.c $1/src/log/log.c $1/src/hotel/hotel.c $1/src/visitor/visitor.c $1/src/index.c -o $1/bin/index.exe -lpthread -lrt
-    cat small_test.txt | ./$1/bin/index.exe $1/output/small.txt
-
 else
     gcc $options $1/src/utils/utils.c $1/src/log/log.c $1/src/hotel.c -o $1/bin/hotel.exe -lpthread -lrt
     gcc $options $1/src/utils/utils.c $1/src/log/log.c $1/src/visitor.c -o $1/bin/visitor.exe -lpthread -lrt
-    node run_independent.mjs $1 small
-
 fi
+
+node run.mjs $1 small

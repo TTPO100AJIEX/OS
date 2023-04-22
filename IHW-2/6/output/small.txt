@@ -1,43 +1,43 @@
-[17:37:57.393.795] Controller: started hotel with PID 3385
-[17:37:57.394.416] Hotel: started with PID 3385
-[17:37:57.395.239] Controller: started m visitor with PID 3386 (time: 1)
-[17:37:57.395.806] Visitor 3386: I want a room
-[17:37:57.396.381] Hotel: initialized 25 rooms
-[17:37:57.396.921] Controller: started m visitor with PID 3387 (time: 2)
-[17:37:57.397.383] Visitor 3387: I want a room
-[17:37:57.398.009] Controller: started m visitor with PID 3388 (time: 3)
-[17:37:57.398.469] Visitor 3388: I want a room
-[17:37:57.399.110] Controller: started f visitor with PID 3389 (time: 1)
-[17:37:57.399.569] Visitor 3389: I want a room
-[17:37:57.897.211] Hotel: male visitor 3386 wants to enter
-[17:37:57.898.024] Hotel: registered the visitor 3386 into the room 0
-[17:37:58.399.387] Visitor 3386: started sleeping
-[17:37:58.900.069] Hotel: male visitor 3387 wants to enter
-[17:37:58.904.663] Hotel: registered the visitor 3387 into the room 0
-[17:37:59.399.996] Visitor 3386: stopped sleeping
-[17:37:59.400.484] Visitor 3386: I want to leave
-[17:37:59.408.351] Visitor 3387: started sleeping
-[17:37:59.909.012] Hotel: male visitor 3388 wants to enter
-[17:37:59.912.322] Hotel: registered the visitor 3388 into the room 1
-[17:38:00.415.828] Visitor 3388: started sleeping
-[17:38:00.916.442] Hotel: female visitor 3389 wants to enter
-[17:38:00.917.225] Hotel: registered the visitor 3389 into the room 2
-[17:38:01.409.361] Visitor 3387: stopped sleeping
-[17:38:01.410.103] Visitor 3387: I want to leave
-[17:38:01.418.138] Visitor 3389: started sleeping
-[17:38:01.918.392] Hotel: visitor with id 3386 wants to leave
-[17:38:01.919.181] Hotel: removed visitor 3386
-[17:38:02.419.150] Visitor 3389: stopped sleeping
-[17:38:02.423.107] Visitor 3386: left the hotel, OK
-[17:38:02.425.964] Visitor 3389: I want to leave
-[17:38:02.921.519] Hotel: visitor with id 3387 wants to leave
-[17:38:02.922.390] Hotel: removed visitor 3387
-[17:38:03.416.562] Visitor 3388: stopped sleeping
-[17:38:03.417.462] Visitor 3388: I want to leave
-[17:38:03.423.180] Visitor 3387: left the hotel, OK
-[17:38:03.923.730] Hotel: visitor with id 3389 wants to leave
-[17:38:03.924.428] Hotel: removed visitor 3389
-[17:38:04.425.534] Visitor 3389: left the hotel, OK
-[17:38:04.925.936] Hotel: visitor with id 3388 wants to leave
-[17:38:04.926.620] Hotel: removed visitor 3388
-[17:38:05.427.833] Visitor 3388: left the hotel, OK
+[19:06:17.775.186] Controller: started hotel with PID 15591
+[19:06:17.778.315] Hotel: started with PID 15591
+[19:06:17.778.681] Controller: started m visitor with PID 15592 (time: 1)
+[19:06:17.779.379] Visitor 15592: I want a room
+[19:06:17.779.514] Hotel: initialized 25 rooms
+[19:06:17.779.641] Controller: started m visitor with PID 15593 (time: 2)
+[19:06:17.780.031] Visitor 15593: I want a room
+[19:06:17.780.204] Controller: started m visitor with PID 15594 (time: 3)
+[19:06:17.780.572] Visitor 15594: I want a room
+[19:06:17.780.716] Controller: started f visitor with PID 15595 (time: 1)
+[19:06:17.780.955] Visitor 15595: I want a room
+[19:06:18.279.984] Hotel: male visitor 15592 wants to enter
+[19:06:18.280.046] Hotel: registered the visitor 15592 into the room 0
+[19:06:18.780.407] Visitor 15592: started sleeping
+[19:06:19.280.899] Hotel: male visitor 15593 wants to enter
+[19:06:19.280.985] Hotel: registered the visitor 15593 into the room 0
+[19:06:19.780.686] Visitor 15592: stopped sleeping
+[19:06:19.780.779] Visitor 15592: I want to leave
+[19:06:19.781.272] Visitor 15593: started sleeping
+[19:06:20.281.735] Hotel: male visitor 15594 wants to enter
+[19:06:20.281.806] Hotel: registered the visitor 15594 into the room 1
+[19:06:20.782.158] Visitor 15594: started sleeping
+[19:06:21.282.619] Hotel: female visitor 15595 wants to enter
+[19:06:21.282.695] Hotel: registered the visitor 15595 into the room 2
+[19:06:21.781.430] Visitor 15593: stopped sleeping
+[19:06:21.781.508] Visitor 15593: I want to leave
+[19:06:21.782.940] Visitor 15595: started sleeping
+[19:06:22.283.881] Hotel: visitor with id 15592 wants to leave
+[19:06:22.283.970] Hotel: removed visitor 15592
+[19:06:22.784.327] Visitor 15592: left the hotel, OK
+[19:06:22.796.830] Visitor 15595: stopped sleeping
+[19:06:22.796.936] Visitor 15595: I want to leave
+[19:06:23.285.300] Hotel: visitor with id 15593 wants to leave
+[19:06:23.285.373] Hotel: removed visitor 15593
+[19:06:23.782.417] Visitor 15594: stopped sleeping
+[19:06:23.782.514] Visitor 15594: I want to leave
+[19:06:23.785.693] Visitor 15593: left the hotel, OK
+[19:06:24.286.488] Hotel: visitor with id 15595 wants to leave
+[19:06:24.286.571] Hotel: removed visitor 15595
+[19:06:24.786.970] Visitor 15595: left the hotel, OK
+[19:06:25.287.778] Hotel: visitor with id 15594 wants to leave
+[19:06:25.287.850] Hotel: removed visitor 15594
+[19:06:25.788.210] Visitor 15594: left the hotel, OK

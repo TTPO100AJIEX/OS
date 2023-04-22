@@ -1,18 +1,18 @@
-[20:52:22.978.605] Started with PID 4961
-[20:52:22.978.704] Initialized 25 rooms
-[20:52:24.487.138] male visitor 4962 wants to enter
-[20:52:24.487.175] Registered the visitor 4962 into the room 0
-[20:52:25.488.686] male visitor 4963 wants to enter
-[20:52:25.488.726] Registered the visitor 4963 into the room 0
-[20:52:26.489.708] male visitor 4964 wants to enter
-[20:52:26.489.756] Registered the visitor 4964 into the room 1
-[20:52:27.491.120] female visitor 4965 wants to enter
-[20:52:27.491.166] Registered the visitor 4965 into the room 2
-[20:52:28.492.574] Visitor with id 4962 wants to leave
-[20:52:28.492.608] Removed visitor 4962
-[20:52:29.493.370] Visitor with id 4963 wants to leave
-[20:52:29.493.405] Removed visitor 4963
-[20:52:30.494.696] Visitor with id 4965 wants to leave
-[20:52:30.494.729] Removed visitor 4965
-[20:52:31.496.200] Visitor with id 4964 wants to leave
-[20:52:31.496.353] Removed visitor 4964
+[19:08:10.588.945] Started with PID 15763
+[19:08:10.589.599] Initialized 25 rooms
+[19:08:12.100.246] male visitor 15764 wants to enter
+[19:08:12.100.306] Registered the visitor 15764 into the room 0
+[19:08:13.101.181] male visitor 15765 wants to enter
+[19:08:13.101.224] Registered the visitor 15765 into the room 0
+[19:08:14.102.312] male visitor 15766 wants to enter
+[19:08:14.102.366] Registered the visitor 15766 into the room 1
+[19:08:15.102.787] female visitor 15767 wants to enter
+[19:08:15.102.834] Registered the visitor 15767 into the room 2
+[19:08:16.105.870] Visitor with id 15764 wants to leave
+[19:08:16.105.936] Removed visitor 15764
+[19:08:17.106.336] Visitor with id 15765 wants to leave
+[19:08:17.106.384] Removed visitor 15765
+[19:08:18.107.758] Visitor with id 15767 wants to leave
+[19:08:18.107.822] Removed visitor 15767
+[19:08:19.108.610] Visitor with id 15766 wants to leave
+[19:08:19.108.654] Removed visitor 15766

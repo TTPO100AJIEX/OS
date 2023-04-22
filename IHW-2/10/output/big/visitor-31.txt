@@ -1,6 +1,6 @@
-[21:15:55.925.559] Started with PID 5449
-[21:15:55.926.272] I want a room
-[21:16:27.875.513] Started sleeping (time: 1)
-[21:16:28.875.774] Stopped sleeping
-[21:16:28.875.799] I want to leave
-[21:17:14.930.889] Left the hotel, OK
+[19:14:16.916.634] Started with PID 16359
+[19:14:16.916.836] I want a room
+[19:14:48.827.738] Started sleeping (time: 1)
+[19:14:49.827.853] Stopped sleeping
+[19:14:49.827.882] I want to leave
+[19:15:35.877.603] Left the hotel, OK
