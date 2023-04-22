@@ -1,0 +1,18 @@
+[18:48:18.707.052] Started with PID 4144
+[18:48:18.707.208] Initialized 25 rooms
+[18:48:20.200.470] male visitor 4145 wants to enter
+[18:48:20.200.512] Registered the visitor 4145 into the room 0
+[18:48:21.202.225] male visitor 4146 wants to enter
+[18:48:21.202.298] Registered the visitor 4146 into the room 0
+[18:48:22.203.329] male visitor 4147 wants to enter
+[18:48:22.203.364] Registered the visitor 4147 into the room 1
+[18:48:23.205.046] female visitor 4148 wants to enter
+[18:48:23.205.077] Registered the visitor 4148 into the room 2
+[18:48:24.205.891] Visitor with id 4145 wants to leave
+[18:48:24.205.918] Removed visitor 4145
+[18:48:25.207.237] Visitor with id 4146 wants to leave
+[18:48:25.207.297] Removed visitor 4146
+[18:48:26.209.101] Visitor with id 4148 wants to leave
+[18:48:26.209.134] Removed visitor 4148
+[18:48:27.209.677] Visitor with id 4147 wants to leave
+[18:48:27.209.710] Removed visitor 4147

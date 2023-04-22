@@ -1,0 +1,3 @@
+[18:38:04.990.561] Started with PID 3927
+[18:38:04.990.664] I want a room
+[18:38:52.936.104] Left the hotel, there were no places for me :(

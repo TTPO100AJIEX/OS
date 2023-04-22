@@ -5,6 +5,7 @@
 enum Gender { NONE, MALE, FEMALE };
 
 
+// Request structures
 struct ComeRequest
 {
     enum Gender gender;
@@ -15,6 +16,7 @@ struct LeaveRequest
     pid_t id;
 };
 
+// Response structures
 struct ComeResponse
 {
     enum ComeStatus { COME_OK, COME_SORRY } status;
@@ -24,6 +26,7 @@ struct LeaveResponse
     enum LeaveStatus { LEAVE_OK } status;
 };
 
+// Message structure
 enum MessageType { COME_REQUEST, LEAVE_REQUEST, COME_RESPONSE, LEAVE_RESPONSE };
 struct Message
 {

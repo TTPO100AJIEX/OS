@@ -1,5 +1,0 @@
-[00:10:04.417.237] [00:10:04.417.281] Hotel: started with PID 3621
-Controller: started hotel with PID 3621
-[00:10:04.418.131] Hotel: initialized 25 rooms
-[00:10:04.418.717] Hotel: female visitor with id 0 came
-[00:10:04.419.079] Hotel: registered visitor 0

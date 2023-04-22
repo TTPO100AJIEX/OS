@@ -1,0 +1,182 @@
+[18:49:02.377.952] Started with PID 4187
+[18:49:02.378.104] Initialized 25 rooms
+[18:49:03.870.472] male visitor 4188 wants to enter
+[18:49:03.870.502] Registered the visitor 4188 into the room 0
+[18:49:04.871.766] male visitor 4189 wants to enter
+[18:49:04.871.795] Registered the visitor 4189 into the room 0
+[18:49:05.873.009] male visitor 4190 wants to enter
+[18:49:05.873.041] Registered the visitor 4190 into the room 1
+[18:49:06.873.619] male visitor 4191 wants to enter
+[18:49:06.873.660] Registered the visitor 4191 into the room 1
+[18:49:07.874.758] female visitor 4192 wants to enter
+[18:49:07.874.791] Registered the visitor 4192 into the room 2
+[18:49:08.875.515] female visitor 4194 wants to enter
+[18:49:08.875.549] Registered the visitor 4194 into the room 2
+[18:49:09.876.305] male visitor 4193 wants to enter
+[18:49:09.876.394] Registered the visitor 4193 into the room 3
+[18:49:10.876.975] female visitor 4195 wants to enter
+[18:49:10.877.070] Registered the visitor 4195 into the room 4
+[18:49:11.877.968] female visitor 4196 wants to enter
+[18:49:11.877.998] Registered the visitor 4196 into the room 4
+[18:49:12.878.842] female visitor 4197 wants to enter
+[18:49:12.878.888] Registered the visitor 4197 into the room 5
+[18:49:13.879.549] male visitor 4198 wants to enter
+[18:49:13.879.591] Registered the visitor 4198 into the room 3
+[18:49:14.880.303] female visitor 4199 wants to enter
+[18:49:14.880.343] Registered the visitor 4199 into the room 5
+[18:49:15.881.273] female visitor 4200 wants to enter
+[18:49:15.881.367] Registered the visitor 4200 into the room 6
+[18:49:16.881.994] female visitor 4201 wants to enter
+[18:49:16.882.027] Registered the visitor 4201 into the room 6
+[18:49:17.882.595] male visitor 4202 wants to enter
+[18:49:17.882.629] Registered the visitor 4202 into the room 7
+[18:49:18.884.282] female visitor 4203 wants to enter
+[18:49:18.884.361] Registered the visitor 4203 into the room 8
+[18:49:19.884.979] female visitor 4204 wants to enter
+[18:49:19.885.010] Registered the visitor 4204 into the room 8
+[18:49:20.886.034] male visitor 4205 wants to enter
+[18:49:20.886.077] Registered the visitor 4205 into the room 7
+[18:49:21.886.856] male visitor 4206 wants to enter
+[18:49:21.886.890] Registered the visitor 4206 into the room 9
+[18:49:22.887.527] female visitor 4207 wants to enter
+[18:49:22.887.608] Registered the visitor 4207 into the room 10
+[18:49:23.888.500] female visitor 4208 wants to enter
+[18:49:23.888.533] Registered the visitor 4208 into the room 10
+[18:49:24.889.232] female visitor 4209 wants to enter
+[18:49:24.889.263] Registered the visitor 4209 into the room 11
+[18:49:25.890.412] female visitor 4210 wants to enter
+[18:49:25.890.445] Registered the visitor 4210 into the room 11
+[18:49:26.891.160] male visitor 4211 wants to enter
+[18:49:26.891.191] Registered the visitor 4211 into the room 9
+[18:49:27.892.533] female visitor 4212 wants to enter
+[18:49:27.892.566] Registered the visitor 4212 into the room 12
+[18:49:28.893.384] female visitor 4213 wants to enter
+[18:49:28.893.416] Registered the visitor 4213 into the room 12
+[18:49:29.894.182] male visitor 4214 wants to enter
+[18:49:29.894.250] Registered the visitor 4214 into the room 13
+[18:49:30.895.047] female visitor 4215 wants to enter
+[18:49:30.895.078] Registered the visitor 4215 into the room 14
+[18:49:31.895.935] male visitor 4216 wants to enter
+[18:49:31.896.017] Registered the visitor 4216 into the room 13
+[18:49:32.897.167] male visitor 4217 wants to enter
+[18:49:32.897.226] Registered the visitor 4217 into the room 15
+[18:49:33.898.235] female visitor 4218 wants to enter
+[18:49:33.898.266] Registered the visitor 4218 into the room 14
+[18:49:34.899.563] male visitor 4219 wants to enter
+[18:49:34.899.600] Registered the visitor 4219 into the room 16
+[18:49:35.900.923] female visitor 4220 wants to enter
+[18:49:35.900.954] Registered the visitor 4220 into the room 17
+[18:49:36.901.827] male visitor 4221 wants to enter
+[18:49:36.901.862] Registered the visitor 4221 into the room 18
+[18:49:37.902.883] male visitor 4222 wants to enter
+[18:49:37.902.947] Registered the visitor 4222 into the room 19
+[18:49:38.904.139] male visitor 4223 wants to enter
+[18:49:38.904.212] Registered the visitor 4223 into the room 20
+[18:49:39.905.044] male visitor 4224 wants to enter
+[18:49:39.905.077] Registered the visitor 4224 into the room 21
+[18:49:40.906.394] male visitor 4225 wants to enter
+[18:49:40.906.426] Registered the visitor 4225 into the room 22
+[18:49:41.908.093] female visitor 4226 wants to enter
+[18:49:41.908.125] Registered the visitor 4226 into the room 23
+[18:49:42.908.913] female visitor 4228 wants to enter
+[18:49:42.908.949] Registered the visitor 4228 into the room 24
+[18:49:43.910.184] female visitor 4227 wants to enter
+[18:49:43.910.229] Failed to register the visitor 4227
+[18:49:44.911.272] female visitor 4229 wants to enter
+[18:49:44.911.299] Failed to register the visitor 4229
+[18:49:45.912.805] female visitor 4230 wants to enter
+[18:49:45.912.833] Failed to register the visitor 4230
+[18:49:46.914.458] male visitor 4231 wants to enter
+[18:49:46.914.493] Failed to register the visitor 4231
+[18:49:47.915.400] male visitor 4232 wants to enter
+[18:49:47.915.553] Failed to register the visitor 4232
+[18:49:48.916.428] male visitor 4233 wants to enter
+[18:49:48.916.455] Failed to register the visitor 4233
+[18:49:49.917.290] female visitor 4234 wants to enter
+[18:49:49.917.318] Failed to register the visitor 4234
+[18:49:50.917.922] male visitor 4235 wants to enter
+[18:49:50.917.953] Failed to register the visitor 4235
+[18:49:51.919.830] male visitor 4236 wants to enter
+[18:49:51.919.901] Failed to register the visitor 4236
+[18:49:52.920.666] female visitor 4237 wants to enter
+[18:49:52.920.706] Failed to register the visitor 4237
+[18:49:53.921.423] Visitor with id 4188 wants to leave
+[18:49:53.921.453] Removed visitor 4188
+[18:49:54.921.996] Visitor with id 4189 wants to leave
+[18:49:54.922.027] Removed visitor 4189
+[18:49:55.923.012] Visitor with id 4195 wants to leave
+[18:49:55.923.094] Removed visitor 4195
+[18:49:56.923.957] Visitor with id 4190 wants to leave
+[18:49:56.923.987] Removed visitor 4190
+[18:49:57.924.702] Visitor with id 4191 wants to leave
+[18:49:57.924.733] Removed visitor 4191
+[18:49:58.925.527] Visitor with id 4197 wants to leave
+[18:49:58.925.560] Removed visitor 4197
+[18:49:59.926.449] Visitor with id 4194 wants to leave
+[18:49:59.926.528] Removed visitor 4194
+[18:50:00.927.212] Visitor with id 4192 wants to leave
+[18:50:00.927.251] Removed visitor 4192
+[18:50:01.928.522] Visitor with id 4196 wants to leave
+[18:50:01.928.553] Removed visitor 4196
+[18:50:02.929.548] Visitor with id 4199 wants to leave
+[18:50:02.929.580] Removed visitor 4199
+[18:50:03.930.360] Visitor with id 4200 wants to leave
+[18:50:03.930.392] Removed visitor 4200
+[18:50:04.931.547] Visitor with id 4201 wants to leave
+[18:50:04.931.611] Removed visitor 4201
+[18:50:05.932.390] Visitor with id 4202 wants to leave
+[18:50:05.932.425] Removed visitor 4202
+[18:50:06.933.710] Visitor with id 4193 wants to leave
+[18:50:06.933.752] Removed visitor 4193
+[18:50:07.935.127] Visitor with id 4206 wants to leave
+[18:50:07.935.160] Removed visitor 4206
+[18:50:08.936.605] Visitor with id 4204 wants to leave
+[18:50:08.936.657] Removed visitor 4204
+[18:50:09.938.333] Visitor with id 4198 wants to leave
+[18:50:09.938.406] Removed visitor 4198
+[18:50:10.940.182] Visitor with id 4210 wants to leave
+[18:50:10.940.243] Removed visitor 4210
+[18:50:11.941.241] Visitor with id 4203 wants to leave
+[18:50:11.941.316] Removed visitor 4203
+[18:50:12.942.416] Visitor with id 4211 wants to leave
+[18:50:12.942.448] Removed visitor 4211
+[18:50:13.943.828] Visitor with id 4207 wants to leave
+[18:50:13.943.905] Removed visitor 4207
+[18:50:14.945.391] Visitor with id 4205 wants to leave
+[18:50:14.945.448] Removed visitor 4205
+[18:50:15.947.181] Visitor with id 4216 wants to leave
+[18:50:15.947.284] Removed visitor 4216
+[18:50:16.948.655] Visitor with id 4208 wants to leave
+[18:50:16.948.700] Removed visitor 4208
+[18:50:17.950.856] Visitor with id 4209 wants to leave
+[18:50:17.950.929] Removed visitor 4209
+[18:50:18.951.728] Visitor with id 4214 wants to leave
+[18:50:18.951.761] Removed visitor 4214
+[18:50:19.952.569] Visitor with id 4212 wants to leave
+[18:50:19.952.602] Removed visitor 4212
+[18:50:20.953.585] Visitor with id 4217 wants to leave
+[18:50:20.953.631] Removed visitor 4217
+[18:50:21.954.337] Visitor with id 4219 wants to leave
+[18:50:21.954.371] Removed visitor 4219
+[18:50:22.954.912] Visitor with id 4222 wants to leave
+[18:50:22.954.944] Removed visitor 4222
+[18:50:23.955.542] Visitor with id 4213 wants to leave
+[18:50:23.955.576] Removed visitor 4213
+[18:50:24.956.281] Visitor with id 4215 wants to leave
+[18:50:24.956.318] Removed visitor 4215
+[18:50:25.957.058] Visitor with id 4218 wants to leave
+[18:50:25.957.109] Removed visitor 4218
+[18:50:26.957.736] Visitor with id 4220 wants to leave
+[18:50:26.957.768] Removed visitor 4220
+[18:50:27.958.499] Visitor with id 4223 wants to leave
+[18:50:27.958.530] Removed visitor 4223
+[18:50:28.959.125] Visitor with id 4226 wants to leave
+[18:50:28.959.160] Removed visitor 4226
+[18:50:29.959.881] Visitor with id 4224 wants to leave
+[18:50:29.959.915] Removed visitor 4224
+[18:50:30.960.635] Visitor with id 4225 wants to leave
+[18:50:30.960.671] Removed visitor 4225
+[18:50:31.961.387] Visitor with id 4221 wants to leave
+[18:50:31.961.456] Removed visitor 4221
+[18:50:32.962.340] Visitor with id 4228 wants to leave
+[18:50:32.962.376] Removed visitor 4228

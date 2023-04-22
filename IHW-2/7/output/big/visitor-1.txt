@@ -1,0 +1,6 @@
+[18:38:04.887.411] Started with PID 3881
+[18:38:04.887.494] I want a room
+[18:38:06.887.170] Started sleeping (time: 7)
+[18:38:13.887.464] Stopped sleeping
+[18:38:13.887.522] I want to leave
+[18:38:56.942.245] Left the hotel, OK
