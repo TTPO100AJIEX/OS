@@ -32,7 +32,7 @@ int main(void)
         .sin_addr = { .s_addr = inet_addr(server_ip) }
     };
     if (connect(connection, (struct sockaddr *)(&server_address), sizeof(server_address)) == -1) { perror("Failed to connect to the server"); close(connection); return 1; }
-
+    printf("Established connection with the server\n");
     
     char message[MAX_MESSAGE_SIZE + 1]; // Initialize the message object
     fgets(message, MAX_MESSAGE_SIZE, stdin); // Skip the remaining symbols
@@ -46,13 +46,13 @@ int main(void)
         else message[strlen(message)] = '\0';
 
         // Send the message to the server
-        if (send(connection, message, strlen(message), 0) == -1) { perror("Failed to send a message to the server"); close(connection); return 1; }
+        if (send(connection, message, strlen(message), 0) != strlen(message)) { perror("Failed to send a message to the server"); close(connection); return 1; }
         
         // Check if it was an end message
         if (strcmp(message, END_MESSAGE) == 0) break;
     }
 
     // Close the connnection and stop
-    close(connection);
+    if (close(connection) == -1) { perror("Failed to close the connection"); return 1; }
     return 0;
 }

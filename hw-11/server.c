@@ -3,6 +3,7 @@
 #include <string.h>
 #include <inttypes.h>
 #include <unistd.h>
+#include <sys/types.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include "common.h"
@@ -34,10 +35,12 @@ int main(void)
     // Receive the connection from the second client
     int client2 = accept(server, NULL, 0);
     if (client2 == -1) { perror("Failed to accept a connection from the second client"); close(server); return 1; }
+    printf("Established the connection with the client 2\n");
 
     // Receive the connection from the first client
     int client1 = accept(server, NULL, 0);
     if (client1 == -1) { perror("Failed to accept a connection from the first client"); close(client2); close(server); return 1; }
+    printf("Established the connection with the client 1\n");
 
     while(true)
     {
@@ -57,9 +60,13 @@ int main(void)
         if (strcmp(message, END_MESSAGE) == 0) break;
     }
 
+    // The server is not allowed to stop before the clients, so the server waits until both clients close the connection (thus recv returns 0)
+    recv(client1, NULL, 0, 0);
+    recv(client2, NULL, 0, 0);
+
     // Close everything and stop
-    close(client1);
-    close(client2);
-    close(server);
+    if (close(client1) == -1) { perror("Failed to close the client1 socket"); close(client2); close(server); return 1; }
+    if (close(client2) == -1) { perror("Failed to close the client2 socket"); close(server); return 1; }
+    if (close(server) == -1) { perror("Failed to close the server"); return 1; }
     return 0;
 }

@@ -32,7 +32,7 @@ int main(void)
         .sin_addr = { .s_addr = inet_addr(server_ip) }
     };
     if (connect(connection, (struct sockaddr *)(&server_address), sizeof(server_address)) == -1) { perror("Failed to connect to the server"); close(connection); return 1; }
-
+    printf("Established connection with the server\n");
 
     while (true)
     {
@@ -50,6 +50,6 @@ int main(void)
     }
 
     // Close the connnection and stop
-    close(connection);
+    if (close(connection) == -1) { perror("Failed to close the connection"); return 1; }
     return 0;
 }
