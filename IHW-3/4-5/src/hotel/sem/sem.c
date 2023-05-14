@@ -1,5 +1,6 @@
 #include "sem.h"
 
+#include <stddef.h>
 #include <fcntl.h>
 
 sem_t* create_semaphore(const char* name, unsigned int value)
