@@ -1,6 +1,8 @@
 #pragma once
 
 #include <semaphore.h>
+
+// Semaphore utilities
 sem_t* create_semaphore(const char* name, unsigned int value);
 int wait_semaphore(sem_t* sem);
 int post_semaphore(sem_t* sem);

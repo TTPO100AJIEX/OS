@@ -5,7 +5,7 @@
 
 sem_t* create_semaphore(const char* name, unsigned int value)
 {
-    sem_t* sem = sem_open(name, O_CREAT, 0666, value);
+    sem_t* sem = sem_open(name, O_CREAT, 0666, value); // Create a POSIX semaphore
     return (sem == SEM_FAILED) ? NULL : sem;
 }
 int wait_semaphore(sem_t* sem) { return (sem_wait(sem) == -1) ? -1 : 0; }
