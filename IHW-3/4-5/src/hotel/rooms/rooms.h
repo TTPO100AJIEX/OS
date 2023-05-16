@@ -9,7 +9,6 @@
 
 struct Room
 {
-    bool isForSinglePerson;
     enum Gender gender;
     union RoomResidents
     {
@@ -31,3 +30,6 @@ struct Rooms
 struct Rooms initialize_rooms(const char* memory_name, const char* semaphore_name);
 int close_rooms(struct Rooms* rooms);
 int destroy_rooms(struct Rooms* rooms);
+
+int take_room(struct Rooms* rooms, enum Gender gender);
+int free_room(struct Rooms* rooms);

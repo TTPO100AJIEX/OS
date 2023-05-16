@@ -1,4 +1,4 @@
 #pragma once
 
-enum Gender { NONE, MALE, FEMALE };
-enum ComeStatus { COME_OK, COME_SORRY };
+enum Gender { NONE = 0, MALE = 1, FEMALE = 2 };
+enum ComeStatus { COME_OK = 0, COME_SORRY = 1 };
