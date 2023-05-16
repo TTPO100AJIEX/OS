@@ -33,3 +33,5 @@ int destroy_rooms(struct Rooms* rooms);
 
 int take_room(struct Rooms* rooms, enum Gender gender);
 int free_room(struct Rooms* rooms);
+
+char* get_rooms_layout(struct Rooms* rooms);

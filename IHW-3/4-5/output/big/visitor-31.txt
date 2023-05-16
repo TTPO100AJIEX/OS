@@ -1,0 +1,5 @@
+[22:05:34.819.992] Connected to the server
+[22:05:35.320.375] Sent gender male to the server
+[22:05:35.820.738] Received status OK from the server
+[22:05:35.820.778] Started sleeping (time: 1)
+[22:05:36.820.886] Stopped sleeping

@@ -26,7 +26,9 @@ int main(int argc, char** argv) // <Port>
     // Initialize the rooms
     struct Rooms rooms = initialize_rooms("/rooms_rooms", "/rooms_rooms_sync");
     if (!rooms.ok) { perror("Failed to initialize to rooms"); destroy_log(); return 1; }
-    log("Initialized the rooms\n");
+    char* rooms_layout = get_rooms_layout(&rooms);
+    log("Initialized the rooms\n%s\n", rooms_layout);
+    free(rooms_layout);
 
     // Create the socket
     int server = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
@@ -46,60 +48,47 @@ int main(int argc, char** argv) // <Port>
 
         pid_t process = fork(); // Create a child process that will handle the client
         if (process == -1) { perror("Failed to fork"); break; } // If something went wrong, stop the program
-        if (process == 0)
+        if (process != 0) { close(client); continue; } // Parent process; the client is not needed in the parent process
+        // Child process
+
+        // Close the server as it is not needed in the child process
+        if (close(server) == -1) { perror("Failed to close the server"); close_rooms(&rooms); close(client); close_log(); return 1; }
+        log("Accepted a connection (pid: %d)\n", getpid());
+
+        // Receive visitor's gender
+        enum Gender gender = NONE;
+        if (recv(client, &gender, sizeof(gender), 0) == sizeof(gender)) // Otherwise, something went wrong and the request should be declined
         {
-            // Visitor handler
+            log("Received gender %s from the visitor (pid: %d)\n", gender == MALE ? "male" : "female", getpid());
+            
+            // Find a room for the visitor
+            int room = take_room(&rooms, gender);
+            if (room == -1) { log("Failed to register (pid: %d)\n", getpid()); }
+            else { char* layout = get_rooms_layout(&rooms); log("Registered into the room %d (pid: %d)\n%s\n", room, getpid(), layout); free(layout); }
+            
+            // Sleep for more realistic interaction
+            struct timespec to_sleep = { .tv_sec = 0, .tv_nsec = 5e8 };
+            nanosleep(&to_sleep, NULL);
 
-            // Close the server as it is not needed in the child process
-            if (close(server) == -1) { perror("Failed to close the server"); close_rooms(&rooms); close(client); close_log(); return 1; }
-            log("Accepted a connection (pid: %d)\n", getpid());
-
-            // Receive visitor's gender
-            enum Gender gender = NONE;
-            int size = recv(client, &gender, sizeof(gender), 0);
-            if (size == sizeof(gender)) // Otherwise, something went wrong and the request should be declined
+            // Send the status to the visitor
+            enum ComeStatus status = (room == -1 ? COME_SORRY : COME_OK);
+            if (send(client, &status, sizeof(status), 0) == sizeof(status))
             {
-                log("Received gender %s from the visitor (pid: %d)\n", gender == MALE ? "male" : "female", getpid());
-                
-                // Find a room for the visitor
-                int room = take_room(&rooms, gender);
-                if (room == -1)
-                {
-                    log("Failed to register (pid: %d)\n", getpid());
-                }
-                else
-                {
-                    log("Registered into the room %d (pid: %d)\n", room, getpid());
-                }
-                
-                // Sleep for more realistic interaction
-                struct timespec to_sleep = { .tv_sec = 0, .tv_nsec = 5e8 };
-                nanosleep(&to_sleep, NULL);
-
-                // Send the status to the visitor
-                enum ComeStatus status = (room == -1 ? COME_SORRY : COME_OK);
-                if (send(client, &status, sizeof(status), 0) == sizeof(status))
-                {
-                    // Wait for the client to close the connection - leave the hotel
-                    char tmp;
-                    recv(client, &tmp, sizeof(tmp), 0);
-                    // Free the room
-                    int room = free_room(&rooms);
-                    log("Visitor left from room %d (pid: %d)\n", room, getpid());
-                }
+                // Wait for the client to close the connection - leave the hotel
+                char tmp; recv(client, &tmp, sizeof(tmp), 0);
+                // Free the room
+                int room = free_room(&rooms);
+                if (room == -1) { log("Visitor left (pid: %d)\n", getpid()); }
+                else { char* layout = get_rooms_layout(&rooms); log("Visitor left room %d (pid: %d)\n%s\n", room, getpid(), layout); free(layout); }
             }
+        }
 
-            // Close everything
-            if (close_rooms(&rooms) == -1) { perror("Failed to close the rooms"); close(client); close_log(); return 1; }
-            if (close(client) == -1) { perror("Failed to close the client"); close_log(); return 1; }
-            log("Closed the connection (pid: %d)\n", getpid());
-            if (close_log() == -1) { perror("Failed to close the logger"); return 1; }
-            return 0;
-        }
-        else
-        {
-            close(client); // The client is not needed in the parent process
-        }
+        // Close everything
+        if (close_rooms(&rooms) == -1) { perror("Failed to close the rooms"); close(client); close_log(); return 1; }
+        if (close(client) == -1) { perror("Failed to close the client"); close_log(); return 1; }
+        log("Closed the connection (pid: %d)\n", getpid());
+        if (close_log() == -1) { perror("Failed to close the logger"); return 1; }
+        return 0;
     }
 
     // Delete everything

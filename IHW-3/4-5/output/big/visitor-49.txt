@@ -1,0 +1,3 @@
+[22:05:34.941.613] Connected to the server
+[22:05:35.441.825] Sent gender female to the server
+[22:05:35.941.963] Received status SORRY from the server

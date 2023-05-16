@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <signal.h>
+#include <time.h>
 #include <unistd.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
@@ -10,7 +11,7 @@
 
 void stop(__attribute__ ((unused)) int signal) { }
 
-int main(int argc, char** argv) // <IP> <Port>
+int main(int argc, char** argv) // <IP> <Port> <Gender (m/f)> <Time>
 {
     // Check and parse the command line arguments
     if (argc < 5) { printf("Not enough command line arguments specified: <IP> <Port> <Gender (m/f)> <Time>\n"); return 1; }
@@ -35,8 +36,12 @@ int main(int argc, char** argv) // <IP> <Port>
     if (connect(client, (struct sockaddr *)(&server_address), sizeof(server_address)) == -1) { perror("Failed to connnect to the server"); close(client); return 1; }
     log("Connected to the server\n");
 
+    // Sleep for more realistic interaction
+    struct timespec to_sleep = { .tv_sec = 0, .tv_nsec = 5e8 };
+    nanosleep(&to_sleep, NULL);
+
     // Send the request to get a room
-    if (send(client, &gender, sizeof(gender), 0) != sizeof(gender)) { perror("Failed to send the gender"); close(client); return 1; }
+    if (send(client, &gender, sizeof(gender), 0) != sizeof(gender)) { perror("Failed to send the request"); close(client); return 1; }
     log("Sent gender %s to the server\n", gender == MALE ? "male" : "female");
 
     // Receive the response
