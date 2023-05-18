@@ -156,7 +156,7 @@ static char* draw_gender(char* write_iter, enum Gender gender)
 }
 char* get_rooms_layout(__attribute__ ((unused)) struct Rooms* rooms)
 {
-    char* result = malloc((25 * 6 + 2) * 3 + (15 * 6 + 2) * 2);
+    char* result = malloc((25 * 6 + 2) * 3 + (15 * 6 + 2) * 2 + 1);
     char* write_iter = result;
 
     *(write_iter++) = '-';
@@ -180,6 +180,6 @@ char* get_rooms_layout(__attribute__ ((unused)) struct Rooms* rooms)
     *(write_iter++) = '-';
     for (unsigned int i = 0; i < 15; i++) for (unsigned int j = 0; j < 6; j++) *(write_iter++) = '-';
 
-    *(write_iter++) = '\0';
+    *(write_iter++) = '\n'; *(write_iter++) = '\0';
     return result;
 }

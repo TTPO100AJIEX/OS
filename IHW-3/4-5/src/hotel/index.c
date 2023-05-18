@@ -59,7 +59,7 @@ int main(int argc, char** argv) // <Port>
         enum Gender gender = NONE;
         if (recv(client, &gender, sizeof(gender), 0) == sizeof(gender)) // Otherwise, something went wrong and the request should be declined
         {
-            log("Received gender %s from the visitor (pid: %d)\n", gender == MALE ? "male" : "female", getpid());
+            log("Received gender %s from the visitor (pid: %d)\n", gender == MALE ? "MALE" : "FEMALE", getpid());
             
             // Find a room for the visitor
             int room = take_room(&rooms, gender);
