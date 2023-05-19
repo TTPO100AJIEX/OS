@@ -1,15 +1,25 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <signal.h>
-#include <time.h>
 #include <unistd.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
 
 #include "../protocol.h"
-#include "log/log.h"
 
 void stop(__attribute__ ((unused)) int signal) { }
+
+#include <time.h>
+#include <sys/time.h>
+int print_time()
+{
+    struct timeval tv;
+    if (gettimeofday(&tv, NULL) == -1) return -1; // Get current time up to microseconds
+    char buffer[16];
+    strftime(buffer, 16, "%H:%M:%S", localtime(&tv.tv_sec)); // Parse current time into nice string
+    printf("[%s.%03d.%03d] ", buffer, (int)(tv.tv_usec / 1000), (int)(tv.tv_usec % 1000)); // Print current time up to microseconds
+    return 0;
+}
 
 int main(int argc, char** argv) // <IP> <Port> <Gender (m/f)> <Time>
 {
@@ -33,30 +43,37 @@ int main(int argc, char** argv) // <IP> <Port> <Gender (m/f)> <Time>
     if (client == -1) { perror("Failed to create a socket"); return 1; }
     // Connect to the server
     struct sockaddr_in server_address = { .sin_family = AF_INET, .sin_port = htons(atoi(argv[2])), .sin_addr = { .s_addr = inet_addr(argv[1]) } };
-    if (connect(client, (struct sockaddr *)(&server_address), sizeof(server_address)) == -1) { perror("Failed to connnect to the server"); close(client); return 1; }
-    log("Connected to the server\n");
-
-    // Sleep for more realistic interaction
-    struct timespec to_sleep = { .tv_sec = 0, .tv_nsec = 5e8 };
-    nanosleep(&to_sleep, NULL);
+    if (connect(client, (struct sockaddr *)(&server_address), sizeof(server_address)) == -1) { perror("Failed to connnect to the server"); goto stop_client; }
+    print_time();
+    printf("Connected to the server\n");
 
     // Send the request to get a room
-    if (send(client, &gender, sizeof(gender), 0) != sizeof(gender)) { perror("Failed to send the request"); close(client); return 1; }
-    log("Sent gender %s to the server\n", gender == MALE ? "male" : "female");
+    if (send(client, &gender, sizeof(gender), 0) != sizeof(gender)) { perror("Failed to send the request"); goto stop_client; }
+    print_time();
+    printf("Sent gender %s to the server\n", gender == MALE ? "male" : "female");
 
     // Receive the response
     enum ComeStatus status;
-    if (recv(client, &status, sizeof(status), 0) != sizeof(status)) { perror("Failed to receive the status"); close(client); return 1; }
-    log("Received status %s from the server\n", status == COME_OK ? "OK" : "SORRY");
+    if (recv(client, &status, sizeof(status), 0) != sizeof(status)) { perror("Failed to receive the status"); goto stop_client; }
+    print_time();
+    printf("Received status %s from the server\n", status == COME_OK ? "OK" : "SORRY");
     
     // Parse the response
     if (status == COME_OK)
     {
-        log("Started sleeping (time: %u)\n", time);
+        print_time();
+        printf("Started sleeping (time: %u)\n", time);
         sleep(time); // Sleep for the specified time
-        log("Stopped sleeping\n");
+        print_time();
+        printf("Stopped sleeping\n");
+    }
+    else
+    {
+        print_time();
+        printf("Left the hotel, there were no places for me :(\n");
     }
 
+stop_client:
     if (close(client) == -1) { perror("Failed to close the socket"); return 1; }
     return 0;
 }

@@ -1,11 +1,7 @@
 #pragma once
 
-#include "../sem/sem.h"
-#include "../shm/shm.h"
-#include "../../protocol.h"
-
-#include <stdbool.h>
 #include <sys/types.h>
+#include "../../protocol.h"
 
 struct Room
 {
@@ -18,20 +14,16 @@ struct Room
 };
 struct Rooms
 {
-    char* memory_name;
+    pid_t owner;
     struct Room* rooms;
-
-    char* semaphore_name;
-    sem_t* rooms_sync;
-
-    bool ok;
+    int rooms1;
+    int rooms2;
 };
 
-struct Rooms initialize_rooms(const char* memory_name, const char* semaphore_name);
-int close_rooms(struct Rooms* rooms);
-int destroy_rooms(struct Rooms* rooms);
+struct Rooms initialize_rooms(struct Room* rooms_storage, int rooms1, int rooms2);
+int delete_rooms(struct Rooms* rooms);
+
+char* get_rooms_layout(struct Rooms* rooms);
 
 int take_room(struct Rooms* rooms, enum Gender gender);
 int free_room(struct Rooms* rooms);
-
-char* get_rooms_layout(struct Rooms* rooms);

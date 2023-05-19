@@ -1,15 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include <time.h>
 #include <signal.h>
 #include <unistd.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
 
 #include "../protocol.h"
-#include "rooms/rooms.h"
+#include "sem/sem.h"
+#include "shm/shm.h"
 #include "log/log.h"
+#include "rooms/rooms.h"
 
 void stop(__attribute__ ((unused)) int signal) { }
 
@@ -21,24 +22,42 @@ int main(int argc, char** argv) // <Port>
     setbuf(stdout, NULL); // Remove the buffering of stdout
     siginterrupt(SIGINT, 1); // Signals must interrupt all system calls
     signal(SIGINT, stop); // Register an empty handler for the change to take effect
-    if (initialize_log("/log_semaphore") == -1) { perror("Failed to initialize the logging"); return 1; } // Initialize the logging
+
+    // Create a semaphore for synchronization
+    struct Semaphore sem = create_semaphore("/hotel_semaphore", 1);
+    if (sem.id == -1) { perror("Failed to create a semaphore"); return 1; }
+
+    // Create a shared memory for rooms storage
+    struct Memory mem = create_memory("/hotel_memory", 25 * sizeof(struct Room));
+    if (!mem.mem) { perror("Failed to create the memory for rooms"); goto stop_server_1; }
+
+    // Initialize the logger
+    struct Logger logger = initialize_logger();
+    if (false) { perror("Failed to initialize the logger"); goto stop_server_2; }
 
     // Initialize the rooms
-    struct Rooms rooms = initialize_rooms("/rooms_rooms", "/rooms_rooms_sync");
-    if (!rooms.ok) { perror("Failed to initialize to rooms"); destroy_log(); return 1; }
-    char* rooms_layout = get_rooms_layout(&rooms);
-    log("Initialized the rooms\n%s\n", rooms_layout);
-    free(rooms_layout);
+    struct Rooms rooms = initialize_rooms(mem.mem, 10, 15);
+    if (false) { perror("Failed to initialize the rooms"); goto stop_server_3; }
+
+    // Print the initial layout
+    if (wait_semaphore(&sem) == -1) { perror("Failed to wait on the semaphore"); goto stop_server_4; }
+    log_message(&logger, "Initialized the rooms\n");
+    log_layout(&logger, &rooms);
+    if (post_semaphore(&sem) == -1) { perror("Failed to post to the semaphore"); goto stop_server_4; }
 
     // Create the socket
     int server = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
-    if (server == -1) { perror("Failed to create a socket"); destroy_rooms(&rooms); destroy_log(); return 1; }
+    if (server == -1) { perror("Failed to create a socket"); goto stop_server_4; }
     // Bind the socket
     struct sockaddr_in server_address = { .sin_family = AF_INET, .sin_port = htons(atoi(argv[1])), .sin_addr = { .s_addr = htonl(INADDR_ANY) } };
-    if (bind(server, (struct sockaddr *)(&server_address), sizeof(server_address)) == -1) { perror("Failed to bind the socket"); close(server); destroy_rooms(&rooms); destroy_log(); return 1; }
+    if (bind(server, (struct sockaddr *)(&server_address), sizeof(server_address)) == -1) { perror("Failed to bind the socket"); goto stop_server; }
     // Start listening for incoming connections
-    if (listen(server, 5) == 1) { perror("Failed to listen for incoming connections"); close(server); destroy_rooms(&rooms); destroy_log(); return 1; }
-    log("Started the server\n");
+    if (listen(server, 5) == 1) { perror("Failed to listen for incoming connections"); goto stop_server; }
+    
+    // Print the log
+    if (wait_semaphore(&sem) == -1) { perror("Failed to wait on the semaphore"); goto stop_server; }
+    log_message(&logger, "Started the server\n");
+    if (post_semaphore(&sem) == -1) { perror("Failed to post to the semaphore"); goto stop_server; }
 
     while (true)
     {
@@ -52,49 +71,77 @@ int main(int argc, char** argv) // <Port>
         // Child process
 
         // Close the server as it is not needed in the child process
-        if (close(server) == -1) { perror("Failed to close the server"); close_rooms(&rooms); close(client); close_log(); return 1; }
-        log("Accepted a connection (pid: %d)\n", getpid());
+        if (close(server) == -1) { perror("Failed to close the server"); goto end_child; }
+
+        // Log the connection
+        if (wait_semaphore(&sem) == -1) { perror("Failed to wait on the semaphore"); goto end_child; }
+        log_message(&logger, "Accepted a connection");
+        log_pid(&logger);
+        if (post_semaphore(&sem) == -1) { perror("Failed to post to the semaphore"); goto end_child; }
 
         // Receive visitor's gender
         enum Gender gender = NONE;
-        if (recv(client, &gender, sizeof(gender), 0) == sizeof(gender)) // Otherwise, something went wrong and the request should be declined
-        {
-            log("Received gender %s from the visitor (pid: %d)\n", gender == MALE ? "MALE" : "FEMALE", getpid());
-            
-            // Find a room for the visitor
-            int room = take_room(&rooms, gender);
-            if (room == -1) { log("Failed to register (pid: %d)\n", getpid()); }
-            else { char* layout = get_rooms_layout(&rooms); log("Registered into the room %d (pid: %d)\n%s\n", room, getpid(), layout); free(layout); }
-            
-            // Sleep for more realistic interaction
-            struct timespec to_sleep = { .tv_sec = 0, .tv_nsec = 5e8 };
-            nanosleep(&to_sleep, NULL);
+        if (recv(client, &gender, sizeof(gender), 0) != sizeof(gender)) goto end_child; // Something went wrong and the request should be declined
 
-            // Send the status to the visitor
-            enum ComeStatus status = (room == -1 ? COME_SORRY : COME_OK);
-            if (send(client, &status, sizeof(status), 0) == sizeof(status))
-            {
-                // Wait for the client to close the connection - leave the hotel
-                char tmp; recv(client, &tmp, sizeof(tmp), 0);
-                // Free the room
-                int room = free_room(&rooms);
-                if (room == -1) { log("Visitor left (pid: %d)\n", getpid()); }
-                else { char* layout = get_rooms_layout(&rooms); log("Visitor left room %d (pid: %d)\n%s\n", room, getpid(), layout); free(layout); }
-            }
-        }
+        // Log the visitor
+        if (wait_semaphore(&sem) == -1) { perror("Failed to wait on the semaphore"); goto end_child; }
+        if (gender == MALE) log_message(&logger, "Received gender MALE from the visitor");
+        else log_message(&logger, "Received gender FEMALE from the visitor");
+        log_pid(&logger);
+        if (post_semaphore(&sem) == -1) { perror("Failed to post to the semaphore"); goto end_child; }
+  
+        // Find a room for the visitor and log this
+        if (wait_semaphore(&sem) == -1) { perror("Failed to wait on the semaphore"); goto end_child; }
+        int room = take_room(&rooms, gender);
+        if (room == -1) { log_message(&logger, "Failed to register"); log_pid(&logger); }
+        else { log_message(&logger, "Registered into the room "); log_integer(&logger, room); log_pid(&logger); log_layout(&logger, &rooms); }
+        if (post_semaphore(&sem) == -1) { perror("Failed to post to the semaphore"); goto end_child; }
+        
+        // Send the status to the visitor
+        enum ComeStatus status = (room == -1 ? COME_SORRY : COME_OK);
+        if (send(client, &status, sizeof(status), 0) != sizeof(status)) goto end_child;
 
+        // Wait for the client to close the connection - leave the hotel
+        char tmp; recv(client, &tmp, sizeof(tmp), 0);
+
+        // Free the room and log this
+        if (wait_semaphore(&sem) == -1) { perror("Failed to wait on the semaphore"); goto end_child; }
+        room = free_room(&rooms);
+        if (room == -1) { log_message(&logger, "Visitor left"); log_pid(&logger); }
+        else { log_message(&logger, "Visitor left room "); log_integer(&logger, room); log_pid(&logger); log_layout(&logger, &rooms); }
+        if (post_semaphore(&sem) == -1) { perror("Failed to post to the semaphore"); goto end_child; }
+
+        // Log the stoppage of the server
+        if (wait_semaphore(&sem) == -1) { perror("Failed to wait on the semaphore"); goto end_child; }
+        log_message(&logger, "Closed the connection");
+        log_pid(&logger);
+        if (post_semaphore(&sem) == -1) { perror("Failed to post to the semaphore"); goto end_child; }
+        
+    end_child:
         // Close everything
-        if (close_rooms(&rooms) == -1) { perror("Failed to close the rooms"); close(client); close_log(); return 1; }
-        if (close(client) == -1) { perror("Failed to close the client"); close_log(); return 1; }
-        log("Closed the connection (pid: %d)\n", getpid());
-        if (close_log() == -1) { perror("Failed to close the logger"); return 1; }
+        if (close(client) == -1) { perror("Failed to close the client"); delete_rooms(&rooms); delete_logger(&logger); delete_memory(&mem); delete_semaphore(&sem); return 1; }
+        if (delete_rooms(&rooms) == -1) { perror("Failed to delete the rooms"); delete_logger(&logger); delete_memory(&mem); delete_semaphore(&sem); return 1; }
+        if (delete_logger(&logger) == -1) { perror("Failed to delete the logger"); delete_memory(&mem); delete_semaphore(&sem); return 1; }
+        if (delete_memory(&mem) == -1) { perror("Failed to delete the memory"); delete_semaphore(&sem); return 1; }
+        if (delete_semaphore(&sem) == -1) { perror("Failed to delete the semaphore"); return 1; }
         return 0;
     }
 
+    // Log the stoppage of the server
+    if (wait_semaphore(&sem) == -1) { perror("Failed to wait on the semaphore"); goto stop_server; }
+    log_message(&logger, "Stopped the server\n");
+    if (post_semaphore(&sem) == -1) { perror("Failed to post to the semaphore"); goto stop_server; }
+    
+stop_server:
     // Delete everything
-    if (destroy_rooms(&rooms) == -1) { perror("Failed to destroy the rooms"); close(server); destroy_log(); return 1; }
-    if (close(server) == -1) { perror("Failed to close the server"); destroy_log(); return 1; }
-    log("Stopped the server\n");
-    if (destroy_log() == -1) { perror("Failed to destroy the logger"); return 1; }
+    if (close(server) == -1) { perror("Failed to close the server"); delete_rooms(&rooms); delete_logger(&logger); delete_memory(&mem); delete_semaphore(&sem); return 1; }
+stop_server_4:
+    if (delete_rooms(&rooms) == -1) { perror("Failed to delete the rooms"); delete_logger(&logger); delete_memory(&mem); delete_semaphore(&sem); return 1; }
+stop_server_3:
+    if (delete_logger(&logger) == -1) { perror("Failed to delete the logger"); delete_memory(&mem); delete_semaphore(&sem); return 1; }
+stop_server_2:
+    if (delete_memory(&mem) == -1) { perror("Failed to delete the memory"); delete_semaphore(&sem); return 1; }
+stop_server_1:
+    if (delete_semaphore(&sem) == -1) { perror("Failed to delete the semaphore"); return 1; }
     return 0;
 }

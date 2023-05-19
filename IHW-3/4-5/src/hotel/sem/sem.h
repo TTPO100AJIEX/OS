@@ -1,10 +1,15 @@
 #pragma once
 
-#include <semaphore.h>
+#include <sys/types.h>
+struct Semaphore
+{
+    pid_t owner;
+    int id;
+};
 
 // Semaphore utilities
-sem_t* create_semaphore(const char* name, unsigned int value);
-int wait_semaphore(sem_t* sem);
-int post_semaphore(sem_t* sem);
-int close_semaphore(sem_t* sem);
-int delete_semaphore(const char* name);
+struct Semaphore create_semaphore(const char* name, unsigned int value);
+int delete_semaphore(struct Semaphore* sem);
+
+int wait_semaphore(struct Semaphore* sem);
+int post_semaphore(struct Semaphore* sem);

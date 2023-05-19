@@ -1,15 +1,20 @@
 #pragma once
 
+#include <stddef.h>
 #include <stdbool.h>
 #include "../sem/sem.h"
 #include "../rooms/rooms.h"
 struct Logger
 {
-    char* memory_name;
-    int* destinations;
-
     char* semaphore_name;
     sem_t* sync;
+
+    char* message_queue_name;
+    int message_queue;
+
+    size_t amount;
+    int* destinations;
+    pid_t logger_pid;
 
     bool ok;
 };

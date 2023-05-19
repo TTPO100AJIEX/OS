@@ -11,6 +11,11 @@
 #include "rooms/rooms.h"
 #include "log/log.h"
 
+struct Logger logger;
+void print_logs(__attribute__ ((unused)) int signal)
+{
+
+}
 void stop(__attribute__ ((unused)) int signal) { }
 
 int main(int argc, char** argv) // <Port>
@@ -21,10 +26,21 @@ int main(int argc, char** argv) // <Port>
     setbuf(stdout, NULL); // Remove the buffering of stdout
     siginterrupt(SIGINT, 1); // Signals must interrupt all system calls
     signal(SIGINT, stop); // Register an empty handler for the change to take effect
-    
+
     // Initialize the logger
-    struct Logger logger = initialize_log("/log_semaphore", "/log_memory");
+    struct Logger logger = initialize_log("/log_semaphore", "/log_memory", );
     if (!logger.ok) { perror("Failed to initialize the logger"); return 1; }
+    signal(SIGUSR1, print_logs); // Register a signal that sends the logs
+
+
+
+
+
+
+
+
+    
+    
 
     // Initialize the rooms
     struct Rooms rooms = initialize_rooms("/rooms_rooms", "/rooms_rooms_sync");

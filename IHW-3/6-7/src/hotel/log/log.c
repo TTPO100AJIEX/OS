@@ -4,16 +4,17 @@
 #include <string.h>
 #include <unistd.h>
 #include <errno.h>
-#include "../shm/shm.h"
+#include "../msq/msq.h"
 
 struct Logger initialize_log(const char* semaphore_name, const char* memory_name)
 {
     // Initialize all fields and return { ok = false } if something failed
     struct Logger logger = { .ok = false };
-    if (!(logger.memory_name = malloc(strlen(memory_name) + 1))) return logger;
-    if (!(logger.destinations = create_memory(memory_name, 100 * sizeof(int)))) return logger;
     if (!(logger.semaphore_name = malloc(strlen(semaphore_name) + 1))) return logger;
     if (!(logger.sync = create_semaphore(semaphore_name, 1))) return logger;
+
+
+    if (!(logger.destinations = create_memory(memory_name, 100 * sizeof(int)))) return logger;
     // Save memory and semaphore names
     strcpy(logger.memory_name, memory_name);
     strcpy(logger.semaphore_name, semaphore_name);

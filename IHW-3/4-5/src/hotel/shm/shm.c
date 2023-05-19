@@ -1,19 +1,38 @@
 #include "shm.h"
 
-#define _POSIX_C_SOURCE 200809L // For ftruncate and kill to work properly
 #include <stddef.h>
-#include <fcntl.h>
 #include <unistd.h>
-#include <sys/stat.h>
-#include <sys/mman.h>
+#include <string.h>
+#include <errno.h>
+#include <sys/ipc.h>
+#include <sys/shm.h>
 
-void* create_memory(const char* name, unsigned int size)
+#define ipc_filepath "src/hotel/sem/sem.c"
+static int string_hash(const char* string)
 {
-    shm_unlink(name); // Delete the memory if it already exists for OSX compatibility
-    int shm_id = shm_open(name, O_CREAT | O_RDWR, 0666); // Create POSIX memory
-    if (shm_id == -1) return NULL;
-    if (ftruncate(shm_id, size) == -1) return NULL; // Size the memory
-    void* ans = mmap(0, size, PROT_WRITE | PROT_READ, MAP_SHARED, shm_id, 0); // Load the memory
-    return (ans == MAP_FAILED) ? NULL : ans;
+    int ans = 0;
+    for (unsigned int i = 0; i < strlen(string); i++) ans = ((ans * 131) + string[i]) % 15999989;
+    return ans;
 }
-int delete_memory(const char* name) { return (shm_unlink(name) == -1) ? -1 : 0; }
+
+struct Memory create_memory(const char* name, size_t size)
+{
+    // Create the memory instance
+    struct Memory mem = { .owner = getpid(), .mem = NULL, .id = shmget(IPC_PRIVATE + 1 + ftok(ipc_filepath, string_hash(name)), size, 0666 | IPC_CREAT) };
+    if (mem.id == -1) return mem;
+    // Load the memory
+    mem.mem = shmat(mem.id, NULL, 0);
+    if (!mem.mem) delete_memory(&mem);
+    return mem;
+}
+int delete_memory(struct Memory* mem)
+{
+    int err = 0; // Save errno to make this function work correctly with perror
+    // Close the memory
+    if (shmdt(mem->mem) == -1) err = errno;
+    // Delete the memory in the parent process
+    if (mem->owner == getpid() && shmctl(mem->id, IPC_RMID, NULL) == -1) err = errno;
+    // Restore errno and return
+    if (err != 0) errno = err;
+    return (err == 0) ? 0 : -1;
+}

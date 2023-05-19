@@ -1,15 +1,22 @@
 #pragma once
 
-#include "../sem/sem.h"
-extern sem_t* log_semaphore;
-int initialize_log(const char* semaphore_name);
-int close_log();
-int destroy_log();
+#include <sys/types.h>
+#include "../rooms/rooms.h"
+struct Logger
+{
+    pid_t owner;
+};
 
-#include <stdio.h>
-int log_time();
-// Thread-safe logging: prints current time and message
-#define log(template, ...)  if (wait_semaphore(log_semaphore) == -1) perror("Log: failed to wait on the semaphore"); \
-                            if (log_time() == -1) perror("Log: failed to print the time"); \
-                            if (printf(template __VA_OPT__(,) __VA_ARGS__) < 0) perror("Log: failed to print the message"); \
-                            if (post_semaphore(log_semaphore) == -1) perror("Log: failed to open the semaphore")
+struct Logger initialize_logger();
+int delete_logger(struct Logger* logger);
+
+
+void log_string(struct Logger* logger, const char* message);
+
+void log_integer(struct Logger* logger, int number);
+void log_uinteger(struct Logger* logger, unsigned int number, unsigned int digits);
+void log_message(struct Logger* logger, const char* message);
+void log_layout(struct Logger* logger, struct Rooms* rooms);
+
+void log_time(struct Logger* logger);
+void log_pid(struct Logger* logger);
