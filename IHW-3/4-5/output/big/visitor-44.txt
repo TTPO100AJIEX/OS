@@ -1,4 +1,0 @@
-[18:13:01.337.707] Connected to the server
-[18:13:01.347.239] Sent gender male to the server
-[18:13:01.416.316] Received status SORRY from the server
-[18:13:01.416.332] Left the hotel, there were no places for me :(

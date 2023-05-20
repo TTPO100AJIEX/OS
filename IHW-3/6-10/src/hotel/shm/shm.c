@@ -17,9 +17,10 @@ static int string_hash(const char* string)
 #include <stdio.h>
 struct Memory create_memory(const char* name, size_t size)
 {
-    printf("%d", ftok(".", string_hash(name)));
+    key_t key = ftok(".", string_hash(name)); // Get a key
+    shmctl(shmget(key, size, 0), IPC_RMID, NULL); // Delete old memory if exists
     // Create the memory instance
-    struct Memory mem = { .owner = getpid(), .mem = NULL, .id = shmget(ftok(".", string_hash(name)), size, 0666 | IPC_CREAT) };
+    struct Memory mem = { .owner = getpid(), .mem = NULL, .id = shmget(key, size, 0666 | IPC_CREAT) };
     if (mem.id == -1) return mem;
     // Load the memory
     mem.mem = shmat(mem.id, NULL, 0);

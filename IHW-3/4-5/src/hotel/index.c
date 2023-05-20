@@ -48,6 +48,9 @@ int main(int argc, char** argv) // <Port>
     // Create the socket
     int server = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
     if (server == -1) { perror("Failed to create a socket"); goto stop_server_4; }
+    // Set socket to allow easy disconnect
+    int socket_flag = 1;
+    if (setsockopt(server, SOL_SOCKET, SO_REUSEADDR, (void*)(&socket_flag), sizeof(socket_flag)) == -1) { perror("Failed to setup the socket"); goto stop_server; }
     // Bind the socket
     struct sockaddr_in server_address = { .sin_family = AF_INET, .sin_port = htons(atoi(argv[1])), .sin_addr = { .s_addr = htonl(INADDR_ANY) } };
     if (bind(server, (struct sockaddr *)(&server_address), sizeof(server_address)) == -1) { perror("Failed to bind the socket"); goto stop_server; }

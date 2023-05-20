@@ -15,8 +15,10 @@ static int string_hash(const char* string)
 
 struct Semaphore create_semaphore(const char* name, unsigned int value)
 {
+    key_t key = ftok(".", string_hash(name)); // Get a key
+    semctl(semget(key, 1, 0), 1, IPC_RMID); // Delete old semaphore if exists
     // Create the semaphore
-    struct Semaphore sem = { .owner = getpid(), .id = semget(ftok(".", string_hash(name)), 1, 0666 | IPC_CREAT) };
+    struct Semaphore sem = { .owner = getpid(), .id = semget(key, 1, 0666 | IPC_CREAT) };
     if (sem.id == -1) return sem;
     // Set the initial value as System V does not allow to do that in semget
     struct sembuf operation = { 0, value, 0 };
