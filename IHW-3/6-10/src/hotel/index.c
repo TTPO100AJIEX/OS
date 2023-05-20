@@ -1,4 +1,3 @@
-#define _POSIX_C_SOURCE 200809L // For ftruncate and kill to work properly
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -100,7 +99,7 @@ int main(int argc, char** argv) // <Port>
 
                 // Log the connection
                 if (lock_rooms(&rooms) == -1) { perror("Failed to lock the rooms"); kill(rooms.owner, SIGINT); }
-                if (log_message(&logger, "Started the server\n") == -1) { perror("Failed to log a message"); kill(rooms.owner, SIGINT); }
+                if (log_message(&logger, "Accepted a visitor\n") == -1) { perror("Failed to log a message"); kill(rooms.owner, SIGINT); }
                 if (log_pid(&logger) == -1) { perror("Failed to log a message"); kill(rooms.owner, SIGINT); }
                 if (unlock_rooms(&rooms) == -1) { perror("Failed to unlock the rooms"); kill(rooms.owner, SIGINT); }
 
@@ -120,12 +119,12 @@ int main(int argc, char** argv) // <Port>
                 int room = take_room(&rooms, gender);
                 if (room == -1)
                 {
-                    if (log_message(&logger, "Failed to register ") == -1) { perror("Failed to log a message"); kill(rooms.owner, SIGINT); }
+                    if (log_message(&logger, "Failed to register") == -1) { perror("Failed to log a message"); kill(rooms.owner, SIGINT); }
                     if (log_pid(&logger) == -1) { perror("Failed to log a message"); kill(rooms.owner, SIGINT); }
                 }
                 else
                 {
-                    if (log_message(&logger, "Registered into the room") == -1) { perror("Failed to log a message"); kill(rooms.owner, SIGINT); }
+                    if (log_message(&logger, "Registered into the room ") == -1) { perror("Failed to log a message"); kill(rooms.owner, SIGINT); }
                     if (log_integer(&logger, room) == -1) { perror("Failed to log a message"); kill(rooms.owner, SIGINT); }
                     if (log_pid(&logger) == -1) { perror("Failed to log a message"); kill(rooms.owner, SIGINT); }
                     if (log_layout(&logger, &rooms) == -1) { perror("Failed to log a message"); kill(rooms.owner, SIGINT); }
@@ -157,6 +156,7 @@ int main(int argc, char** argv) // <Port>
                 if (unlock_rooms(&rooms) == -1) { perror("Failed to unlock the rooms"); kill(rooms.owner, SIGINT); }
 
                 raise(SIGINT);
+                break;
             }
             default:
             {

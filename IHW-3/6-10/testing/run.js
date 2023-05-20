@@ -1,9 +1,9 @@
 import fs from 'fs';
 import { spawn } from 'child_process';
-/*
+
 const hotel = spawn(`./6-10/bin/hotel.exe`, [ process.argv[3] ]);
 var hotelOutput = ""; hotel.stdout.on('data', data => hotelOutput += data.toString());
-await new Promise(r => setTimeout(r, 1000));*/
+await new Promise(r => setTimeout(r, 1000));
 
 const test = fs.readFileSync(`6-10/testing/${process.argv[2]}_test.txt`, "utf-8").replaceAll("\r", "").split('\n');
 var visitorsOutput = new Array(test.length / 2).fill(""), waiters = [ ];
@@ -14,7 +14,7 @@ for (let i = 0; i < test.length; i += 2)
     waiters.push(new Promise(resolve => visitor.on('exit', resolve)));
     await new Promise(r => setTimeout(r, 20));
 }
-/*
+
 
 var loggersOutput = [ ], loggersWaiters = [ ];
 const interval = setInterval(() =>
@@ -43,4 +43,4 @@ Promise.all(waiters).then(async (data) =>
     fs.writeFileSync(`6-10/output/${process.argv[2]}/hotel.txt`, hotelOutput, "utf-8");
     for (let i = 0; i < visitorsOutput.length; i++) fs.writeFileSync(`6-10/output/${process.argv[2]}/visitors/visitor-${i}.txt`, visitorsOutput[i], "utf-8");
     for (let i = 0; i < loggersOutput.length; i++) fs.writeFileSync(`6-10/output/${process.argv[2]}/loggers/logger-${i}.txt`, loggersOutput[i], "utf-8");
-});*/
+});

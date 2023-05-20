@@ -53,6 +53,7 @@ int read_string(struct Logger* this)
     printf("%s", message); // Print to the console
     for (unsigned int i = 0; i < this->destinations_amount; i++) send(this->destinations[i], message, strlen(message), 0); // Broadcast to the loggers
     return post_semaphore(&(this->msqsem));
+
 }
 
 

@@ -1,5 +1,5 @@
-[19:44:59.818.032] Connected to the server
-[19:44:59.818.158] Sent client_type to the server
-[19:44:59.818.166] Sent gender female to the server
-[19:44:59.818.818] Received status SORRY from the server
-[19:44:59.818.847] Left the hotel, there were no places for me :(
+[23:46:09.523.308] Connected to the server
+[23:46:09.523.483] Sent client_type to the server
+[23:46:09.523.496] Sent gender female to the server
+[23:46:09.524.383] Received status SORRY from the server
+[23:46:09.524.418] Left the hotel, there were no places for me :(

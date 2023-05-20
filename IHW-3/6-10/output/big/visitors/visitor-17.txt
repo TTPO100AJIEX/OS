@@ -1,6 +1,6 @@
-[19:44:58.982.171] Connected to the server
-[19:44:58.982.311] Sent client_type to the server
-[19:44:58.982.320] Sent gender male to the server
-[19:44:58.982.991] Received status OK from the server
-[19:44:58.983.020] Started sleeping (time: 12)
-[19:45:10.983.126] Stopped sleeping
+[23:46:08.758.341] Connected to the server
+[23:46:08.758.505] Sent client_type to the server
+[23:46:08.758.518] Sent gender male to the server
+[23:46:08.759.249] Received status OK from the server
+[23:46:08.759.276] Started sleeping (time: 12)
+[23:46:20.759.398] Stopped sleeping
