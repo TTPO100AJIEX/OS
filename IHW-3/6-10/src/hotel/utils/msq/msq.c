@@ -1,6 +1,5 @@
 #include "msq.h"
 
-#include <fcntl.h>
 #include <unistd.h>
 #include <string.h>
 #include <sys/ipc.h>
@@ -32,8 +31,6 @@ struct MessageQueueBuffer
     long mtype;
     char mtext[1024]; // Definitely enough for all messages
 };
-#include <errno.h>
-#include <stdio.h>
 int write_message_queue(struct MessageQueue* msq, const void* src, unsigned int size)
 {
     struct MessageQueueBuffer buffer = { .mtype = 1 };
@@ -47,12 +44,4 @@ int read_message_queue(struct MessageQueue* msq, void* dest, unsigned int size)
     if (msgrcv(msq->id, &buffer, 1024, 1, 0) == -1) return -1; // Get the data    
     memcpy(dest, buffer.mtext, size); // Copy the data to the destination
     return 0;
-}
-
-
-int message_queue_size(struct MessageQueue* msq)
-{
-    struct msqid_ds data;
-    if (msgctl(msq->id, IPC_STAT, &data) == -1) return -1;
-    return data.msg_qnum;
 }

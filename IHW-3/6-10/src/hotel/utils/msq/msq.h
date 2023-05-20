@@ -13,5 +13,3 @@ int delete_message_queue(struct MessageQueue* msq);
 
 int write_message_queue(struct MessageQueue* msq, const void* src, unsigned int size);
 int read_message_queue(struct MessageQueue* msq, void* dest, unsigned int size);
-
-int message_queue_size(struct MessageQueue* msq);

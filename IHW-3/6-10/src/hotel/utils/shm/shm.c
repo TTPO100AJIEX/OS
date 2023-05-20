@@ -3,7 +3,6 @@
 #include <stddef.h>
 #include <unistd.h>
 #include <string.h>
-#include <errno.h>
 #include <sys/ipc.h>
 #include <sys/shm.h>
 
@@ -14,7 +13,6 @@ static int string_hash(const char* string)
     return ans;
 }
 
-#include <stdio.h>
 struct Memory create_memory(const char* name, size_t size)
 {
     key_t key = ftok(".", string_hash(name)); // Get a key
@@ -29,12 +27,10 @@ struct Memory create_memory(const char* name, size_t size)
 }
 int delete_memory(struct Memory* mem)
 {
-    int err = 0; // Save errno to make this function work correctly with perror
-    // Close the memory
-    if (shmdt(mem->mem) == -1) err = errno;
+    int status = 0;
+    // Close the memory in every process
+    if (shmdt(mem->mem) == -1) status = -1;
     // Delete the memory in the parent process
-    if (mem->owner == getpid() && shmctl(mem->id, IPC_RMID, NULL) == -1) err = errno;
-    // Restore errno and return
-    if (err != 0) errno = err;
-    return (err == 0) ? 0 : -1;
+    if (mem->owner == getpid() && shmctl(mem->id, IPC_RMID, NULL) == -1) status = -1;
+    return status;
 }

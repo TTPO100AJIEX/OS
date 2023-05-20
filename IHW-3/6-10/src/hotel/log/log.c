@@ -1,31 +1,58 @@
 #include "log.h"
 
-#include <sys/socket.h>
 #include <unistd.h>
 #include <time.h>
 #include <sys/time.h>
 #include <string.h>
 #include <stdlib.h>
 
-struct Logger initialize_logger(struct MessageQueue* msq, struct Semaphore* msqsem)
+struct Logger initialize_logger(const char* message_queue_name, const char* semaphore_name)
 {
     // Create the object
-    return (struct Logger){ .owner = getpid(), .msq = msq, .msqsem = msqsem, .destinations_amount = 0, .destinations = NULL };
+    struct Logger answer = {
+        .owner = getpid(),
+        .ok = false,
+        
+        .msq = create_message_queue(message_queue_name),
+        .msqsem = create_semaphore(semaphore_name, 1),
+        
+        .destinations_amount = 0,
+        .destinations = NULL
+    };
+    // Check if everything initialized successfully
+    if (answer.msq.id != -1 && answer.msqsem.id != -1) answer.ok = true;
+    return answer;
 }
-int delete_logger(struct Logger* logger)
+int delete_logger(struct Logger* this)
 {
+    int status = 0;
     // Close the clients, and it is fine if the operation fails
-    for (unsigned int i = 0; i < logger->destinations_amount; i++) close(logger->destinations[i]);
-    free(logger->destinations); // Both parent and children have to free the memory
+    for (unsigned int i = 0; i < this->destinations_amount; i++) close(this->destinations[i]);
+    free(this->destinations); // Both parent and children have to free the memory
+    // Delete the message queue and the semaphore
+    if (delete_message_queue(&(this->msq)) == -1) status = -1;
+    if (delete_semaphore(&(this->msqsem)) == -1) status = -1;
+    return status;
+}
+
+int add_log_destination(struct Logger* this, int client)
+{
+    ++this->destinations_amount;
+    this->destinations = realloc(this->destinations, this->destinations_amount * sizeof(int));
+    if (!this->destinations) { this->destinations_amount = 0; return -1; }
+    this->destinations[this->destinations_amount - 1] = client;
     return 0;
 }
-int add_log_destination(struct Logger* logger, int client)
+
+#include <stdio.h>
+#include <sys/socket.h>
+int read_string(struct Logger* this)
 {
-    ++logger->destinations_amount;
-    logger->destinations = realloc(logger->destinations, logger->destinations_amount * sizeof(int));
-    if (!logger->destinations) return -1;
-    logger->destinations[logger->destinations_amount - 1] = client;
-    return 0;
+    char message[1024]; // Buffer
+    if (read_message_queue(&(this->msq), message, 1000) == -1) { post_semaphore(&(this->msqsem)); return -1; } // Read one message
+    printf("%s", message); // Print to the console
+    for (unsigned int i = 0; i < this->destinations_amount; i++) send(this->destinations[i], message, strlen(message), 0); // Broadcast to the loggers
+    return post_semaphore(&(this->msqsem));
 }
 
 
@@ -58,46 +85,47 @@ static char* write_uinteger(char* dest, unsigned int number, unsigned int digits
 }
 
 #define _POSIX_C_SOURCE 200809L // For ftruncate and kill to work properly
-#include <stdio.h>
 #include <signal.h>
-void log_string(struct Logger* logger, const char* message)
+int log_string(struct Logger* this, const char* message)
 {
-    // if (wait_semaphore(logger->msqsem) == -1) perror("YYY");
+    // Wait for the queue to empty
+    if (wait_semaphore(&(this->msqsem)) == -1) return -1;
     // Send the message to the queue
-    if (write_message_queue(logger->msq, message, strlen(message)) == -1) perror("Failed to write to the message queue");
+    if (write_message_queue(&(this->msq), message, strlen(message)) == -1) { post_semaphore(&(this->msqsem)); return -1; }
     // Send the signal to the parent process to make it print the message
-    if (kill(logger->owner, SIGUSR1) == -1) perror("Failed to send SIGUSR1 to the parent");
+    if (kill(this->owner, SIGUSR1) == -1) { post_semaphore(&(this->msqsem)); return -1; }
+    return 0;
 }
 
-void log_integer(struct Logger* logger, int number)
+int log_integer(struct Logger* this, int number)
 {
     // Transform an integer into a string and log it
     char buffer[16]; *(write_integer(buffer, number)) = '\0';
-    log_string(logger, buffer);
+    return log_string(this, buffer);
 }
-void log_uinteger(struct Logger* logger, unsigned int number, unsigned int digits)
+int log_uinteger(struct Logger* this, unsigned int number, unsigned int digits)
 {
     // Transform an integer into a string with given number of digits and log it
     char buffer[16]; *(write_uinteger(buffer, number, digits)) = '\0';
-    log_string(logger, buffer);
+    return log_string(this, buffer);
 }
-void log_message(struct Logger* logger, const char* message)
+int log_message(struct Logger* this, const char* message)
 {
     // Log a string with time
-    log_time(logger);
-    log_string(logger, message);
+    return (log_time(this) == -1 || log_string(this, message) == -1) ? -1 : 0;
 }
-void log_layout(struct Logger* logger, struct Rooms* rooms)
+int log_layout(struct Logger* this, struct Rooms* rooms)
 {
     char* rooms_layout = get_rooms_layout(rooms); // Get the layout of the rooms
-    log_string(logger, rooms_layout); // Log the layout
+    int status = log_string(this, rooms_layout); // Log the layout
     free(rooms_layout); // Free the memory allocated by get_rooms_layout
+    return status;
 }
 
-void log_time(struct Logger* logger)
+int log_time(struct Logger* this)
 {
     struct timeval tv;
-    if (gettimeofday(&tv, NULL) == -1) return; // Get current time up to microseconds
+    if (gettimeofday(&tv, NULL) == -1) return -1; // Get current time up to microseconds
     char buffer[16];
     strftime(buffer, 16, "%H:%M:%S", localtime(&tv.tv_sec)); // Parse current time into nice string
 
@@ -112,13 +140,13 @@ void log_time(struct Logger* logger)
     writer = write_uinteger(writer, tv.tv_usec % 1000, 3);
     *(writer++) = ']'; *(writer++) = ' '; *(writer++) = '\0';
 
-    log_string(logger, message);
+    return log_string(this, message);
 }
-void log_pid(struct Logger* logger)
+int log_pid(struct Logger* this)
 {
     // Convert the PID into a string and log it
     char string[32] = " (pid: "; char* writer = &string[7];
     writer = write_integer(writer, getpid());
     *(writer++) = ')'; *(writer++) = '\n'; *(writer++) = '\0';
-    log_string(logger, string);
+    return log_string(this, string);
 }
