@@ -62,7 +62,7 @@ static char* write_uinteger(char* dest, unsigned int number, unsigned int digits
 #include <signal.h>
 void log_string(struct Logger* logger, const char* message)
 {
-    if (wait_semaphore(logger->msqsem) == -1) perror("YYY");
+    // if (wait_semaphore(logger->msqsem) == -1) perror("YYY");
     // Send the message to the queue
     if (write_message_queue(logger->msq, message, strlen(message)) == -1) perror("Failed to write to the message queue");
     // Send the signal to the parent process to make it print the message

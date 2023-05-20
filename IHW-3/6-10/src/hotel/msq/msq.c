@@ -44,7 +44,7 @@ int write_message_queue(struct MessageQueue* msq, const void* src, unsigned int 
 int read_message_queue(struct MessageQueue* msq, void* dest, unsigned int size)
 {
     struct MessageQueueBuffer buffer;
-    if (msgrcv(msq->id, &buffer, 1024, 1, 0) == -1) return -1; // Get the data
+    if (msgrcv(msq->id, &buffer, 1024, 1, 0) == -1) return -1; // Get the data    
     memcpy(dest, buffer.mtext, size); // Copy the data to the destination
     return 0;
 }

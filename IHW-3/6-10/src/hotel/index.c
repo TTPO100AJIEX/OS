@@ -8,34 +8,26 @@
 #include <arpa/inet.h>
 
 #include "../protocol.h"
-#include "sem/sem.h"
-#include "shm/shm.h"
-#include "msq/msq.h"
 #include "log/log.h"
 #include "rooms/rooms.h"
 
-void stop(__attribute__ ((unused)) int signal) { }
+#include "sem/sem.h"
+#include "msq/msq.h"
 
-struct MessageQueue msq;
-struct Logger logger;
-struct Semaphore msgsem;
-#include <errno.h>
+struct Logger logger = { };
+struct Rooms rooms;
+void stop(__attribute__ ((unused)) int signal)
+{
+
+}
+
 void read_logs(__attribute__ ((unused)) int signal)
 {
-    printf("-");
     char message[1024]; // Buffer
-    printf("*");
-    errno = 0;
     read_message_queue(&msq, message, 1000); // Read one message
-    perror("t");
-    printf("!");
-    for (unsigned int i = 0; i < 100; i++)
-    {
-        printf("%d", (int)(message[i]));
-    }
-    // printf("%s", message); // Print the message
-    // for (unsigned int i = 0; i < logger.destinations_amount; i++) send(logger.destinations[i], message, strlen(message), 0); // Broadcast the message to the loggers
-    if (post_semaphore(&msgsem) == -1) perror("TTT");
+    printf("%s", message);
+    for (unsigned int i = 0; i < logger.destinations_amount; i++) send(logger.destinations[i], message, strlen(message), 0); // Broadcast the message to the loggers
+    // if (post_semaphore(&msgsem) == -1) perror("TTT");
 }
 
 int main(int argc, char** argv) // <Port>
@@ -46,6 +38,18 @@ int main(int argc, char** argv) // <Port>
     setbuf(stdout, NULL); // Remove the buffering of stdout
     siginterrupt(SIGINT, 1); // Signals must interrupt all system calls
     signal(SIGINT, stop); // Register an empty handler for the change to take effect
+
+    // Initialize the logger
+    logger = initialize_logger(&msq, &msgsem);
+    if (false) { perror("Failed to initialize the logger"); goto stop_server_3; }
+    signal(SIGUSR1, read_logs); // Setup the signal listener to print logs
+
+    // Initialize the rooms
+    struct Rooms rooms = initialize_rooms(mem.mem, 10, 15);
+    if (false) { perror("Failed to initialize the rooms"); goto stop_server_4; }
+
+
+
 
     // Create a semaphore for synchronization
     struct Semaphore sem = create_semaphore("/hotel_semaphore", 1);
@@ -60,14 +64,6 @@ int main(int argc, char** argv) // <Port>
     msq = create_message_queue("/hotel_msq");
     if (msq.id == -1) { perror("Failed to create a message queue"); goto stop_server_2; }
 
-    // Initialize the logger
-    logger = initialize_logger(&msq, &msgsem);
-    if (false) { perror("Failed to initialize the logger"); goto stop_server_3; }
-    signal(SIGUSR1, read_logs); // Setup the signal listener to print logs
-
-    // Initialize the rooms
-    struct Rooms rooms = initialize_rooms(mem.mem, 10, 15);
-    if (false) { perror("Failed to initialize the rooms"); goto stop_server_4; }
 
     // Print the initial layout
     if (wait_semaphore(&sem) == -1) { perror("Failed to wait on the semaphore"); goto stop_server_5; }
