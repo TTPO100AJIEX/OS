@@ -35,7 +35,7 @@ int write_message_queue(struct MessageQueue* msq, const void* src, unsigned int 
 {
     struct MessageQueueBuffer buffer = { .mtype = 1 };
     memcpy(buffer.mtext, src, size); // Copy the data into the buffer
-    buffer.mtext[size] = '\0';
+    buffer.mtext[size] = '\0'; // Add a null terminator
     return msgsnd(msq->id, &buffer, 1024, 0); // Send the data
 }
 int read_message_queue(struct MessageQueue* msq, void* dest, unsigned int size)

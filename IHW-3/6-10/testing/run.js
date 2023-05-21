@@ -5,15 +5,6 @@ const hotel = spawn(`./6-10/bin/hotel.exe`, [ process.argv[3] ]);
 var hotelOutput = ""; hotel.stdout.on('data', data => hotelOutput += data.toString());
 await new Promise(r => setTimeout(r, 1000));
 
-const test = fs.readFileSync(`6-10/testing/${process.argv[2]}_test.txt`, "utf-8").replaceAll("\r", "").split('\n');
-var visitorsOutput = new Array(test.length / 2).fill(""), waiters = [ ];
-for (let i = 0; i < test.length; i += 2)
-{
-    const visitor = spawn(`./6-10/bin/visitor.exe`, [ "127.0.0.1", process.argv[3], test[i], test[i + 1] ]);
-    visitor.stdout.on('data', data => visitorsOutput[i / 2] += data.toString());
-    waiters.push(new Promise(resolve => visitor.on('exit', resolve)));
-    await new Promise(r => setTimeout(r, 20));
-}
 
 
 var loggersOutput = [ ], loggersWaiters = [ ];
@@ -26,6 +17,16 @@ const interval = setInterval(() =>
 }, 250);
 
 
+const test = fs.readFileSync(`6-10/testing/${process.argv[2]}_test.txt`, "utf-8").replaceAll("\r", "").split('\n');
+var visitorsOutput = new Array(test.length / 2).fill(""), waiters = [ ];
+for (let i = 0; i < test.length; i += 2)
+{
+    const visitor = spawn(`./6-10/bin/visitor.exe`, [ "127.0.0.1", process.argv[3], test[i], test[i + 1] ]);
+    visitor.stdout.on('data', data => visitorsOutput[i / 2] += data.toString());
+    waiters.push(new Promise(resolve => visitor.on('exit', resolve)));
+    await new Promise(r => setTimeout(r, 75));
+}
+
 Promise.all(waiters).then(async (data) =>
 {
     clearInterval(interval);
@@ -35,7 +36,7 @@ Promise.all(waiters).then(async (data) =>
     hotel.kill('SIGINT');
     await new Promise(resolve => hotel.on('exit', resolve));
 
-    await Promise.all(loggersWaiters);
+    console.log(await Promise.all(loggersWaiters));
     
     fs.rmSync(`6-10/output/${process.argv[2]}`, { recursive: true, force: true });
     fs.mkdirSync(`6-10/output/${process.argv[2]}/visitors`, { recursive: true });

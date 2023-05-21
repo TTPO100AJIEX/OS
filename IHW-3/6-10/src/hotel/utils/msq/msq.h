@@ -3,8 +3,8 @@
 #include <sys/types.h>
 struct MessageQueue
 {
-    pid_t owner;
-    int id;
+    pid_t owner; // Owner of the message queue
+    int id; // ID of the instance
 };
 
 // Message queue utilities

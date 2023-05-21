@@ -67,11 +67,20 @@ int main(int argc, char** argv) // <Port>
     if (log_message(&logger, "Started the server\n") == -1) { perror("Failed to log a message"); raise(SIGINT); }
     if (unlock_rooms(&rooms) == -1) { perror("Failed to unlock the rooms"); raise(SIGINT); }
 
+    // Change the state of the logger: initially it should be locked
+    if (lock_logger(&logger) == -1) { perror("Failed to unlock the logger"); raise(SIGINT); }
+    
     while (true)
     {
+        // Let someone initiate the logging while parent process is waiting to accept a connection
+        if (unlock_logger(&logger) == -1) { perror("Failed to unlock the logger"); raise(SIGINT); }
+
         // Receive the connection from the client
         int client = accept(server, NULL, 0);
         if (client == -1) { perror("Failed to accept a connection"); raise(SIGINT); }
+        
+        // Do not let anyone log anything until the request is handled. Logging can only be done while waiting for accept
+        if (lock_logger(&logger) == -1) { perror("Failed to unlock the logger"); raise(SIGINT); }
 
         // Get the type of the client
         enum ClientType client_type = UNKNOWN;
@@ -91,6 +100,7 @@ int main(int argc, char** argv) // <Port>
                 if (process == -1) { perror("Failed to fork"); close(client); raise(SIGINT); } // If something went wrong, stop the program
                 if (process != 0) { close(client); break; } // Parent process; the client is not needed in the parent process
                 // Child process
+                signal(SIGUSR1, SIG_IGN); // remove an unnecessary listener
                 socket_to_close_on_stop = client;
 
                 // Close the server as it is not needed in the child process
@@ -99,7 +109,7 @@ int main(int argc, char** argv) // <Port>
 
                 // Log the connection
                 if (lock_rooms(&rooms) == -1) { perror("Failed to lock the rooms"); kill(rooms.owner, SIGINT); }
-                if (log_message(&logger, "Accepted a visitor\n") == -1) { perror("Failed to log a message"); kill(rooms.owner, SIGINT); }
+                if (log_message(&logger, "Accepted a visitor") == -1) { perror("Failed to log a message"); kill(rooms.owner, SIGINT); }
                 if (log_pid(&logger) == -1) { perror("Failed to log a message"); kill(rooms.owner, SIGINT); }
                 if (unlock_rooms(&rooms) == -1) { perror("Failed to unlock the rooms"); kill(rooms.owner, SIGINT); }
 
@@ -133,7 +143,7 @@ int main(int argc, char** argv) // <Port>
                 
                 // Send the status to the visitor
                 enum ComeStatus status = (room == -1 ? COME_SORRY : COME_OK);
-                if (send(client, &status, sizeof(status), 0) != sizeof(status)) raise(SIGINT); // Something went wrong and the connection should be stopped
+                if (send(client, &status, sizeof(status), MSG_NOSIGNAL) != sizeof(status)) raise(SIGINT); // Something went wrong and the connection should be stopped
 
                 // Wait for the client to close the connection - leave the hotel
                 char tmp; recv(client, &tmp, sizeof(tmp), 0);

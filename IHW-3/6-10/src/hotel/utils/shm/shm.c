@@ -16,7 +16,7 @@ static int string_hash(const char* string)
 struct Memory create_memory(const char* name, size_t size)
 {
     key_t key = ftok(".", string_hash(name)); // Get a key
-    shmctl(shmget(key, size, 0), IPC_RMID, NULL); // Delete old memory if exists
+    shmctl(shmget(key, size, 0), IPC_RMID, NULL); // Delete old memory if it exists
     // Create the memory instance
     struct Memory mem = { .owner = getpid(), .mem = NULL, .id = shmget(key, size, 0666 | IPC_CREAT) };
     if (mem.id == -1) return mem;

@@ -12,7 +12,7 @@ for (let i = 0; i < test.length; i += 2)
     const visitor = spawn(`./4-5/bin/visitor.exe`, [ "127.0.0.1", process.argv[3], test[i], test[i + 1] ]);
     visitor.stdout.on('data', data => visitorsOutput[i / 2] += data.toString());
     waiters.push(new Promise(resolve => visitor.on('exit', resolve)));
-    await new Promise(r => setTimeout(r, 20));
+    await new Promise(r => setTimeout(r, 75));
 }
 
 console.log(await Promise.all(waiters));

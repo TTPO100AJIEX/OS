@@ -20,6 +20,9 @@ struct Logger
 struct Logger initialize_logger(const char* message_queue_name, const char* semaphore_name);
 int delete_logger(struct Logger* this);
 
+int lock_logger(struct Logger* this);
+int unlock_logger(struct Logger* this);
+
 int add_log_destination(struct Logger* this, int client);
 
 int read_string(struct Logger* this);

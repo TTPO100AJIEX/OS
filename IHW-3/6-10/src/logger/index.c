@@ -47,9 +47,9 @@ int main(int argc, char** argv) // <IP> <Port>
 
     char message[1024]; // A buffer that is definitely enough
     int size;
-    while ((size = recv(client, message, sizeof(message), 0)) > 0)
+    while ((size = recv(client, message, sizeof(message) - 1, 0)) > 0)
     {
-        message[size] = '\0';
+        message[size] = '\0'; // Add the null terminator
         printf("%s", message); // Read while there is something to read and print it to the console; recv will fail when the server is turned off
     }
 

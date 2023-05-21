@@ -3,8 +3,8 @@
 #include <sys/types.h>
 struct Semaphore
 {
-    pid_t owner;
-    int id;
+    pid_t owner; // Owner of the semaphore
+    int id; // ID of the instance
 };
 
 // Semaphore utilities

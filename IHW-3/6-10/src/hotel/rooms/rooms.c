@@ -1,6 +1,5 @@
 #include "rooms.h"
 
-#define _POSIX_C_SOURCE 200809L // For ftruncate and kill to work properly
 #include <signal.h>
 #include <unistd.h>
 
@@ -20,9 +19,10 @@ struct Rooms initialize_rooms(__attribute__ ((unused)) const char* memory_name, 
     };
     // Check if everything initialized successfully
     if (!answer.mem.mem || answer.sem.id == -1) return answer;
-    // Fill the memory
+    // Set remaining fields
     answer.storage = answer.mem.mem;
     answer.ok = true;
+    // Fill the memory
     for (int i = 0; i < rooms2; i++) { answer.storage[i].residents.people[0] = 0; answer.storage[i].residents.people[1] = 0; }
     for (int i = rooms2; i < rooms1 + rooms2; i++) { answer.storage[i].residents.person = 0; }
     return answer;
