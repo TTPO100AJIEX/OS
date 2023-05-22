@@ -35,7 +35,9 @@ int main(int argc, char** argv) // <IP> <Port> <Gender (m/f)> <Time>
     if (time == 0) { printf("Invalid time specified\n"); return 1; }
     
     setbuf(stdout, NULL); // Remove the buffering of stdout
-    signal(SIGINT, stop); // Register an empty handler for the change to take effect
+    // Register an empty handler for SIGINT to make it interrupt all system calls
+    struct sigaction sigint_settings = { .sa_handler = stop, .sa_flags = 0 };
+    sigaction(SIGINT, &sigint_settings, NULL);
 
     // Create the socket
     int client = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
