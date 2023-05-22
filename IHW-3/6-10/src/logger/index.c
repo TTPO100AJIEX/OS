@@ -27,7 +27,6 @@ int main(int argc, char** argv) // <IP> <Port>
     if (argc < 3) { printf("Not enough command line arguments specified: <IP> <Port>\n"); return 1; }
     
     setbuf(stdout, NULL); // Remove the buffering of stdout
-    siginterrupt(SIGINT, 1); // Signals must interrupt all system calls
     signal(SIGINT, stop); // Register an empty handler for the change to take effect
 
     // Create the socket
