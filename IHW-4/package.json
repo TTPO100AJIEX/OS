@@ -1,0 +1,25 @@
+{
+    "name": "ihw-3",
+    "type": "module",
+    "version": "1.0.0",
+    "author": "TTPO100AJIEX",
+    "license": "MIT",
+    "description": "",
+    "scripts":
+    {
+        "compile-4-5": "./4-5/compile.sh",
+        "compile-6-10": "./6-10/compile.sh",
+
+        "small-4-5": "node 4-5/testing/run.js small 8000",
+        "small-6-10": "node 6-10/testing/run.js small 8000",
+
+        "big-4-5": "node 4-5/testing/run.js big 8000",
+        "big-6-10": "node 6-10/testing/run.js big 8000",
+
+        "4-5": "npm run compile-4-5 && npm run small-4-5 && npm run big-4-5",
+        "6-10": "npm run compile-6-10 && npm run small-6-10 && npm run big-6-10",
+
+        "all": "npm run clear && npm run 4-5 && npm run 6-10",
+        "clear": "rm -rf */bin && rm -rf */output"
+    }
+}
