@@ -24,7 +24,7 @@ int print_time()
 int main(int argc, char** argv) // <IP> <Port>
 {
     // Check and parse the command line arguments
-    if (argc < 3) { printf("Not enough command line arguments specified: <IP> <Port>\n"); return 1; }
+    /*if (argc < 3) { printf("Not enough command line arguments specified: <IP> <Port>\n"); return 1; }
     
     setbuf(stdout, NULL); // Remove the buffering of stdout
     // Register an empty handler for SIGINT to make it interrupt all system calls
@@ -55,6 +55,6 @@ int main(int argc, char** argv) // <IP> <Port>
     }
 
 stop_client:
-    if (close(client) == -1) { perror("Failed to close the socket"); return 1; }
+    if (close(client) == -1) { perror("Failed to close the socket"); return 1; }*/
     return 0;
 }

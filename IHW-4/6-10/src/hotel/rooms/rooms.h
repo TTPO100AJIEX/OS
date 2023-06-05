@@ -7,15 +7,6 @@
 #include "../utils/sem/sem.h"
 #include "../rooms/rooms.h"
 
-struct Room
-{
-    enum Gender gender;
-    union RoomResidents
-    {
-        pid_t person;
-        pid_t people[2];
-    } residents;
-};
 struct Rooms
 {
     pid_t owner; // Owner of the rooms (to determine who must delete everything)

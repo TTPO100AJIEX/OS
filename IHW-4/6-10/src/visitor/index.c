@@ -26,7 +26,29 @@ int main(int argc, char** argv) // <IP> <Port> <Gender (m/f)> <Time>
     // Check and parse the command line arguments
     if (argc < 5) { printf("Not enough command line arguments specified: <IP> <Port> <Gender (m/f)> <Time>\n"); return 1; }
 
-    enum Gender gender = NONE;
+    struct Request request = {
+        .type = COME_REQUEST,
+        .data = {
+            .come_request = {
+                .gender = MALE,
+                .time = 4
+            }
+        }
+    };
+
+    // Create the socket
+    int client = socket(PF_INET, SOCK_DGRAM, IPPROTO_UDP);
+    if (client == -1) { perror("Failed to create a socket"); return 1; }
+
+    struct sockaddr_in server_address = { .sin_family = AF_INET, .sin_port = htons(atoi(argv[2])), .sin_addr = { .s_addr = inet_addr(argv[1]) } };
+    printf("%ld", sendto(client, &request, sizeof(request), 0, (struct sockaddr *)(&server_address), sizeof(server_address)));
+    printf("%ld", sendto(client, &request, sizeof(request), 0, (struct sockaddr *)(&server_address), sizeof(server_address)));
+
+    struct Response response;
+    printf("%zd", recvfrom(client, &response, sizeof(response), 0, NULL, NULL));
+
+
+    /*enum Gender gender = NONE;
     if (argv[3][0] == 'm') gender = MALE;
     if (argv[3][0] == 'f') gender = FEMALE;
     if (gender == NONE) { printf("Invalid gender specified\n"); return 1; }
@@ -81,6 +103,6 @@ int main(int argc, char** argv) // <IP> <Port> <Gender (m/f)> <Time>
     }
 
 stop_client:
-    if (close(client) == -1) { perror("Failed to close the socket"); return 1; }
+    if (close(client) == -1) { perror("Failed to close the socket"); return 1; }*/
     return 0;
 }
