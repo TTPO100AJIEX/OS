@@ -5,10 +5,6 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 
-#include "../protocol.h"
-
-void stop(__attribute__ ((unused)) int signal) { }
-
 #include <time.h>
 #include <sys/time.h>
 int print_time()
@@ -21,65 +17,78 @@ int print_time()
     return 0;
 }
 
+#include "../protocol.h"
+
+enum Gender gender = GENDER_NONE;
+unsigned int stay_time = 0;
+int client = -1;
+struct sockaddr_in server_address;
+void stop(__attribute__ ((unused)) int signal)
+{
+    // TODO: send leave request
+    if (close(client) == -1) { perror("Failed to close the socket"); exit(1); }
+    exit(0);
+}
+
+void request(struct Request request)
+{
+    if (sendto(client, &request, sizeof(request), 0, (struct sockaddr *)(&server_address), sizeof(server_address)) != sizeof(request))
+    {
+        perror("Failed to send a request");
+        raise(SIGINT);
+    }
+}
+struct Response response(enum ResponseType type)
+{
+    struct Response response;
+    if (recvfrom(client, &response, sizeof(response), 0, NULL, NULL) != sizeof(response))
+    {
+        perror("Failed to receive a response");
+        raise(SIGINT);
+    }
+    if (response.type != type)
+    {
+        printf("Received an invalid response (expected: %d, received: %d)\n", type, response.type);
+        raise(SIGINT);
+    }
+    return response;
+}
+
 int main(int argc, char** argv) // <IP> <Port> <Gender (m/f)> <Time>
 {
     // Check and parse the command line arguments
     if (argc < 5) { printf("Not enough command line arguments specified: <IP> <Port> <Gender (m/f)> <Time>\n"); return 1; }
 
-    struct Request request = {
-        .type = COME_REQUEST,
-        .data = {
-            .come_request = {
-                .gender = MALE,
-                .time = 4
-            }
-        }
-    };
-
-    // Create the socket
-    int client = socket(PF_INET, SOCK_DGRAM, IPPROTO_UDP);
-    if (client == -1) { perror("Failed to create a socket"); return 1; }
-
-    struct sockaddr_in server_address = { .sin_family = AF_INET, .sin_port = htons(atoi(argv[2])), .sin_addr = { .s_addr = inet_addr(argv[1]) } };
-    printf("%ld", sendto(client, &request, sizeof(request), 0, (struct sockaddr *)(&server_address), sizeof(server_address)));
-    printf("%ld", sendto(client, &request, sizeof(request), 0, (struct sockaddr *)(&server_address), sizeof(server_address)));
-
-    struct Response response;
-    printf("%zd", recvfrom(client, &response, sizeof(response), 0, NULL, NULL));
-
-
-    /*enum Gender gender = NONE;
-    if (argv[3][0] == 'm') gender = MALE;
-    if (argv[3][0] == 'f') gender = FEMALE;
-    if (gender == NONE) { printf("Invalid gender specified\n"); return 1; }
-
-    unsigned int time = atoi(argv[4]);
-    if (time == 0) { printf("Invalid time specified\n"); return 1; }
+    server_address = (struct sockaddr_in){ .sin_family = AF_INET, .sin_port = htons(atoi(argv[2])), .sin_addr = { .s_addr = inet_addr(argv[1]) } };
     
+    gender = GENDER_NONE;
+    if (argv[3][0] == 'm') gender = GENDER_MALE;
+    if (argv[3][0] == 'f') gender = GENDER_FEMALE;
+    if (gender == GENDER_NONE) { printf("Invalid gender specified\n"); return 1; }
+
+    stay_time = atoi(argv[4]);
+    if (stay_time == 0) { printf("Invalid time specified\n"); return 1; }
+
     setbuf(stdout, NULL); // Remove the buffering of stdout
-    // Register an empty handler for SIGINT to make it interrupt all system calls
-    struct sigaction sigint_settings = { .sa_handler = stop, .sa_flags = 0 };
-    sigaction(SIGINT, &sigint_settings, NULL);
+    signal(SIGINT, stop); // Register SIGINT handler
 
     // Create the socket
-    int client = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
+    client = socket(PF_INET, SOCK_DGRAM, IPPROTO_UDP);
     if (client == -1) { perror("Failed to create a socket"); return 1; }
-    // Connect to the server
-    struct sockaddr_in server_address = { .sin_family = AF_INET, .sin_port = htons(atoi(argv[2])), .sin_addr = { .s_addr = inet_addr(argv[1]) } };
-    if (connect(client, (struct sockaddr *)(&server_address), sizeof(server_address)) == -1) { perror("Failed to connnect to the server"); goto stop_client; }
-    print_time();
-    printf("Connected to the server\n");
+    printf("Created the socket\n");
 
-    // Send the request to specify who I am
-    enum ClientType client_type = VISITOR;
-    if (send(client, &client_type, sizeof(client_type), 0) != sizeof(client_type)) { perror("Failed to send the request with the client_type"); goto stop_client; }
+    // Request a room
+    request((struct Request){ .type = COME_REQUEST, .data = { .come = { .gender = gender, .stay_time = stay_time } } });
     print_time();
-    printf("Sent client_type to the server\n");
+    printf("Sent gender %s to the server\n", gender == GENDER_MALE ? "male" : "female");
 
-    // Send the request to get a room
-    if (send(client, &gender, sizeof(gender), 0) != sizeof(gender)) { perror("Failed to send the request"); goto stop_client; }
-    print_time();
-    printf("Sent gender %s to the server\n", gender == MALE ? "male" : "female");
+    // Wait for the response
+    struct Response res = response(COME_RESPONSE);
+    printf("%u - %u\n", res.data.come.id, res.data.come.room);
+
+    // Stop the program
+    raise(SIGINT);
+    /*
 
     // Receive the response
     enum ComeStatus status;

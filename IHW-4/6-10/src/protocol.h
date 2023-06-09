@@ -2,41 +2,52 @@
 
 enum Gender { GENDER_NONE = 0, GENDER_MALE = 1, GENDER_FEMALE = 2 }; // Genders of visitors
 
+
+
 // Request structure
+enum RequestType { COME_REQUEST = 0, LEAVE_REQUEST = 1 };
+
+struct ComeRequest
+{
+    enum Gender gender;
+    unsigned int stay_time;
+};
+struct LeaveRequest
+{
+    unsigned int id;
+    unsigned int room;
+};
+
 struct Request
 {
-    enum RequestType { COME_REQUEST = 0, LEAVE_REQUEST = 1 } type;
+    enum RequestType type;
     union RequestData
     {
-        struct ComeRequest
-        {
-            enum Gender gender;
-            unsigned int time;
-        } come_request;
-
-        struct LeaveRequest
-        {
-            unsigned int id;
-            unsigned int room;
-        } leave_request;
+        struct ComeRequest come;
+        struct LeaveRequest leave;
     } data;
 };
 
+
+
 // Response structure
+enum ResponseType { COME_RESPONSE = 0, LEAVE_RESPONSE = 1 };
+
+struct ComeResponse
+{
+    unsigned int id;
+    unsigned int room;
+};
+struct LeaveResponse
+{
+};
+
 struct Response
 {
-    enum ResponseType { COME_RESPONSE = 0, LEAVE_RESPONSE = 1 } type;
+    enum ResponseType type;
     union ResponseData
     {
-        struct ComeResponse
-        {
-            unsigned int id;
-            unsigned int room;
-        } come_request;
-
-        struct LeaveResponse
-        {
-            enum LeaveStatus { LEAVE_OK = 0 } status;
-        } leave_request;
+        struct ComeResponse come;
+        struct LeaveResponse leave;
     } data;
 };

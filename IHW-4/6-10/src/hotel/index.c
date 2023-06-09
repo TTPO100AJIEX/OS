@@ -1,11 +1,24 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stddef.h>
 #include <stdbool.h>
-#include <string.h>
 #include <signal.h>
 #include <unistd.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
+
+#include <time.h>
+#include <sys/time.h>
+int print_time()
+{
+    struct timeval tv;
+    if (gettimeofday(&tv, NULL) == -1) return -1; // Get current time up to microseconds
+    char buffer[16];
+    strftime(buffer, 16, "%H:%M:%S", localtime(&tv.tv_sec)); // Parse current time into nice string
+    printf("[%s.%03d.%03d] ", buffer, (int)(tv.tv_usec / 1000), (int)(tv.tv_usec % 1000)); // Print current time up to microseconds
+    return 0;
+}
+
 #include "../protocol.h"
 
 struct Room
@@ -15,15 +28,17 @@ struct Room
     {
         struct Resident
         {
+            unsigned int id;
             in_addr_t ip;
             in_port_t port;
         } person, people[2];
     } residents;
 };
-#define ROOMS1 10
-#define ROOMS2 15
+static const size_t ROOMS1 = 10;
+static const size_t ROOMS2 = 15;
 
 int server = -1;
+unsigned int last_id = 0;
 struct Room rooms[ROOMS2 + ROOMS1];
 void stop(__attribute__ ((unused)) int signal)
 {
@@ -32,6 +47,40 @@ void stop(__attribute__ ((unused)) int signal)
     exit(0);
 }
 
+void print_id(unsigned int id)
+{
+    char offset = ' ';
+    for (int denom = 10000; denom > 0; denom /= 10)
+    {
+        if (denom == 1 || id / denom != 0) offset = '0';
+        printf("%c", offset + id / denom);
+        id %= denom;
+    }
+}
+void print_rooms()
+{
+    printf("-");
+    for (size_t i = 0; i < ROOMS2 + ROOMS1; i++) for (size_t j = 0; j < 6; j++) printf("-");
+    printf("\n");
+
+    printf("|");
+    for (size_t i = 0; i < ROOMS2; i++) { print_id(rooms[i].residents.people[0].id); printf("|"); }
+    for (size_t i = ROOMS2; i < ROOMS2 + ROOMS1; i++) { print_id(rooms[i].residents.person.id); printf("|"); }
+    printf("\n");
+
+    printf("|");
+    for (size_t i = 0; i < ROOMS2; i++) printf("  (%c)|", rooms[i].gender == GENDER_MALE ? 'm' : rooms[i].gender == GENDER_FEMALE ? 'f' : ' ');
+    for (size_t i = ROOMS2; i < ROOMS2 + ROOMS1; i++) printf("-(%c)--", rooms[i].gender == GENDER_MALE ? 'm' : rooms[i].gender == GENDER_FEMALE ? 'f' : ' ');
+    printf("\n");
+
+    printf("|");
+    for (size_t i = 0; i < ROOMS2; i++) { print_id(rooms[i].residents.people[1].id); printf("|"); }
+    printf("\n");
+
+    printf("-");
+    for (size_t i = 0; i < ROOMS2; i++) for (size_t j = 0; j < 6; j++) printf("-");
+    printf("\n");
+}
 
 int main(int argc, char** argv) // <Port>
 {
@@ -42,16 +91,16 @@ int main(int argc, char** argv) // <Port>
     signal(SIGINT, stop); // Register SIGINT handler
 
     // Initialize the rooms
-    for (unsigned int i = 0; i < ROOMS2; i++)
+    for (size_t i = 0; i < ROOMS2; i++)
     {
         rooms[i].gender = GENDER_NONE;
-        rooms[i].residents.people[0].ip = 0; rooms[i].residents.people[0].port = 0;
-        rooms[i].residents.people[1].ip = 0; rooms[i].residents.people[1].port = 0;
+        rooms[i].residents.people[0] = (struct Resident){ .id = 0, .ip = 0, .port = 0 };
+        rooms[i].residents.people[1] = (struct Resident){ .id = 0, .ip = 0, .port = 0 };
     }
-    for (unsigned int i = ROOMS2; i < ROOMS1; i++)
+    for (size_t i = ROOMS2; i < ROOMS1; i++)
     {
         rooms[i].gender = GENDER_NONE;
-        rooms[i].residents.person.ip = 0; rooms[i].residents.person.port = 0;
+        rooms[i].residents.person = (struct Resident){ .id = 0, .ip = 0, .port = 0 };
     }
 
     // Create the socket
@@ -60,49 +109,42 @@ int main(int argc, char** argv) // <Port>
     // Bind the socket
     struct sockaddr_in server_address = { .sin_family = AF_INET, .sin_port = htons(atoi(argv[1])), .sin_addr = { .s_addr = htonl(INADDR_ANY) } };
     if (bind(server, (struct sockaddr *)(&server_address), sizeof(server_address)) == -1) { perror("Failed to bind the socket"); raise(SIGINT); }
-    
+    print_time();
+    printf("Started the server\n");
+    print_rooms();
+
     while (true)
     {
+        // Receive a request
         struct Request request;
         struct sockaddr_in client;
         socklen_t client_struct_length = sizeof(client);
-        printf("%ld\n", recvfrom(server, &request, sizeof(request), 0, (struct sockaddr *) &client, &client_struct_length));
-        printf("%d\n", client_struct_length);
-        printf("%d %u\n", request.data.come_request.gender, request.data.come_request.time);
-        printf("%s:%d", inet_ntoa(client.sin_addr), client.sin_port);
+        if (recvfrom(server, &request, sizeof(request), 0, (struct sockaddr *)(&client), &client_struct_length) != sizeof(request))
+        {
+            perror("Failed to receive a request");
+            raise(SIGINT);
+        }
+
+        switch (request.type)
+        {
+            case COME_REQUEST:
+            {
+                struct Response res = { .type = COME_RESPONSE, .data = { .come = { .id = 1, .room = 2 } } };
+                if (sendto(server, &res, sizeof(res), 0, (struct sockaddr *)(&client), sizeof(client)) != sizeof(res))
+                {
+                    perror("Failed to send a response");
+                }
+                break;
+            }
+            case LEAVE_REQUEST:
+            {
+                break;
+            }
+            default: { }
+        }
     }
 
    /*while (true)
-    {
-        // Receive the connection from the client
-        int client = accept(server, NULL, 0);
-        if (client == -1) { perror("Failed to accept a connection"); raise(SIGINT); }
-
-        // Get the type of the client
-        enum ClientType client_type = UNKNOWN;
-        if (recv(client, &client_type, sizeof(client_type), 0) != sizeof(client_type)) client_type = UNKNOWN; // Something went wrong and the request should be declined
-        
-        switch (client_type)
-        {
-            case LOGGER:
-            {
-                // Just save the client's descriptor
-                if (add_log_destination(&logger, client) == -1) { perror("Failed to register a logger"); close(client); raise(SIGINT); }
-                break;
-            }
-            case VISITOR:
-            {
-                pid_t process = fork(); // Create a child process that will handle the client
-                if (process == -1) { perror("Failed to fork"); close(client); raise(SIGINT); } // If something went wrong, stop the program
-                if (process != 0) { close(client); break; } // Parent process; the client is not needed in the parent process
-                // Child process
-                signal(SIGUSR1, SIG_IGN); // remove an unnecessary listener
-                socket_to_close_on_stop = client;
-
-                // Close the server as it is not needed in the child process
-                if (close(server) == -1) { perror("Failed to close the server"); raise(SIGINT); }
-                
-
                 // Log the connection
                 if (lock_rooms(&rooms) == -1) { perror("Failed to lock the rooms"); kill(rooms.owner, SIGINT); }
                 if (log_message(&logger, "Accepted a visitor") == -1) { perror("Failed to log a message"); kill(rooms.owner, SIGINT); }
