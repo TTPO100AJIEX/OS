@@ -27,3 +27,4 @@ void destroy_rooms();
 void print_rooms();
 
 const struct Room* take_room(size_t id, enum Gender gender, unsigned int stay_time, struct sockaddr_in client);
+const struct Room* free_room(size_t room_id, size_t visitor_id);

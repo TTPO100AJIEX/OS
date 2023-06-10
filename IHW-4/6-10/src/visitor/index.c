@@ -23,12 +23,7 @@ enum Gender gender = GENDER_NONE;
 unsigned int stay_time = 0;
 int client = -1;
 struct sockaddr_in server_address;
-void stop(__attribute__ ((unused)) int signal)
-{
-    // TODO: send leave request
-    if (close(client) == -1) { perror("Failed to close the socket"); exit(1); }
-    exit(0);
-}
+size_t id = 0, room = 0;
 
 void request(struct Request request)
 {
@@ -52,6 +47,19 @@ struct Response response(enum ResponseType type)
         raise(SIGINT);
     }
     return response;
+}
+
+void stop(__attribute__ ((unused)) int signal)
+{
+    if (room != 0)
+    {
+        // Send a leave request
+        request((struct Request){ .type = LEAVE_REQUEST, .data = { .leave = { .id = id, .room = room } } });
+        print_time(); printf("Left the hotel\n");
+        // There is no need to wait for the response
+    }   
+    if (close(client) == -1) { perror("Failed to close the socket"); exit(1); }
+    exit(0);
 }
 
 int main(int argc, char** argv) // <IP> <Port> <Gender (m/f)> <Time>
@@ -79,44 +87,43 @@ int main(int argc, char** argv) // <IP> <Port> <Gender (m/f)> <Time>
 
     // Request a room
     request((struct Request){ .type = COME_REQUEST, .data = { .come = { .gender = gender, .stay_time = stay_time } } });
-    print_time(); printf("Sent gender %s, stay_time = %d to the server\n", gender == GENDER_MALE ? "male" : "female", stay_time);
+    print_time(); printf("Sent gender %s, stay_time %d to the server\n", gender == GENDER_MALE ? "male" : "female", stay_time);
 
     // Wait for the response
     struct Response res = response(COME_RESPONSE);
-    printf("%zu - %zu\n", res.data.come.id, res.data.come.room);
+    print_time(); printf("Assigned id %zu and received room %zu from the server\n", res.data.come.id, res.data.come.room);
+    id = res.data.come.id;
+    room = res.data.come.room;
 
-    // Stop the program
-    raise(SIGINT);
-
-
-
-
-
-
-    /*
-
-    // Receive the response
-    enum ComeStatus status;
-    if (recv(client, &status, sizeof(status), 0) != sizeof(status)) { perror("Failed to receive the status"); goto stop_client; }
-    print_time();
-    printf("Received status %s from the server\n", status == COME_OK ? "OK" : "SORRY");
-    
     // Parse the response
-    if (status == COME_OK)
-    {
-        print_time();
-        printf("Started sleeping (time: %u)\n", time);
-        sleep(time); // Sleep for the specified time
-        print_time();
-        printf("Stopped sleeping\n");
-    }
-    else
+    if (room == 0)
     {
         print_time();
         printf("Left the hotel, there were no places for me :(\n");
     }
+    else
+    {
+        pid_t process = fork(); // Create a child process to listen for urgent leave requests
+        if (process == -1) { perror("Failed to fork"); raise(SIGINT); } // If something went wrong, stop the program
+        if (process != 0)
+        {
+            // Parent process
+            print_time(); printf("Started sleeping (time: %u)\n", stay_time);
+            sleep(stay_time); // Sleep for the specified time
+            print_time(); printf("Stopped sleeping\n");
+        }
+        else
+        {
+            // Child process
+            room = 0;
+            response(LEAVE_RESPONSE);
+            print_time(); printf("Forced to leave\n");
+            kill(getppid(), SIGINT);
+            raise(SIGINT);
+            return 0;
+        }
+    }
 
-stop_client:
-    if (close(client) == -1) { perror("Failed to close the socket"); return 1; }*/
-    return 0;
+    // Stop the program
+    raise(SIGINT);
 }

@@ -93,50 +93,10 @@ int main(int argc, char** argv) // <Port>
             }
             case LEAVE_REQUEST:
             {
-                // TODO
+                printf("Visitor %zu left room %zu\n", request.data.leave.id, free_room(request.data.leave.room, request.data.leave.id)->id);
                 break;
             }
             default: { }
         }
     }
-
-   /*
-                // Log the visitor
-                if (lock_rooms(&rooms) == -1) { perror("Failed to lock the rooms"); kill(rooms.owner, SIGINT); }
-                if (gender == MALE && log_message(&logger, "Received gender MALE from the visitor") == -1) { perror("Failed to log a message"); kill(rooms.owner, SIGINT); }
-                if (gender == FEMALE && log_message(&logger, "Received gender FEMALE from the visitor") == -1) { perror("Failed to log a message"); kill(rooms.owner, SIGINT); }
-                if (log_pid(&logger) == -1) { perror("Failed to log a message"); kill(rooms.owner, SIGINT); }
-                if (unlock_rooms(&rooms) == -1) { perror("Failed to unlock the rooms"); kill(rooms.owner, SIGINT); }
-        
-
-                // Wait for the client to close the connection - leave the hotel
-                char tmp; recv(client, &tmp, sizeof(tmp), 0);
-
-                // Free the room and log it
-                if (lock_rooms(&rooms) == -1) { perror("Failed to lock the rooms"); kill(rooms.owner, SIGINT); }
-                room = free_room(&rooms);
-                if (room == -1)
-                {
-                    if (log_message(&logger, "Visitor left") == -1) { perror("Failed to log a message"); kill(rooms.owner, SIGINT); }
-                    if (log_pid(&logger) == -1) { perror("Failed to log a message"); kill(rooms.owner, SIGINT); }
-                }
-                else
-                {
-                    if (log_message(&logger, "Visitor left room ") == -1) { perror("Failed to log a message"); kill(rooms.owner, SIGINT); }
-                    if (log_integer(&logger, room) == -1) { perror("Failed to log a message"); kill(rooms.owner, SIGINT); }
-                    if (log_pid(&logger) == -1) { perror("Failed to log a message"); kill(rooms.owner, SIGINT); }
-                    if (log_layout(&logger, &rooms) == -1) { perror("Failed to log a message"); kill(rooms.owner, SIGINT); }
-                }
-                if (unlock_rooms(&rooms) == -1) { perror("Failed to unlock the rooms"); kill(rooms.owner, SIGINT); }
-
-                raise(SIGINT);
-                break;
-            }
-            default:
-            {
-                if (close(client) == -1) { perror("Failed to close the client"); raise(SIGINT); }
-            }
-        }
-    }
-    */
 }

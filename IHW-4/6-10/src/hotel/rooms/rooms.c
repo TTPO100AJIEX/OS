@@ -105,6 +105,7 @@ static void free_rooms()
         {
             if (rooms[i].residents.people[j].id && compare_timstamps(cur_time, rooms[i].residents.people[j].leave_time) > 0)
             {
+                printf("Visitor %zu forced to leave the room %zu\n", rooms[i].residents.people[j].id, rooms[i].id);
                 rooms[i].residents.people[j].id = 0;
                 force_leave(rooms[i].residents.people[j]);
             }
@@ -114,6 +115,7 @@ static void free_rooms()
     {
         if (rooms[i].residents.person.id && compare_timstamps(cur_time, rooms[i].residents.person.leave_time) > 0)
         {
+            printf("Visitor %zu forced to leave the room %zu\n", rooms[i].residents.person.id, rooms[i].id);
             rooms[i].residents.person.id = 0;
             force_leave(rooms[i].residents.person);
         }
@@ -159,4 +161,33 @@ const struct Room* take_room(size_t id, enum Gender gender, unsigned int stay_ti
         room->residents.person = resident;
     }
     return room;
+}
+
+
+const struct Room* free_room(size_t room_id, size_t visitor_id)
+{
+    room_id--;
+    static struct Room null_room = { .id = 0 };
+    if (room_id >= ROOMS1 + ROOMS2) return &null_room;
+
+    if (room_id < ROOMS2)
+    {
+        if (rooms[room_id].residents.people[0].id == visitor_id)
+        {
+            rooms[room_id].residents.people[0].id = 0;
+            return &rooms[room_id];
+        }
+        if (rooms[room_id].residents.people[1].id == visitor_id)
+        {
+            rooms[room_id].residents.people[1].id = 0;
+            return &rooms[room_id];
+        }
+        return &null_room;
+    }
+    else
+    {
+        if (rooms[room_id].residents.person.id != visitor_id) return &null_room;
+        rooms[room_id].residents.person.id = 0;
+        return &rooms[room_id];
+    }
 }
