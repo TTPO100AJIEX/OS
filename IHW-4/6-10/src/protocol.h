@@ -1,9 +1,11 @@
 #pragma once
 
 #include <stddef.h>
+#include <sys/socket.h>
+#include <arpa/inet.h>
+
 
 enum Gender { GENDER_NONE = 0, GENDER_MALE = 1, GENDER_FEMALE = 2 }; // Genders of visitors
-
 
 
 // Request structure
@@ -31,7 +33,6 @@ struct Request
 };
 
 
-
 // Response structure
 enum ResponseType { COME_RESPONSE = 0, LEAVE_RESPONSE = 1 };
 
@@ -53,3 +54,23 @@ struct Response
         struct LeaveResponse leave;
     } data;
 };
+
+
+// Send utilities
+void send_request(int socket, struct Request request, struct sockaddr_in address);
+void send_response(int socket, struct Response response, struct sockaddr_in address);
+
+// Receive utilities
+struct RequestWrapper
+{
+    size_t id;
+    struct Request request;
+    struct sockaddr_in client;
+};
+struct ResponseWrapper
+{
+    struct Response response;
+    struct sockaddr_in server;
+};
+struct RequestWrapper receive_request(int socket);
+struct ResponseWrapper receive_response(int socket, enum ResponseType type);

@@ -1,18 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <stddef.h>
 #include <stdbool.h>
 #include <signal.h>
 #include <unistd.h>
-#include <sys/socket.h>
-#include <arpa/inet.h>
 
 #include "../protocol.h"
 #include "./rooms/rooms.h"
 
 #include <time.h>
 #include <sys/time.h>
-static int print_time()
+int print_time()
 {
     struct timeval tv;
     if (gettimeofday(&tv, NULL) == -1) return -1; // Get current time up to microseconds
@@ -38,8 +35,7 @@ int main(int argc, char** argv) // <Port>
     setbuf(stdout, NULL); // Remove the buffering of stdout
     signal(SIGINT, stop); // Register SIGINT handler
 
-    // Initialize the rooms
-    init_rooms();
+    init_rooms(); // Initialize the rooms
 
     // Create the socket
     server = socket(PF_INET, SOCK_DGRAM, IPPROTO_UDP);
@@ -48,52 +44,45 @@ int main(int argc, char** argv) // <Port>
     struct sockaddr_in server_address = { .sin_family = AF_INET, .sin_port = htons(atoi(argv[1])), .sin_addr = { .s_addr = htonl(INADDR_ANY) } };
     if (bind(server, (struct sockaddr *)(&server_address), sizeof(server_address)) == -1) { perror("Failed to bind the socket"); raise(SIGINT); }
 
-    // Log that everything is ok
-    print_time(); printf("Started the server\n"); print_rooms();
+    print_time(); printf("Started the server\n"); print_rooms(); // Log that everything is ok
 
-    size_t request_id = 0;
     while (true)
     {
-        // Receive a request
-        request_id++;
-        struct Request request;
-        struct sockaddr_in client;
-        socklen_t client_struct_length = sizeof(client);
-        if (recvfrom(server, &request, sizeof(request), 0, (struct sockaddr *)(&client), &client_struct_length) != sizeof(request)) { perror("Failed to receive a request"); raise(SIGINT); }
-
-        switch (request.type)
+        struct RequestWrapper req = receive_request(server); // Receive a request
+        switch (req.request.type)
         {
             case COME_REQUEST:
             {
                 // Log the request
                 print_time();
-                if (request.data.come.gender != GENDER_MALE && request.data.come.gender != GENDER_FEMALE) { printf("Received an invalid come request from %s:%d\n", inet_ntoa(client.sin_addr), client.sin_port); break; }
-                printf("Assigned id %zu to a come request from %s:%d (%c)\n", request_id, inet_ntoa(client.sin_addr), client.sin_port, request.data.come.gender == GENDER_MALE ? 'm' : 'f');
+                if (req.request.data.come.gender != GENDER_MALE && req.request.data.come.gender != GENDER_FEMALE) { printf("Received an invalid come request from %s:%d\n", inet_ntoa(req.client.sin_addr), req.client.sin_port); break; }
+                printf("Assigned id %zu to a come request from %s:%d (%c)\n", req.id, inet_ntoa(req.client.sin_addr), req.client.sin_port, req.request.data.come.gender == GENDER_MALE ? 'm' : 'f');
 
                 // Find a room for the visitor
-                const struct Room* room = take_room(request_id, request.data.come.gender, request.data.come.stay_time, client);
+                const struct Room* room = take_room(req.id, req.request.data.come.gender, req.request.data.come.stay_time, req.client);
 
                 // Log the room
                 print_time();
                 if (room)
                 {
-                    printf("Registered the visitor %zu into the room %zu\n", request_id, room->id);
+                    printf("Registered the visitor %zu into the room %zu\n", req.id, room->id);
                     print_rooms();
                 }
                 else
                 {
-                    printf("Failed to register the visitor %zu\n", request_id);
+                    printf("Failed to register the visitor %zu\n", req.id);
                 }
 
                 // Send the response to the visitor
-                struct Response res = { .type = COME_RESPONSE, .data = { .come = { .id = request_id, .room = room ? room->id : 0 } } };
-                if (sendto(server, &res, sizeof(res), 0, (struct sockaddr *)(&client), sizeof(client)) != sizeof(res)) perror("Failed to send a response");
-
+                send_response(server, (struct Response){ .type = COME_RESPONSE, .data = { .come = { .id = req.id, .room = room ? room->id : 0 } } }, req.client);
                 break;
             }
             case LEAVE_REQUEST:
             {
-                printf("Visitor %zu left room %zu\n", request.data.leave.id, free_room(request.data.leave.room, request.data.leave.id)->id);
+                const struct Room* room = free_room(req.request.data.leave.room, req.request.data.leave.id);
+                print_time();
+                if (room) printf("Visitor %zu left\n", req.request.data.leave.id);
+                else printf("Visitor %zu left room %zu\n", req.request.data.leave.id, room->id);
                 break;
             }
             default: { }

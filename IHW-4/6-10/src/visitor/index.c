@@ -2,8 +2,6 @@
 #include <stdlib.h>
 #include <signal.h>
 #include <unistd.h>
-#include <sys/socket.h>
-#include <arpa/inet.h>
 
 #include "../protocol.h"
 
@@ -19,44 +17,17 @@ int print_time()
     return 0;
 }
 
-enum Gender gender = GENDER_NONE;
-unsigned int stay_time = 0;
+
 int client = -1;
-struct sockaddr_in server_address;
 size_t id = 0, room = 0;
-
-void request(struct Request request)
-{
-    if (sendto(client, &request, sizeof(request), 0, (struct sockaddr *)(&server_address), sizeof(server_address)) != sizeof(request))
-    {
-        perror("Failed to send a request");
-        raise(SIGINT);
-    }
-}
-struct Response response(enum ResponseType type)
-{
-    struct Response response;
-    if (recvfrom(client, &response, sizeof(response), 0, NULL, NULL) != sizeof(response))
-    {
-        perror("Failed to receive a response");
-        raise(SIGINT);
-    }
-    if (response.type != type)
-    {
-        printf("Received an invalid response (expected: %d, received: %d)\n", type, response.type);
-        raise(SIGINT);
-    }
-    return response;
-}
-
+struct sockaddr_in server_address;
 void stop(__attribute__ ((unused)) int signal)
 {
-    if (room != 0)
+    if (room)
     {
         // Send a leave request
-        request((struct Request){ .type = LEAVE_REQUEST, .data = { .leave = { .id = id, .room = room } } });
+        send_request(client, (struct Request){ .type = LEAVE_REQUEST, .data = { .leave = { .id = id, .room = room } } }, server_address);
         print_time(); printf("Left the hotel\n");
-        // There is no need to wait for the response
     }   
     if (close(client) == -1) { perror("Failed to close the socket"); exit(1); }
     exit(0);
@@ -69,12 +40,12 @@ int main(int argc, char** argv) // <IP> <Port> <Gender (m/f)> <Time>
 
     server_address = (struct sockaddr_in){ .sin_family = AF_INET, .sin_port = htons(atoi(argv[2])), .sin_addr = { .s_addr = inet_addr(argv[1]) } };
     
-    gender = GENDER_NONE;
+    enum Gender gender = GENDER_NONE;
     if (argv[3][0] == 'm') gender = GENDER_MALE;
     if (argv[3][0] == 'f') gender = GENDER_FEMALE;
     if (gender == GENDER_NONE) { printf("Invalid gender specified\n"); return 1; }
 
-    stay_time = atoi(argv[4]);
+    unsigned int stay_time = atoi(argv[4]);
     if (stay_time == 0) { printf("Invalid time specified\n"); return 1; }
 
     setbuf(stdout, NULL); // Remove the buffering of stdout
@@ -86,44 +57,39 @@ int main(int argc, char** argv) // <IP> <Port> <Gender (m/f)> <Time>
     print_time(); printf("Created the socket\n");
 
     // Request a room
-    request((struct Request){ .type = COME_REQUEST, .data = { .come = { .gender = gender, .stay_time = stay_time } } });
-    print_time(); printf("Sent gender %s, stay_time %d to the server\n", gender == GENDER_MALE ? "male" : "female", stay_time);
+    send_request(client, (struct Request){ .type = COME_REQUEST, .data = { .come = { .gender = gender, .stay_time = stay_time } } }, server_address);
+    print_time(); printf("Sent gender %s, stay_time %d to the hotel\n", gender == GENDER_MALE ? "male" : "female", stay_time);
 
     // Wait for the response
-    struct Response res = response(COME_RESPONSE);
-    print_time(); printf("Assigned id %zu and received room %zu from the server\n", res.data.come.id, res.data.come.room);
-    id = res.data.come.id;
-    room = res.data.come.room;
+    struct ResponseWrapper res = receive_response(client, COME_RESPONSE);
+    id = res.response.data.come.id; room = res.response.data.come.room;
+    print_time(); printf("Assigned id %zu and received room %zu from the hotel\n", id, room);
 
     // Parse the response
     if (room == 0)
     {
-        print_time();
-        printf("Left the hotel, there were no places for me :(\n");
+        print_time(); printf("Left the hotel, there were no places for me :(\n");
+        raise(SIGINT); // Stop the program
+    }
+
+    // The program needs to sleep, but may be interrupted by the hotel with a message
+    pid_t child = fork(); // Create a child process to listen for urgent leave requests
+    if (child == -1) { perror("Failed to fork"); raise(SIGINT); } // If something went wrong, stop the program
+    if (child != 0)
+    {
+        // Parent process
+        print_time(); printf("Started sleeping (time: %u)\n", stay_time);
+        sleep(stay_time); // Sleep for the specified time
+        print_time(); printf("Stopped sleeping\n");
+        raise(SIGINT); // Stop the program
     }
     else
     {
-        pid_t process = fork(); // Create a child process to listen for urgent leave requests
-        if (process == -1) { perror("Failed to fork"); raise(SIGINT); } // If something went wrong, stop the program
-        if (process != 0)
-        {
-            // Parent process
-            print_time(); printf("Started sleeping (time: %u)\n", stay_time);
-            sleep(stay_time); // Sleep for the specified time
-            print_time(); printf("Stopped sleeping\n");
-        }
-        else
-        {
-            // Child process
-            room = 0;
-            response(LEAVE_RESPONSE);
-            print_time(); printf("Forced to leave\n");
-            kill(getppid(), SIGINT);
-            raise(SIGINT);
-            return 0;
-        }
+        // Child process
+        room = 0; // To avoid sending multiple leave requests on SIGINT
+        receive_response(client, LEAVE_RESPONSE); // Wait for a leave message
+        print_time(); printf("I was forced to leave ;(\n");
+        kill(getppid(), SIGINT); // Stop the parent process
+        raise(SIGINT); // Stop the current process for compatibility
     }
-
-    // Stop the program
-    raise(SIGINT);
 }
