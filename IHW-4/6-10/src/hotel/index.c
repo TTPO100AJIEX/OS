@@ -6,18 +6,7 @@
 
 #include "../protocol.h"
 #include "./rooms/rooms.h"
-
-#include <time.h>
-#include <sys/time.h>
-int print_time()
-{
-    struct timeval tv;
-    if (gettimeofday(&tv, NULL) == -1) return -1; // Get current time up to microseconds
-    char buffer[16];
-    strftime(buffer, 16, "%H:%M:%S", localtime(&tv.tv_sec)); // Parse current time into nice string
-    printf("[%s.%03d.%03d] ", buffer, (int)(tv.tv_usec / 1000), (int)(tv.tv_usec % 1000)); // Print current time up to microseconds
-    return 0;
-}
+#include "./log/log.h"
 
 int server = -1;
 void stop(__attribute__ ((unused)) int signal)
@@ -25,6 +14,11 @@ void stop(__attribute__ ((unused)) int signal)
     destroy_rooms();
     if (close(server) == -1) { perror("Failed to close the socket"); exit(1); }
     exit(0);
+}
+
+void log_string(const char* string)
+{
+    printf(string);
 }
 
 int main(int argc, char** argv) // <Port>
@@ -44,7 +38,7 @@ int main(int argc, char** argv) // <Port>
     struct sockaddr_in server_address = { .sin_family = AF_INET, .sin_port = htons(atoi(argv[1])), .sin_addr = { .s_addr = htonl(INADDR_ANY) } };
     if (bind(server, (struct sockaddr *)(&server_address), sizeof(server_address)) == -1) { perror("Failed to bind the socket"); raise(SIGINT); }
 
-    print_time(); printf("Started the server\n"); print_rooms(); // Log that everything is ok
+    log_message("Started the server\n"); log_layout(); // Log that everything is ok
 
     while (true)
     {
@@ -53,36 +47,35 @@ int main(int argc, char** argv) // <Port>
         {
             case COME_REQUEST:
             {
+                struct ComeRequest request = req.request.data.come;
+
                 // Log the request
-                print_time();
-                if (req.request.data.come.gender != GENDER_MALE && req.request.data.come.gender != GENDER_FEMALE) { printf("Received an invalid come request from %s:%d\n", inet_ntoa(req.client.sin_addr), req.client.sin_port); break; }
-                printf("Assigned id %zu to a come request from %s:%d (%c)\n", req.id, inet_ntoa(req.client.sin_addr), req.client.sin_port, req.request.data.come.gender == GENDER_MALE ? 'm' : 'f');
+                if (request.gender != GENDER_MALE && request.gender != GENDER_FEMALE) { log_parametric("Received an invalid come request from %s:%d\n", inet_ntoa(req.client.sin_addr), req.client.sin_port); break; }
+                log_parametric("Assigned id %zu to a come request from %s:%d (%c)\n", req.id, inet_ntoa(req.client.sin_addr), req.client.sin_port, request.gender == GENDER_MALE ? 'm' : 'f');
 
                 // Find a room for the visitor
-                const struct Room* room = take_room(req.id, req.request.data.come.gender, req.request.data.come.stay_time, req.client);
+                const struct Room* room = take_room(req.id, request.gender, request.stay_time, req.client);
 
                 // Log the room
-                print_time();
-                if (room)
-                {
-                    printf("Registered the visitor %zu into the room %zu\n", req.id, room->id);
-                    print_rooms();
-                }
-                else
-                {
-                    printf("Failed to register the visitor %zu\n", req.id);
-                }
+                if (room) { log_parametric("Registered the visitor %zu into the room %zu\n", req.id, room->id); log_layout(); }
+                else log_parametric("Failed to register the visitor %zu\n", req.id);
 
                 // Send the response to the visitor
                 send_response(server, (struct Response){ .type = COME_RESPONSE, .data = { .come = { .id = req.id, .room = room ? room->id : 0 } } }, req.client);
+
                 break;
             }
             case LEAVE_REQUEST:
             {
-                const struct Room* room = free_room(req.request.data.leave.room, req.request.data.leave.id);
-                print_time();
-                if (room) printf("Visitor %zu left\n", req.request.data.leave.id);
-                else printf("Visitor %zu left room %zu\n", req.request.data.leave.id, room->id);
+                struct LeaveRequest request = req.request.data.leave;
+
+                // Free the room
+                const struct Room* room = free_room(request.room, request.id);
+
+                // Log the room
+                if (room) { log_parametric("Visitor %zu left the room %zu\n", request.id, room->id); log_layout(); }
+                else log_parametric("Visitor %zu left\n", request.id);
+
                 break;
             }
             default: { }

@@ -12,11 +12,14 @@ static long int compare_timstamps(struct timeval first, struct timeval second)
 
 
 extern int server;
-static struct Room rooms[25];
+#define ROOMS 25
+#define ROOMS2 15
+#define MAX_RESIDENTS 2
+static struct Room rooms[ROOMS];
 void init_rooms()
 {
-    for (size_t i = 0; i < 15; i++) rooms[i] = (struct Room){ .id = i + 1, .gender = GENDER_NONE, .max_residents = 2, .residents = calloc(2, sizeof(struct Resident)) };
-    for (size_t i = 15; i < 25; i++) rooms[i] = (struct Room){ .id = i + 1, .gender = GENDER_NONE, .max_residents = 1, .residents = calloc(1, sizeof(struct Resident)) };
+    for (size_t i = 0; i < ROOMS2; i++) rooms[i] = (struct Room){ .id = i + 1, .gender = GENDER_NONE, .max_residents = 2, .residents = calloc(2, sizeof(struct Resident)) };
+    for (size_t i = ROOMS2; i < ROOMS; i++) rooms[i] = (struct Room){ .id = i + 1, .gender = GENDER_NONE, .max_residents = 1, .residents = calloc(1, sizeof(struct Resident)) };
 }
 static void force_leave(size_t room_index, size_t resident_index)
 {
@@ -30,7 +33,7 @@ static void free_rooms()
     struct timeval cur_time;
     if (gettimeofday(&cur_time, NULL) == -1) return;
     
-    for (size_t i = 0; i < 25; i++)
+    for (size_t i = 0; i < ROOMS; i++)
     {
         for (size_t j = 0; j < rooms[i].max_residents; j++)
         {
@@ -41,7 +44,7 @@ static void free_rooms()
 }
 void destroy_rooms()
 {
-    for (size_t i = 0; i < 25; i++)
+    for (size_t i = 0; i < ROOMS; i++)
     {
         for (size_t j = 0; j < rooms[i].max_residents; j++)
         {
@@ -55,7 +58,7 @@ void destroy_rooms()
 
 static struct Room* find_room(enum Gender gender)
 {
-    for (size_t i = 0; i < 25; i++)
+    for (size_t i = 0; i < ROOMS; i++)
     {
         if (rooms[i].gender != gender && rooms[i].gender != GENDER_NONE) continue;
         for (size_t j = 0; j < rooms[i].max_residents; j++)
@@ -90,7 +93,7 @@ const struct Room* take_room(size_t id, enum Gender gender, unsigned int stay_ti
 
 const struct Room* free_room(size_t room_id, size_t visitor_id)
 {
-    if (room_id > 25) return NULL; // Invalid input
+    if (room_id > ROOMS) return NULL; // Invalid input
     struct Room* room = &rooms[room_id - 1];
     bool has_residents = false, found_visitor = false;
     for (size_t i = 0; i < room->max_residents; i++)
@@ -108,31 +111,42 @@ const struct Room* free_room(size_t room_id, size_t visitor_id)
 }
 
 
-static void print_id(size_t id)
+char* get_rooms_layout()
 {
-    if (id < 10) printf(" %zu ", id);
-    if (id >= 10 && id < 100) printf(" %zu", id);
-    if (id >= 100) printf("%zu", id % 1000);
-}
-void print_rooms()
-{
-    printf("-");
-    for (size_t i = 0; i < 25; i++) for (size_t j = 0; j < 4; j++) printf("-");
-    printf("\n");
+    char* result = malloc(675);
+    char* write_iter = result;
+    
+    *(write_iter++) = '-';
+    for (size_t i = 0; i < ROOMS; i++) write_iter += sprintf(write_iter, "----");
+    *(write_iter++) = '\n';
+    
+    *(write_iter++) = '|';
+    for (size_t i = 0; i < ROOMS; i++) write_iter += sprintf(write_iter, "(%c)|", rooms[i].gender == GENDER_MALE ? 'm' : rooms[i].gender == GENDER_FEMALE ? 'f' : ' ');
+    *(write_iter++) = '\n';
 
-    printf("|");
-    for (size_t i = 0; i < 25; i++) { print_id(rooms[i].residents[0].id); printf("|"); }
-    printf("\n");
+    for (size_t j = 0; j < MAX_RESIDENTS; j++)
+    {
+        *(write_iter++) = '|';
+        for (size_t i = 0; i < ROOMS; i++) if (rooms[i].max_residents >= j) write_iter += sprintf(write_iter, rooms[i].max_residents == j ? "----" : "---|");
+        *(write_iter++) = '\n';
 
-    printf("|");
-    for (size_t i = 0; i < 25; i++) printf("(%c)|", rooms[i].gender == GENDER_MALE ? 'm' : rooms[i].gender == GENDER_FEMALE ? 'f' : ' ');
-    printf("\n");
-
-    printf("|");
-    for (size_t i = 0; i < 15; i++) { print_id(rooms[i].residents[1].id); printf("|"); }
-    printf("\n");
-
-    printf("-");
-    for (size_t i = 0; i < 15; i++) for (size_t j = 0; j < 4; j++) printf("-");
-    printf("\n");
+        *(write_iter++) = '|';
+        for (size_t i = 0; i < ROOMS; i++)
+        {
+            if (j >= rooms[i].max_residents) { write_iter += sprintf(write_iter, "    "); continue; }
+            const size_t id = rooms[i].residents[j].id;
+            if (id == 0) write_iter += sprintf(write_iter, "   |");
+            else if (id < 10) write_iter += sprintf(write_iter, " %zu |", id);
+            else if (id < 100) write_iter += sprintf(write_iter, "%zu |", id);
+            else write_iter += sprintf(write_iter, "%zu|", id % 1000);
+        }
+        *(write_iter++) = '\n';
+    }
+    
+    *(write_iter++) = '-';
+    for (size_t i = 0; i < ROOMS; i++) if (rooms[i].max_residents == MAX_RESIDENTS) write_iter += sprintf(write_iter, "----");
+    *(write_iter++) = '\n';
+    
+    *(write_iter++) = '\0';
+    return result;
 }
