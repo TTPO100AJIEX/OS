@@ -5,6 +5,8 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 
+#include "../protocol.h"
+
 #include <time.h>
 #include <sys/time.h>
 int print_time()
@@ -16,8 +18,6 @@ int print_time()
     printf("[%s.%03d.%03d] ", buffer, (int)(tv.tv_usec / 1000), (int)(tv.tv_usec % 1000)); // Print current time up to microseconds
     return 0;
 }
-
-#include "../protocol.h"
 
 enum Gender gender = GENDER_NONE;
 unsigned int stay_time = 0;
@@ -75,19 +75,24 @@ int main(int argc, char** argv) // <IP> <Port> <Gender (m/f)> <Time>
     // Create the socket
     client = socket(PF_INET, SOCK_DGRAM, IPPROTO_UDP);
     if (client == -1) { perror("Failed to create a socket"); return 1; }
-    printf("Created the socket\n");
+    print_time(); printf("Created the socket\n");
 
     // Request a room
     request((struct Request){ .type = COME_REQUEST, .data = { .come = { .gender = gender, .stay_time = stay_time } } });
-    print_time();
-    printf("Sent gender %s to the server\n", gender == GENDER_MALE ? "male" : "female");
+    print_time(); printf("Sent gender %s, stay_time = %d to the server\n", gender == GENDER_MALE ? "male" : "female", stay_time);
 
     // Wait for the response
     struct Response res = response(COME_RESPONSE);
-    printf("%u - %u\n", res.data.come.id, res.data.come.room);
+    printf("%zu - %zu\n", res.data.come.id, res.data.come.room);
 
     // Stop the program
     raise(SIGINT);
+
+
+
+
+
+
     /*
 
     // Receive the response

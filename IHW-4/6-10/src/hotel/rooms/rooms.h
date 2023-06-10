@@ -8,14 +8,15 @@
 
 struct Room
 {
+    size_t id;
     enum Gender gender;
     union RoomResidents
     {
         struct Resident
         {
+            size_t id;
             struct timeval leave_time;
-            in_addr_t ip;
-            in_port_t port;
+            struct sockaddr_in client;
         } person, people[2];
     } residents;
 };
@@ -25,4 +26,4 @@ void destroy_rooms();
 
 void print_rooms();
 
-int take_room(enum Gender gender, unsigned int stay_time, in_addr_t ip, in_port_t port);
+const struct Room* take_room(size_t id, enum Gender gender, unsigned int stay_time, struct sockaddr_in client);

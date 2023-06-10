@@ -1,5 +1,7 @@
 #pragma once
 
+#include <stddef.h>
+
 enum Gender { GENDER_NONE = 0, GENDER_MALE = 1, GENDER_FEMALE = 2 }; // Genders of visitors
 
 
@@ -14,8 +16,8 @@ struct ComeRequest
 };
 struct LeaveRequest
 {
-    unsigned int id;
-    unsigned int room;
+    size_t id;
+    size_t room;
 };
 
 struct Request
@@ -35,8 +37,8 @@ enum ResponseType { COME_RESPONSE = 0, LEAVE_RESPONSE = 1 };
 
 struct ComeResponse
 {
-    unsigned int id;
-    unsigned int room;
+    size_t id;
+    size_t room;
 };
 struct LeaveResponse
 {
