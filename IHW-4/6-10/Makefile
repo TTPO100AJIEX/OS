@@ -23,3 +23,12 @@ compile_logger:
 
 logger: compile_logger
 	./bin/logger.exe 225.0.0.0 9000
+
+
+compile_all: compile_hotel compile_visitor compile_logger
+
+test_small: compile_all
+	node testing/run.mjs small 8000 225.0.0.0 9000
+test_big: compile_all
+	node testing/run.mjs big 8000 225.0.0.0 9000
+test: test_small test_big

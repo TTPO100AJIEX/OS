@@ -81,6 +81,7 @@ int main(int argc, char** argv) // <IP> <Port> <Gender (m/f)> <Time>
         print_time(); printf("Started sleeping (time: %u)\n", stay_time);
         sleep(stay_time); // Sleep for the specified time
         print_time(); printf("Stopped sleeping\n");
+        kill(child, SIGINT); // Stop the child process
         raise(SIGINT); // Stop the program
     }
     else

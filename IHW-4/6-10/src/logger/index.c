@@ -41,6 +41,10 @@ int main(int argc, char** argv) // <IP> <Port>
     multicast_receiver = socket(PF_INET, SOCK_DGRAM, IPPROTO_UDP);
     if (multicast_receiver == -1) { perror("Failed to create a socket"); return 1; }
     print_time(); printf("Created the socket\n");
+    
+    // Set socket options to allow multiple listeners at once
+    int socket_flag = 1;
+    if (setsockopt(multicast_receiver, SOL_SOCKET, SO_REUSEADDR, (void*)(&socket_flag), sizeof(socket_flag)) == -1) { perror("Failed to setup the socket"); raise(SIGINT); }
 
     // Bind to the multicast address
     if (bind(multicast_receiver, (struct sockaddr *)(&multicast_address), sizeof(multicast_address)) == -1) { perror("Failed to bind the socket"); raise(SIGINT); }
