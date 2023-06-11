@@ -22,7 +22,7 @@ void stop(__attribute__ ((unused)) int signal)
 
 void log_string(const char* string)
 {
-    printf(string);
+    printf("%s", string);
     // Multicast the message-
     if (sendto(server, string, strlen(string), 0, (struct sockaddr *)(&multicast_address), sizeof(multicast_address)) != (int)(strlen(string)))
     {

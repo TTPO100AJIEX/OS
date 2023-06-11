@@ -111,40 +111,41 @@ const struct Room* free_room(size_t room_id, size_t visitor_id)
 }
 
 
+#include <string.h>
 char* get_rooms_layout()
 {
     char* result = malloc(675);
     char* write_iter = result;
     
     *(write_iter++) = '-';
-    for (size_t i = 0; i < ROOMS; i++) write_iter += sprintf(write_iter, "----");
+    for (size_t i = 0; i < ROOMS; i++) { snprintf(write_iter, 5, "----"); write_iter += 4; }
     *(write_iter++) = '\n';
     
     *(write_iter++) = '|';
-    for (size_t i = 0; i < ROOMS; i++) write_iter += sprintf(write_iter, "(%c)|", rooms[i].gender == GENDER_MALE ? 'm' : rooms[i].gender == GENDER_FEMALE ? 'f' : ' ');
+    for (size_t i = 0; i < ROOMS; i++) { snprintf(write_iter, 5, "(%c)|", rooms[i].gender == GENDER_MALE ? 'm' : rooms[i].gender == GENDER_FEMALE ? 'f' : ' '); write_iter += 4; }
     *(write_iter++) = '\n';
 
     for (size_t j = 0; j < MAX_RESIDENTS; j++)
     {
         *(write_iter++) = '|';
-        for (size_t i = 0; i < ROOMS; i++) if (rooms[i].max_residents >= j) write_iter += sprintf(write_iter, rooms[i].max_residents == j ? "----" : "---|");
+        for (size_t i = 0; i < ROOMS; i++) if (rooms[i].max_residents >= j) { snprintf(write_iter, 5, rooms[i].max_residents == j ? "----" : "---|"); write_iter += 4; }
         *(write_iter++) = '\n';
 
         *(write_iter++) = '|';
         for (size_t i = 0; i < ROOMS; i++)
         {
-            if (j >= rooms[i].max_residents) { write_iter += sprintf(write_iter, "    "); continue; }
+            if (j >= rooms[i].max_residents) { snprintf(write_iter, 5, "    "); write_iter += 4; continue; }
             const size_t id = rooms[i].residents[j].id;
-            if (id == 0) write_iter += sprintf(write_iter, "   |");
-            else if (id < 10) write_iter += sprintf(write_iter, " %zu |", id);
-            else if (id < 100) write_iter += sprintf(write_iter, "%zu |", id);
-            else write_iter += sprintf(write_iter, "%zu|", id % 1000);
+            if (id == 0) { snprintf(write_iter, 5, "   |"); write_iter += 4; }
+            else if (id < 10) { snprintf(write_iter, 5, " %zu |", id); write_iter += 4; }
+            else if (id < 100) { snprintf(write_iter, 5, "%zu |", id); write_iter += 4; }
+            else { snprintf(write_iter, 5, "%zu|", id % 1000); write_iter += 4; }
         }
         *(write_iter++) = '\n';
     }
     
     *(write_iter++) = '-';
-    for (size_t i = 0; i < ROOMS; i++) if (rooms[i].max_residents == MAX_RESIDENTS) write_iter += sprintf(write_iter, "----");
+    for (size_t i = 0; i < ROOMS; i++) if (rooms[i].max_residents == MAX_RESIDENTS) { snprintf(write_iter, 5, "----"); write_iter += 4; }
     *(write_iter++) = '\n';
     
     *(write_iter++) = '\0';
