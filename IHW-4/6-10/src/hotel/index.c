@@ -1,17 +1,21 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <string.h>
 #include <signal.h>
 #include <unistd.h>
 
 #include "../protocol.h"
 #include "./rooms/rooms.h"
 #include "./log/log.h"
+void log_string(const char* string);
 
 int server = -1;
+struct sockaddr_in multicast_address;
 void stop(__attribute__ ((unused)) int signal)
 {
     destroy_rooms();
+    log_string(LOG_END_MESSAGE); // Stop the loggers
     if (close(server) == -1) { perror("Failed to close the socket"); exit(1); }
     exit(0);
 }
@@ -19,15 +23,24 @@ void stop(__attribute__ ((unused)) int signal)
 void log_string(const char* string)
 {
     printf(string);
+    // Multicast the message-
+    if (sendto(server, string, strlen(string), 0, (struct sockaddr *)(&multicast_address), sizeof(multicast_address)) != (int)(strlen(string)))
+    {
+        perror("Failed to multicast a message");
+        raise(SIGINT);
+    }
 }
 
-int main(int argc, char** argv) // <Port>
+int main(int argc, char** argv) // <Port> <Multicast-IP> <Multicast-Port>
 {
     // Check the command line arguments
-    if (argc < 2) { printf("Not enough command line arguments specified: <Port>\n"); return 1; }
+    if (argc < 4) { printf("Not enough command line arguments specified: <Port> <Multicast-IP> <Multicast-Port>\n"); return 1; }
 
     setbuf(stdout, NULL); // Remove the buffering of stdout
     signal(SIGINT, stop); // Register SIGINT handler
+    
+    // Construct the multicast address
+    multicast_address = (struct sockaddr_in){ .sin_family = AF_INET, .sin_port = htons(atoi(argv[3])), .sin_addr = { .s_addr = inet_addr(argv[2]) } };
 
     init_rooms(); // Initialize the rooms
 

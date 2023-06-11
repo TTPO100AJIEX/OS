@@ -74,3 +74,7 @@ struct ResponseWrapper
 };
 struct RequestWrapper receive_request(int socket);
 struct ResponseWrapper receive_response(int socket, enum ResponseType type);
+
+// Logger settings
+#define LOG_MAX_MESSAGE_SIZE 1024
+#define LOG_END_MESSAGE "The End\n"
