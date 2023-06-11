@@ -106,12 +106,11 @@ const struct Room* free_room(size_t room_id, size_t visitor_id)
         }
         if (!has_residents) has_residents = room->residents[i].id; // Update the flag
     }
-    if (!has_residents) room->gender = GENDER_NONE; // Reset the gender if noone leaves in the room
+    if (!has_residents) room->gender = GENDER_NONE; // Reset the gender if noone lives in the room
     return found_visitor ? room : NULL;
 }
 
 
-#include <string.h>
 char* get_rooms_layout()
 {
     char* result = malloc(675);

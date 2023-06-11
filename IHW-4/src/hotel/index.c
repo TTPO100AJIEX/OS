@@ -14,7 +14,7 @@ int server = -1;
 struct sockaddr_in multicast_address;
 void stop(__attribute__ ((unused)) int signal)
 {
-    destroy_rooms();
+    destroy_rooms(); // Force everyone to leave
     log_string(LOG_END_MESSAGE); // Stop the loggers
     if (close(server) == -1) { perror("Failed to close the socket"); exit(1); }
     exit(0);
@@ -23,7 +23,7 @@ void stop(__attribute__ ((unused)) int signal)
 void log_string(const char* string)
 {
     printf("%s", string);
-    // Multicast the message-
+    // Multicast the message
     if (sendto(server, string, strlen(string), 0, (struct sockaddr *)(&multicast_address), sizeof(multicast_address)) != (int)(strlen(string)))
     {
         perror("Failed to multicast a message");
@@ -70,7 +70,7 @@ int main(int argc, char** argv) // <Port> <Multicast-IP> <Multicast-Port>
                 const struct Room* room = take_room(req.id, request.gender, request.stay_time, req.client);
 
                 // Log the room
-                if (room) { log_parametric("Registered the visitor %zu into the room %zu\n", req.id, room->id); log_layout(); }
+                if (room) { log_parametric("Registered visitor %zu into the room %zu\n", req.id, room->id); log_layout(); }
                 else log_parametric("Failed to register the visitor %zu\n", req.id);
 
                 // Send the response to the visitor

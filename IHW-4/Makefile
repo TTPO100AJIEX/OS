@@ -4,7 +4,6 @@ gcc_options = -O2 -fsanitize=address,undefined -fno-sanitize-recover=all -std=gn
 compile_visitor:
 	mkdir -p ./bin
 	gcc $(gcc_options) ./src/visitor/index.c ./src/protocol.c -o ./bin/visitor.exe
-
 visitor: compile_visitor
 	./bin/visitor.exe 127.0.0.1 8000 m 3
 
@@ -12,7 +11,6 @@ visitor: compile_visitor
 compile_hotel:
 	mkdir -p ./bin
 	gcc $(gcc_options) ./src/hotel/index.c ./src/protocol.c ./src/hotel/rooms/rooms.c ./src/hotel/log/log.c -o ./bin/hotel.exe
-
 hotel: compile_hotel
 	./bin/hotel.exe 8000 225.0.0.0 9000
 
@@ -20,7 +18,6 @@ hotel: compile_hotel
 compile_logger:
 	mkdir -p ./bin
 	gcc $(gcc_options) ./src/logger/index.c ./src/protocol.c -o ./bin/logger.exe
-
 logger: compile_logger
 	./bin/logger.exe 225.0.0.0 9000
 

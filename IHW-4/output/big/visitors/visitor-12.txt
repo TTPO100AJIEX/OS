@@ -1,6 +1,6 @@
-[15:44:40.703.313] Created the socket
-[15:44:40.704.259] Sent gender female, stay_time 5 to the hotel
-[15:44:40.704.519] Assigned id 13 and received room 7 from the hotel
-[15:44:40.724.989] Started sleeping (time: 5)
-[15:44:45.730.126] Stopped sleeping
-[15:44:45.730.321] Left the hotel
+[18:40:21.391.199] Created the socket
+[18:40:21.391.330] Sent gender female, stay_time 5 to the hotel
+[18:40:21.391.663] Assigned id 13 and received room 7 from the hotel
+[18:40:21.391.811] Started sleeping (time: 5)
+[18:40:26.392.189] Stopped sleeping
+[18:40:26.392.336] Left the hotel

@@ -8,13 +8,15 @@ await new Promise(r => setTimeout(r, 1000));
 
 
 var loggersOutput = [ ], loggersWaiters = [ ];
-const interval = setInterval(() =>
+function create_logger()
 {
     const logger = spawn(`./bin/logger.exe`, [ process.argv[4], process.argv[5] ]);
     const loggerIndex = loggersOutput.length; loggersOutput.push("");
     loggersWaiters.push(new Promise(resolve => logger.on('exit', resolve)));
     logger.stdout.on('data', data => loggersOutput[loggerIndex] += data.toString());
-}, 250);
+}
+const interval = setInterval(create_logger, 250);
+create_logger();
 
 
 const test = fs.readFileSync(`testing/${process.argv[2]}_test.txt`, "utf-8").replaceAll("\r", "").split('\n');
@@ -27,9 +29,8 @@ for (let i = 0; i < test.length; i += 2)
     await new Promise(r => setTimeout(r, 75));
 }
 
-const data = await Promise.all(waiters);
+console.log(await Promise.all(waiters));
 clearInterval(interval);
-console.log(data);
 
 await new Promise(r => setTimeout(r, 1000));
 hotel.kill('SIGINT');

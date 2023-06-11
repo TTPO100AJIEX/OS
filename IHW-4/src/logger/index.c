@@ -42,7 +42,7 @@ int main(int argc, char** argv) // <IP> <Port>
     if (multicast_receiver == -1) { perror("Failed to create a socket"); return 1; }
     print_time(); printf("Created the socket\n");
     
-    // Set socket options to allow multiple listeners at once
+    // Set socket options to allow multiple loggers at once
     int socket_flag = 1;
     if (setsockopt(multicast_receiver, SOL_SOCKET, SO_REUSEADDR, (void*)(&socket_flag), sizeof(socket_flag)) == -1) { perror("Failed to setup the socket"); raise(SIGINT); }
 
